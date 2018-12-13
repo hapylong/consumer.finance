@@ -1,0 +1,2698 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.data.layer.mysql.dao.inst.InstallmentBillInfoDaoImpl">
+
+	<sql id="table">inst_billinfo</sql>
+
+	<resultMap
+		type="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo"
+		id="installmentBillInfo">
+		<result column="ID" property="id" />
+		<result column="ORDERID" property="orderId" />
+		<result column="SUBORDERID" property="subOrderId" />
+		<result column="ORDERDATE" property="orderDate" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="INSTALLINFOID" property="installInfoId" />
+		<result column="INSTALLDETAILID" property="installDetailId" />
+		<result column="REGID" property="regId" />
+		<result column="OPENID" property="openId" />
+		<result column="LASTREPAYDATE" property="lastRepayDate" />
+		<result column="DELAYBEGINDATE" property="delayBeginDate" />
+		<result column="CUR_REPAY_AMT" property="curRepayAmt" />
+		<result column="CUR_REPAYDATE" property="curRepayDate" />
+		<result column="EARLIEST_PAY_DATE" property="earliestPayDate" />
+		<result column="CUR_REPAY_PRINCIPAL" property="curRepayPrincipal" />
+		<result column="CUR_REPAY_INTEREST" property="curRepayInterest" />
+		<result column="CUT_INTEREST" property="cutInterest" />
+		<result column="PRE_INTEREST" property="preInterest" />
+		<result column="CUR_REPAY_OVERDUE_INTEREST" property="curRepayOverdueInterest" />
+		<result column="CUT_OVERDUE_INTEREST" property="cutOverdueInterest" />
+		<result column="PRE_OVERDUE_INTEREST" property="preOverdueInterest" />
+		<result column="MONTH_OVERDUE_AMT" property="monthOverdueAmt" />
+		<result column="FIXED_OVERDUE_AMT" property="fixedOverdueAmt" />
+		<result column="CUT_FIXED_OVERDUE_AMT" property="cutFixedOverdueAmt" />
+		<result column="OVERDUE_DAYS" property="overdueDays" />
+		<result column="CUR_REAL_REPAYAMT" property="curRealRepayamt" />
+		<result column="PRINCIPAL" property="principal" />
+		<result column="REALPAYAMT" property="realPayamt" />
+		<result column="REMAINPRINCIPAL" property="remainPrincipal" />
+		<result column="REMAINPRIANDINTEREST" property="remainPriandInterest" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="INSTALLSUMAMT" property="installSumAmt" />
+		<result column="INSTALLAMT" property="installAmt" />
+		<!-- 其他费用 by yeoman begin -->
+		<result column="OTHERAMT" property="otherAmt" />
+		<!-- 其他费用 by yeoman end -->
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="PREPAYMENT" property="prePayment" />
+		<result column="PARTPAYMENT" property="partPayment" />
+		<result column="INSTORDER" property="instOrder" />
+		<result column="STATUS" property="status" />
+		<result column="PLANID" property="planId" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+		<!-- 提前结清-获取账务系统要素 -->
+		<result column="OVERDUEAMT" property="overdueAmt" />
+		<result column="CURITEMS" 	property="curItems" />
+		<result column="EXPIRYDATE" property="expiryDate" />
+		<result column="HASPAYAMT" 	property="hasRepayAmt" />
+		<result column="REPAYAMT" 	property="repayAmt" />
+		<result column="OFFSETAMT" 	property="offsetAmt" />
+		
+		<!-- 提前结清-获取账务系统要素 -->
+		<result column="SUMCURREPAYAMT" 	property="sumCurRepayAmt" />
+		<result column="monthInterest"      property="monthInterest" />
+	</resultMap>
+	
+	<resultMap
+		type="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfoNormalRepay"
+		id="installmentBillInfoNormalRepay">
+		
+		<result column="ORDERID" 		property="orderId" />
+		<result column="OPENID" 		property="openId" />
+		<result column="REGID" 			property="regId" />
+		<result column="MERCHANTNO" 	property="merchantNo" />
+		<result column="REPAYNO" 		property="repayNo" />
+		<result column="AMT" 			property="amt" />
+	</resultMap>
+
+	<!-- 表中的字段 -->
+	<sql id="cols">
+		ID,ORDERID,SUBORDERID,ORDERDATE,MERCHANTNO,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+		CUR_REPAY_AMT,CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+		PRE_OVERDUE_INTEREST,MONTH_OVERDUE_AMT,FIXED_OVERDUE_AMT,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,REMAINPRIANDINTEREST,CONTRACTAMT,OTHERAMT,INSTALLSUMAMT,INSTALLAMT,
+		PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,PLANID,VERSION,CREATETIME,UPDATETIME
+	</sql>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO
+		<include refid="table" />
+		(
+		ORDERID,SUBORDERID,ORDERDATE,MERCHANTNO,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+		CUR_REPAY_AMT,CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+		PRE_OVERDUE_INTEREST,FIXED_OVERDUE_AMT,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,REMAINPRIANDINTEREST,CONTRACTAMT,INSTALLSUMAMT,INSTALLAMT,OTHERAMT,
+		PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,PLANID,VERSION,CREATETIME,OFFSETAMT,SMSMOBILE
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.orderId},#{item.subOrderId},#{item.orderDate},#{item.merchantNo},#{item.repayNo},#{item.installInfoId},#{item.installDetailId},#{item.regId},#{item.openId},#{item.lastRepayDate},#{item.delayBeginDate},
+			#{item.curRepayAmt},#{item.curRepayDate},#{item.earliestPayDate},#{item.curRepayPrincipal},#{item.curRepayInterest},#{item.preInterest},#{item.curRepayOverdueInterest},
+			#{item.preOverdueInterest},#{item.fixedOverdueAmt},#{item.overdueDays},#{item.curRealRepayamt},#{item.principal},#{item.realPayamt},#{item.remainPrincipal},#{item.remainPriandInterest},#{item.contractAmt},#{item.installSumAmt},#{item.installAmt},#{item.otherAmt},
+			#{item.prePayment},#{item.partPayment},#{item.instOrder},#{item.status},#{item.planId},#{item.version},NOW(),#{item.offsetAmt},#{item.smsMobile}
+			)
+		</foreach>
+	</insert>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.inst.ExtendBillInfo"
+		id="extendBillInfo" extends="installmentBillInfo">
+		<result column="REALNAME" property="realName" />
+	</resultMap>
+
+	<!-- 还款字段 -->
+	<sql id="billCols">
+		A.REALNAME,
+		B.SUBORDERID AS SUBORDERID,  
+		B.ID AS ID,
+		B.INSTALLDETAILID AS INSTALLDETAILID,
+		B.CUR_REPAYDATE AS CUR_REPAYDATE,
+		B.CUR_REPAY_PRINCIPAL / 100 AS CUR_REPAY_PRINCIPAL,
+		B.CUR_REPAY_INTEREST / 100 AS CUR_REPAY_INTEREST,
+		B.INSTALLSUMAMT / 100 AS INSTALLSUMAMT,
+		B.REMAINPRINCIPAL / 100 AS REMAINPRINCIPAL,
+		B.CUT_INTEREST / 100 AS CUT_INTEREST,
+		B.CUT_OVERDUE_INTEREST / 100 AS CUT_OVERDUE_INTEREST,
+		B.CUT_FIXED_OVERDUE_AMT / 100 AS CUT_FIXED_OVERDUE_AMT,
+		B.PRE_INTEREST / 100 AS PRE_INTEREST,
+		B.PRE_OVERDUE_INTEREST / 100 AS PRE_OVERDUE_INTEREST,
+		B.FIXED_OVERDUE_AMT / 100 AS FIXED_OVERDUE_AMT,
+		B.MONTH_OVERDUE_AMT / 100 AS MONTH_OVERDUE_AMT,
+		B.PRINCIPAL / 100 AS PRINCIPAL,
+		B.REALPAYAMT / 100 AS REALPAYAMT,
+		B.INSTALLAMT / 100 AS INSTALLAMT,
+		B.ORDERDATE AS ORDERDATE,
+		B.INSTALLINFOID AS INSTALLINFOID,
+		B.OPENID AS OPENID,
+		B.DELAYBEGINDATE AS DELAYBEGINDATE,
+		B.EARLIEST_PAY_DATE AS EARLIEST_PAY_DATE,
+		B.INSTORDER AS INSTORDER,
+		B.STATUS AS STATUS,
+		B.ORDERID AS ORDERID,
+		B.REGID AS REGID,
+		B.MERCHANTNO AS MERCHANTNO,
+		B.REPAYNO AS REPAYNO,
+		B.CUR_REPAYDATE AS CUR_REPAYDATE,
+		I.INSTALLTERMS AS INSTALLTERMS,
+		B.LASTREPAYDATE AS LASTREPAYDATE,
+		B.OVERDUE_DAYS AS OVERDUE_DAYS,
+		B.CUR_REPAY_AMT / 100 AS CUR_REPAY_AMT,
+		B.CUR_REPAY_OVERDUE_INTEREST / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+		B.CUR_REAL_REPAYAMT / 100 AS CUR_REAL_REPAYAMT,
+		B.OTHERAMT /100 AS OTHERAMT
+	</sql>
+	<!-- 查询还款条件 -->
+	<sql id="condition_billSQL">
+		<if test="bid != null and bid != ''">
+			and B.ID = #{bid}
+		</if>
+		<if test="regId != null and regId != ''">
+			and B.REGID = #{regId}
+		</if>
+		<if test="curRepayDate != null and curRepayDate != '' ">
+			and B.CUR_REPAYDATE = #{curRepayDate}
+		</if>
+		<if test="curRepayDateBegin != null and curRepayDateBegin != '' ">
+            and B.CUR_REPAYDATE &gt;= #{curRepayDateBegin}
+        </if>
+        <if test="curRepayDateEnd != null and curRepayDateEnd != '' ">
+            and B.CUR_REPAYDATE &lt;= #{curRepayDateEnd}
+        </if>
+		<if test="status != null and status !='' ">
+			and B.STATUS = #{status}
+		</if>
+		<if test="openId !=null and openId !=''">
+			and B.OPENID like CONCAT(#{openId},'%')
+		</if>
+		<!-- 改造，订单支持订单列表查询 -->
+		<if test="orderId != null and orderId.size() > 0">
+			and B.ORDERID in
+			<foreach item="item" index="index" collection="orderId"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="merchantNos != null and merchantNos.size() > 0">
+			and B.MERCHANTNO in
+			<foreach item="item" index="index" collection="merchantNos"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- <if test="startDate !=null and endDate !=null ">
+			and B.LASTREPAYDATE BETWEEN #{startDate} AND #{endDate}
+		</if> -->
+		<if test="startDate != null and startDate != '' ">
+            and B.LASTREPAYDATE &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != '' ">
+            and B.LASTREPAYDATE &lt;= #{endDate}
+        </if>
+		<if test="getOverdueBill == 1 ">
+			and ((B.CUR_REPAY_OVERDUE_INTEREST > ifnull(B.CUT_OVERDUE_INTEREST,0)) or (B.FIXED_OVERDUE_AMT > ifnull(B.CUT_FIXED_OVERDUE_AMT,0)))
+		</if>
+		<if test="realName !=null and realName !='' ">
+			and A.REALNAME = #{realName}
+		</if>
+		
+	</sql>
+
+	<!-- 查询还款订单 -->
+	<select id="queryBillByParams" parameterType="java.util.Map"
+		resultMap="extendBillInfo">
+		SELECT
+		<include refid="billCols"></include>
+		FROM inst_billinfo B
+			LEFT JOIN inst_info I on B.ORDERID = I.ORDERID AND B.SUBORDERID = I.SUBORDERID
+			LEFT JOIN acc_openinfo A on B.REGID=A.REGID AND A.PID = B.OPENID
+		<where>
+			B.ORDERID = I.ORDERID AND B.STATUS != 4
+			<include refid="condition_billSQL" />
+		</where>
+	</select>
+
+	<!-- 查询还款订单 -->
+	<select id="queryBillByParamsCount" parameterType="java.util.Map"
+		resultType="long">
+		SELECT count(1) FROM (SELECT B. STATUS FROM inst_billinfo B,inst_info
+		I,acc_openinfo A
+		<where>
+			B.REGID=A.REGID AND A.PID = B.OPENID AND
+			B.ORDERID = I.ORDERID AND B.SUBORDERID = I.SUBORDERID AND B.STATUS != 4
+			<include refid="condition_billSQL" />
+		</where>
+		)D
+	</select>
+
+	<!-- 查询条件 -->
+	<sql id="condition_sql">
+		STATUS != 4
+		<!-- Equal query -->
+		<if test="regId != null and regId != ''">
+			and REGID = #{regId}
+		</if>
+		<if test="status != null and status != ''">
+			<choose>
+				<when test="status == 5"><!-- 未还款 -->
+					and STATUS &lt;= 2
+				</when>
+				<otherwise>
+					and STATUS = #{status}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="openId !=null and openId !=''">
+			and OPENID like CONCAT(#{openId},'%')
+		</if>
+	</sql>
+
+	<!-- 分页查询账单信息 -->
+	<select id="listPage" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+		ID,
+		ORDERID,
+		ORDERDATE,
+		MERCHANTNO,
+		REPAYNO,
+		INSTALLINFOID,
+		INSTALLDETAILID,
+		REGID,
+		OPENID,
+		LASTREPAYDATE,
+		DELAYBEGINDATE,
+		CUR_REPAY_AMT / 100 AS CUR_REPAY_AMT,
+		CUR_REPAYDATE,
+		EARLIEST_PAY_DATE,
+		CUR_REPAY_PRINCIPAL / 100 AS CUR_REPAY_PRINCIPAL,
+		CUR_REPAY_INTEREST / 100 AS CUR_REPAY_INTEREST,
+		PRE_INTEREST / 100 AS PRE_INTEREST,
+		CUR_REPAY_OVERDUE_INTEREST / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+		PRE_OVERDUE_INTEREST / 100 AS PRE_OVERDUE_INTEREST,
+		MONTH_OVERDUE_AMT / 100 AS MONTH_OVERDUE_AMT,
+		FIXED_OVERDUE_AMT / 100 AS FIXED_OVERDUE_AMT,
+		OVERDUE_DAYS,
+		CUR_REAL_REPAYAMT / 100 AS CUR_REAL_REPAYAMT,
+		PRINCIPAL / 100 AS PRINCIPAL,
+		REALPAYAMT / 100 AS REALPAYAMT,
+		REMAINPRINCIPAL / 100 AS REMAINPRINCIPAL,
+		INSTALLSUMAMT / 100,
+		INSTALLAMT / 100 AS INSTALLAMT,
+		CUT_INTEREST / 100 AS CUT_INTEREST,
+		CUT_OVERDUE_INTEREST / 100 AS CUT_OVERDUE_INTEREST,
+		CUT_FIXED_OVERDUE_AMT / 100 AS CUT_FIXED_OVERDUE_AMT,
+		PREPAYMENT,
+		PARTPAYMENT,
+		INSTORDER,
+		STATUS,
+		PLANID,
+		VERSION,
+		CREATETIME,
+		UPDATETIME
+		FROM
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+			<if test="orderId != null and orderId != ''">
+				and ORDERID = #{orderId}
+			</if>
+			<!-- 增加子订单和期数颜值 -->
+			<if test="subOrderId != null and subOrderId != ''">
+				and SUBORDERID = #{subOrderId}
+			</if>
+			<if test="repayNo != null">
+				and REPAYNO = #{repayNo}
+			</if>
+			<if test="merchantNo != null and merchantNo != ''">
+				and MERCHANTNO = #{merchantNo}
+			</if>
+		</where>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+	<!-- 分页查询账单数量 -->
+	<select id="listPageCount" parameterType="java.util.Map"
+		resultType="long">
+		select count(1) from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+			<if test="orderId != null and orderId != ''">
+				and ORDERID = #{orderId}
+			</if>
+			<if test="merchantNo != null and merchantNo != ''">
+				and MERCHANTNO = #{merchantNo}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询当前三期未还的账单 -->
+	<select id="listCurrBill" parameterType="java.util.Map"
+		resultMap="installmentBillInfo">
+		SELECT
+		CUR_REPAY_AMT,
+		ID,ORDERID,ORDERDATE,MERCHANTNO,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+		CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+		PRE_OVERDUE_INTEREST,MONTH_OVERDUE_AMT,FIXED_OVERDUE_AMT,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLSUMAMT,INSTALLAMT,
+		CUT_INTEREST,CUT_OVERDUE_INTEREST,CUT_FIXED_OVERDUE_AMT,PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,PLANID,VERSION,CREATETIME,UPDATETIME
+		FROM
+		<include refid="table" />
+		<where>
+			STATUS &lt;= 2 AND OPENID != 10101
+			<include refid="condition_CurrSql" />
+			<if test="orderId != null and orderId != ''">
+				AND ORDERID = #{orderId}
+			</if>
+		</where>
+		<![CDATA[ ORDER BY REPAYNO ASC]]>
+	</select>
+
+	<!-- 当前三期账单条件,未还款包含<=2 -->
+	<sql id="condition_CurrSql">
+		<!-- Equal query -->
+		<if test="regId != null and regId != ''">
+			and REGID = #{regId}
+		</if>
+		<if test="openId !=null and openId !=''">
+			and OPENID like CONCAT(#{openId},'%')
+		</if>
+	</sql>
+
+	<!-- 分页查询账单信息 -->
+	<select id="listOverdueInterestPage" parameterType="java.util.Map"
+		resultMap="installmentBillInfo">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			<if test="orderId !=null and orderId !=''">
+				and ORDERID = #{orderId}
+			</if>
+			<if test="instBillId !=null and instBillId !=''">
+				and INSTALLINFOID = #{instBillId}
+			</if>
+			<if test="delayDate !=null and delayDate !=''">
+				and LASTREPAYDATE &lt;= #{delayDate}
+			</if>
+			and STATUS &lt;= 2
+		</where>
+		<![CDATA[ order by ORDERID ASC, REPAYNO asc]]>
+	</select>
+
+	<!-- 分页查询账单信息 -->
+	<select id="listOverdueInterestPageCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+		<include refid="table" />
+		<where>
+			<if test="orderId !=null and orderId !=''">
+				and ORDERID = #{orderId}
+			</if>
+			<if test="instBillId !=null and instBillId !=''">
+				and INSTALLINFOID = #{instBillId}
+			</if>
+			<if test="delayDate !=null and delayDate !=''">
+				and LASTREPAYDATE &lt;= #{delayDate}
+			</if>
+			and STATUS &lt;= 2
+		</where>
+		<![CDATA[ order by ORDERID ASC, REPAYNO asc]]>
+	</select>
+
+	<!-- 分页查询账单信息 -->
+	<select id="listOverdueInterestPageRepayNoDesc" parameterType="java.util.Map"
+		resultMap="installmentBillInfo">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			<if test="orderId !=null and orderId !=''">
+				and ORDERID = #{orderId}
+			</if>
+			<if test="instBillId !=null and instBillId !=''">
+				and INSTALLINFOID = #{instBillId}
+			</if>
+			<if test="delayDate !=null and delayDate !=''">
+				and LASTREPAYDATE &lt;= #{delayDate}
+			</if>
+			and STATUS &lt;= 2
+		</where>
+		<![CDATA[ ORDER BY ORDERID ASC, REPAYNO ASC]]>
+	</select>
+
+	<!-- 查询上期账单信息 -->
+	<select id="getLastInstallmentBillInfo" parameterType="java.util.Map"
+		resultMap="installmentBillInfo">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId}
+			and INSTALLINFOID = #{installId}
+			and REPAYNO
+			= #{repayNo}
+			and STATUS &lt;= 2
+		</where>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+	
+	<!-- 查询剩余本息 -->
+	<select id="getRemainPriAndInterest" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT <include refid="cols" /> from inst_billinfo WHERE ORDERID = #{orderId} AND `STATUS` = 0 order BY REPAYNO LIMIT 1;
+	</select>
+
+	<!-- 通过订单号和序号查询还款金额 -->
+	<select id="getSAmtByOrderIdAndRepayNo" parameterType="java.util.Map"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(CUR_REPAY_AMT) from
+		<include refid="table" />
+		WHERE ORDERID=#{orderId} AND `STATUS` != 4 AND REPAYNO IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 通过订单号和序号查询单期已还账单应还款和已还款 -->
+	<select id="getInstBillByOrderIdAndRepayNo" parameterType="java.util.Map"
+		resultMap="installmentBillInfo">
+		SELECT SUM(CUR_REPAY_AMT) as CUR_REPAY_AMT,SUM(CUR_REAL_REPAYAMT) as
+		CUR_REAL_REPAYAMT from
+		<include refid="table" />
+		WHERE ORDERID=#{orderId} and REPAYNO = #{repayNo} AND `STATUS` &lt; 3
+		GROUP
+		BY REPAYNO
+	</select>
+
+	<!-- update -->
+	<update id="update"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="curRepayAmt != null and curRepayAmt != '' ">
+				CUR_REPAY_AMT = #{curRepayAmt},
+			</if>
+			<if
+				test="curRepayOverdueInterest != null and curRepayOverdueInterest != '' ">
+				CUR_REPAY_OVERDUE_INTEREST = #{curRepayOverdueInterest},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+			<if test="fixedOverdueAmt != null and fixedOverdueAmt != '' ">
+				FIXED_OVERDUE_AMT = #{fixedOverdueAmt},
+			</if>
+			<if test="status !=null ">
+				STATUS = #{status},
+			</if>
+			<if test="overdueDays != null and overdueDays != '' ">
+				OVERDUE_DAYS = #{overdueDays},
+			</if>
+			<if test="monthOverdueAmt != null and monthOverdueAmt != '' ">
+				MONTH_OVERDUE_AMT = #{monthOverdueAmt},
+			</if>
+			<if test="remainPrincipal != null and remainPrincipal != '' ">
+				REMAINPRINCIPAL = #{remainPrincipal},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+
+	<!-- stopInstallmentBillInfo -->
+	<update id="stopInstallmentBillInfo"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			STATUS = 4
+		</set>
+		<where>
+			ORDERID = #{orderId}
+			AND REGID = #{regId}
+			AND OPENID = #{openId}
+		</where>
+	</update>
+
+	<!-- 获得还款时应该还第几期 -->
+	<select id="getRepayNoByOrderId" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		REPAYNO
+		FROM
+		inst_billinfo
+		WHERE
+		STATUS &lt;= 2
+		AND ORDERID = #{orderId}
+		AND DELAYBEGINDATE between #{today} and
+		#{nextDay}
+		AND INSTORDER = 1
+	</select>
+
+	<!-- 查询订单 -->
+	<select id="listBy" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+			<if test="orderId != null and orderId != ''">
+				AND ORDERID = #{orderId}
+			</if>
+		</where>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+	<!-- 查询订单下所有账单信息 合并金额 -->
+	<select id="getAllInstallmentBillInfoListForOrderId"
+		parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT CUR_REPAY_AMT
+		,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+		CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+		PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+		PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME
+		FROM
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId}
+			AND STATUS
+			= 1 GROUP BY REPAYNO
+		</where>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+
+	<!-- 正常还款 -->
+	<update id="updateForNormalRepayment"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="curRealRepayamt != null and curRealRepayamt != '' ">
+				CUR_REAL_REPAYAMT = CUR_REPAY_AMT,
+			</if>
+			<if test="curRepayDate != null and curRepayDate != '' ">
+				CUR_REPAYDATE = #{curRepayDate},
+			</if>
+			<if test="status != null and status != '' ">
+				STATUS = #{status},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			STATUS != 4
+			<if test="orderId != null and orderId != '' ">
+				AND ORDERID = #{orderId}
+			</if>
+			<if test="subOrderId != null and subOrderId != '' ">
+				AND SUBORDERID = #{subOrderId}
+			</if>
+			<if test="repayNo != null and repayNo != '' ">
+				AND REPAYNO = #{repayNo}
+			</if>
+		</where>
+	</update>
+
+	<!-- 提前还款 -->
+	<update id="updateForAdvanceRepayment"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1,
+			STATUS = 3,
+			<if test="curRepayAmt != null and curRepayAmt != '' ">
+				CUR_REAL_REPAYAMT = #{curRepayAmt},
+			</if>
+			<if test="curRepayDate != null and curRepayDate != '' ">
+				CUR_REPAYDATE = #{curRepayDate},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			<if test="orderId != null and orderId != '' ">
+				ORDERID = #{orderId} AND STATUS = 1
+			</if>
+		</where>
+	</update>
+
+	<!-- 提前还款by Id -->
+	<update id="updateForAdvanceRepaymentById"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="status != null">
+				STATUS = #{status},
+			</if>
+			<if test="curRepayAmt != null">
+				CUR_REAL_REPAYAMT = #{curRepayAmt},
+			</if>
+			<if test="curRepayDate != null and curRepayDate != '' ">
+				CUR_REPAYDATE = #{curRepayDate},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			<if test="id != null and id != '' ">
+				ID = #{id}
+			</if>
+		</where>
+	</update>
+
+	<!-- 检查跨期还款情况 -->
+	<select id="checkIntertemporal" parameterType="java.util.Map"
+		resultType="long">
+		SELECT
+		count(1)
+		FROM
+		inst_billinfo
+		WHERE
+		STATUS &lt;= 2
+		AND ORDERID = #{orderId}
+		AND REPAYNO &lt; #{repayno}
+	</select>
+
+	<!-- 获得当前订单最后还款期数 -->
+	<select id="getRepayNo" parameterType="String" resultType="int">
+		SELECT
+		REPAYNO
+		FROM
+		inst_billinfo
+		WHERE
+		STATUS = 3
+		AND ORDERID = #{orderId}
+		AND INSTORDER = 1
+		ORDER BY REPAYNO DESC
+		LIMIT 1
+	</select>
+
+	<!-- 查询订单实际已还金额 -->
+	<select id="getRealRepayAmtByOrderId" parameterType="String"
+		resultType="double">
+		SELECT SUM(CUR_REAL_REPAYAMT) FROM
+		<include refid="table" />
+		WHERE ORDERID = #{orderId}
+	</select>
+	
+	<!-- 查询需要提醒还款账单信息  -->
+	<select id="getRepayRemindBillList"  parameterType="java.util.Map" resultType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		SELECT 
+		  ID,
+		  ORDERID AS orderId,
+		  MERCHANTNO AS merchantNo,
+		  REGID AS regId,
+		  LASTREPAYDATE AS lastRepayDate,
+		  OPENID AS openId,
+		  CUR_REPAY_AMT AS curRepayAmt,
+		  CUR_REPAY_OVERDUE_INTEREST AS curRepayOverdueInterest,
+		  OVERDUE_DAYS AS overdueDays 
+		FROM
+		  inst_billinfo 
+		WHERE
+		  STATUS &lt;= 2
+		  AND LASTREPAYDATE = #{repayDate}
+		  AND MERCHANTNO != 'htqb'
+		<if test="merchantNo != null and merchantNo != '' ">
+			AND MERCHANTNO = #{merchantNo}
+		</if>
+	</select>
+	
+	<!-- 依据逾期天数查询需要提醒还款账单信息  -->
+    <select id="getOverdueBillListByDay"  parameterType="java.util.Map" resultType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+        SELECT 
+          ID,
+          ORDERID AS orderId,
+          MERCHANTNO AS merchantNo,
+          REGID AS regId,
+          LASTREPAYDATE AS lastRepayDate,
+          OPENID AS openId,
+          CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST AS curRepayAmt,
+          CUR_REPAY_OVERDUE_INTEREST AS curRepayOverdueInterest,
+          OVERDUE_DAYS AS overdueDays 
+        FROM
+          inst_billinfo 
+        WHERE
+          STATUS = 0
+          AND MERCHANTNO != 'htqb'
+        <if test="overdueDay != null">
+            AND OVERDUE_DAYS &lt;= #{overdueDay} AND OVERDUE_DAYS &gt;= 1
+        </if>
+    </select>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.inst.ToRiskBillInfo"
+		id="ToRiskBillInfo">
+		<result column="ID" property="id" />
+		<result column="REALNAME" property="realName" />
+		<result column="ORDERID" property="orderId" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="REGID" property="regId" />
+		<result column="LASTREPAYDATE" property="lastRepayDate" />
+		<result column="DELAYBEGINDATE" property="delayBeginDate" />
+		<result column="CUR_REPAY_AMT" property="curRepayAmt" />
+		<result column="CUR_REPAYDATE" property="curRepayDate" />
+		<result column="CUR_REPAY_OVERDUE_INTEREST" property="curRepayOverdueInterest" />
+		<result column="FIXED_OVERDUE_AMT" property="fixedOverdueAmt" />
+		<result column="OVERDUE_DAYS" property="overdueDays" />
+		<result column="CUR_REAL_REPAYAMT" property="curRealRepayAmt" />
+		<result column="STATUS" property="status" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 手机号和状态查询账单 -->
+	<select id="getToRiskBillInfo" parameterType="java.util.Map" resultMap="ToRiskBillInfo">
+		SELECT
+			B.REGID,
+			(
+				SELECT
+					A.REALNAME
+				FROM
+					acc_openinfo A
+				WHERE
+					A.REGID = B.REGID
+				LIMIT 1
+			) AS REALNAME,
+			B.ORDERID,
+			B.MERCHANTNO,
+			B.REPAYNO,
+			B.LASTREPAYDATE,
+			B.DELAYBEGINDATE,
+			B.CUR_REPAY_AMT,
+			B.CUR_REPAY_OVERDUE_INTEREST,
+			B.FIXED_OVERDUE_AMT,
+			B.OVERDUE_DAYS,
+			B.CUR_REAL_REPAYAMT,
+			B.CUR_REPAYDATE,
+			B.`STATUS`
+		FROM
+			inst_billinfo B 
+		WHERE B.REGID=#{regId}
+		<if test="status != null and status != '' ">
+			and B.STATUS = #{status}
+		</if>
+	</select>
+
+	<resultMap
+		type="com.iqb.consumer.data.layer.mysql.bean.inst.ShouldDebtDetail"
+		id="ShouldDebtDetail">
+		<result column="REALNAME" property="realName" />
+		<result column="IDNO" property="idNo" />
+		<result column="ORDERID" property="orderId" />
+		<result column="REGID" property="regId" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="SOURCESFUNDING" property="sourcesFunding" />
+		<result column="FUNDID" property="fundId" />
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="LASTREPAYDATE" property="lastRepayDate" />
+		<result column="CUR_REPAY_AMT" property="curRepayAmt" />
+		<result column="CUR_REPAY_OVERDUE_INTEREST" property="curRepayOverdueInterest" />
+		<result column="CUR_REAL_REPAYAMT" property="curRealRepayAmt" />
+		<result column="CUR_REPAY_PRINCIPAL" property="curRepayPrincipal" />
+		<result column="CUR_REPAY_INTEREST" property="curRepayInterest" />
+		
+		<result column="CUT_INTEREST" property="cutInterest" />
+		<result column="CUT_OVERDUE_INTEREST" property="cutOverdueInterest" />
+		<result column="CUT_FIXED_OVERDUE_AMT" property="cutFixedOverdueAmt" />
+		
+		<result column="FIXED_OVERDUE_AMT" property="fixedOverdueAmt" />
+		<result column="REALPAYAMT" property="realPayAmt" />
+		<result column="OVERDUE_DAYS" property="overdueDays" />
+		<result column="CUR_REPAYDATE" property="curRepayDate" />
+		<result column="STATUS" property="status" />
+		<result column="BANKCARDNO" property="bankCardNo" />
+		<result column="BANKNAME" property="bankName" />
+		<result column="BANKID" property="bankId" />
+		<result column="REPAYTYPE" property="repayType" />
+	</resultMap>
+	
+	<!-- 应收明细查询 -->
+	<select id="selectShouldDebtDetail" parameterType="java.util.Map" resultMap="ShouldDebtDetail">
+		SELECT
+			tmp.*, rh.BANKCARDNO,
+			rh.BANKNAME,
+			rh.BANKID,
+			rh.REPAYTYPE
+		FROM
+			(
+				SELECT
+					o.REALNAME,
+					o.IDNO,
+					i.ORDERID,
+					i.REGID,
+					i.MERCHANTNO,
+					i.SOURCESFUNDING,
+					i.FUNDID,
+					i.INSTALLTERMS,
+					i.CONTRACTAMT / 100 AS CONTRACTAMT,
+					b.REPAYNO,
+					b.LASTREPAYDATE,
+					b.CUR_REPAY_AMT / 100 AS CUR_REPAY_AMT,
+					b.CUR_REPAY_OVERDUE_INTEREST / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+					b.CUR_REAL_REPAYAMT / 100 AS CUR_REAL_REPAYAMT,
+					b.CUR_REPAY_PRINCIPAL / 100 AS CUR_REPAY_PRINCIPAL,
+					b.CUR_REPAY_INTEREST / 100 AS CUR_REPAY_INTEREST,
+					b.FIXED_OVERDUE_AMT / 100 AS FIXED_OVERDUE_AMT,
+					
+					b.CUT_INTEREST / 100 AS CUT_INTEREST,
+					b.CUT_OVERDUE_INTEREST / 100 AS CUT_OVERDUE_INTEREST,
+					b.CUT_FIXED_OVERDUE_AMT / 100 AS CUT_FIXED_OVERDUE_AMT,
+					
+					b.REALPAYAMT / 100 AS REALPAYAMT,
+					b.CUR_REPAYDATE,
+					b.OVERDUE_DAYS,
+					b. STATUS
+				FROM
+					inst_info i,
+					inst_billinfo b,
+					acc_openinfo o
+				WHERE
+					i.ID = b.INSTALLINFOID
+				AND o.REGID = i.REGID
+				<include refid="condition_DebtDetailSQL" />
+				<![CDATA[ GROUP BY b.ORDERID, b.REPAYNO ]]>
+			) tmp
+		LEFT JOIN acc_repay_history rh ON rh.ORDERID = tmp.ORDERID AND rh.REPAYNO = tmp.REPAYNO
+		<![CDATA[ GROUP BY tmp.ORDERID, tmp.REPAYNO ]]>
+	</select>
+	
+	<!-- 分页查询账单信息 -->
+	<select id="selectShouldDebtDetailCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+			(
+			SELECT
+				tmp.*, rh.BANKCARDNO,
+				rh.BANKNAME,
+				rh.BANKID,
+				rh.REPAYTYPE
+			FROM
+				(
+					SELECT
+						o.REALNAME,
+						o.IDNO,
+						i.ORDERID,
+						i.REGID,
+						i.MERCHANTNO,
+						i.SOURCESFUNDING,
+						i.FUNDID,
+						i.INSTALLTERMS,
+						i.CONTRACTAMT / 100 AS CONTRACTAMT,
+						b.REPAYNO,
+						b.LASTREPAYDATE,
+						b.CUR_REPAY_AMT / 100 AS CUR_REPAY_AMT,
+						b.CUR_REPAY_OVERDUE_INTEREST / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+						b.CUR_REAL_REPAYAMT / 100 AS CUR_REAL_REPAYAMT,
+						b.CUR_REPAY_PRINCIPAL / 100 AS CUR_REPAY_PRINCIPAL,
+						b.CUR_REPAY_INTEREST / 100 AS CUR_REPAY_INTEREST,
+						b.REALPAYAMT / 100 AS REALPAYAMT,
+						b.CUR_REPAYDATE,
+						b.OVERDUE_DAYS,
+						b. STATUS
+					FROM
+						inst_info i,
+						inst_billinfo b,
+						acc_openinfo o
+					WHERE
+						i.ID = b.INSTALLINFOID
+					AND o.REGID = i.REGID
+					<include refid="condition_DebtDetailSQL" />
+					<![CDATA[ GROUP BY b.ORDERID, b.REPAYNO ]]>
+				) tmp
+			LEFT JOIN acc_repay_history rh ON rh.ORDERID = tmp.ORDERID AND rh.REPAYNO = tmp.REPAYNO
+			<![CDATA[ GROUP BY tmp.ORDERID, tmp.REPAYNO ]]>
+		) G
+	</select>
+	
+	<!-- 统计明细查询到的金额 -->
+	<select id="getTotalRepayAmt" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+		SELECT
+			SUM(b.CUR_REPAY_AMT)/100
+		FROM
+			inst_info i,
+			inst_billinfo b
+		WHERE
+			i.ID = b.INSTALLINFOID
+		AND b.STATUS != 4 
+		<if test="orderId != null and orderId != ''">
+			and i.ORDERID = #{orderId} 
+		</if>
+		<if test="regId != null and regId != ''">
+			and i.REGID = #{regId} 
+		</if>
+		<if test="fundId != null and fundId != ''">
+			and i.FUNDID = #{fundId} 
+		</if>
+		<if test="sourcesFunding != null and sourcesFunding != ''">
+			and i.SOURCESFUNDING = #{sourcesFunding} 
+		</if>
+		<if test="startDate !=null and endDate !=null ">
+			and b.LASTREPAYDATE BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="status != null">
+			and b.STATUS = #{status} 
+		</if>
+		<if test="merchantNos != null and merchantNos.size() > 0">
+			and b.MERCHANTNO in
+			<foreach item="item" index="index" collection="merchantNos"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<sql id="condition_DebtDetailSQL">
+		AND b.STATUS != 4 
+		<if test="orderId != null and orderId != ''">
+			and i.ORDERID = #{orderId} 
+		</if>
+		<if test="realName != null and realName != ''">
+			and o.REALNAME = #{realName} 
+		</if>
+		<if test="regId != null and regId != ''">
+			and i.REGID = #{regId} 
+		</if>
+		<if test="fundId != null and fundId != ''">
+			and i.FUNDID = #{fundId} 
+		</if>
+		<if test="sourcesFunding != null and sourcesFunding != ''">
+			and i.SOURCESFUNDING = #{sourcesFunding} 
+		</if>
+		<if test="startDate !=null and endDate !=null ">
+			and b.LASTREPAYDATE BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="status != null">
+			and b.STATUS = #{status} 
+		</if>
+		<if test="merchantNos != null and merchantNos.size() > 0">
+			and b.MERCHANTNO in
+			<foreach item="item" index="index" collection="merchantNos"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</sql>
+	
+	<!-- 存量统计 -->
+	<resultMap
+		type="com.iqb.consumer.data.layer.mysql.bean.inst.StockStatisticsBean"
+		id="StockStatisticsBean">
+		<result column="ORDERID" property="orderId" />
+		<result column="REALNAME" property="realName" />
+		<result column="REGID" property="regId" />
+		<result column="OPENID" property="openId" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="SOURCESFUNDING" property="sourcesFunding" />
+		<result column="FUNDID" property="fundId" />
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="INSTALLSUMAMT" property="installSumAmt" />
+		<result column="CUR_REPAY_PRINCIPAL" property="curRepayPrincipal" />
+		<result column="NONREPAYNO" property="nonRepayno" />
+		
+	</resultMap>
+	
+	<select id="listStockStatistics" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+			B.ORDERID,
+			A.REALNAME,
+			B.REGID,
+			B.OPENID,
+			B.MERCHANTNO,
+			I.SOURCESFUNDING,
+			I.FUNDID
+		FROM
+			inst_billinfo B 
+			LEFT JOIN acc_openinfo A on A.REGID = B.REGID
+				LEFT JOIN inst_info I on I.ORDERID = B.ORDERID and I.`STATUS` = 0
+		where 
+		B.STATUS &lt;= 2
+		AND B.OPENID='10102'
+		AND B.MERCHANTNO NOT IN ('hykc')
+				<if test="curRepayDate != null and curRepayDate != ''">
+					<![CDATA[ 
+						AND B.ORDERDATE <= #{curRepayDate}
+						AND (
+							B.CUR_REPAYDATE > #{curRepayDate}
+							OR B.CUR_REPAYDATE IS NULL
+						)
+					]]>
+				</if>
+				<if test="orderId != null and orderId != ''">
+					and B.ORDERID = #{orderId} 
+				</if>
+				<if test="regId != null and regId != ''">
+					and B.REGID = #{regId} 
+				</if>
+				<if test="merchantNos != null and merchantNos.size() > 0">
+					and B.MERCHANTNO in
+					<foreach item="item" index="index" collection="merchantNos"
+						open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				GROUP BY ORDERID
+	</select>
+	
+	<!-- 分页查询存量信息 -->
+	<select id="listStockStatisticsCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+		(
+			SELECT
+			B.ORDERID,
+			A.REALNAME,
+			B.REGID,
+			B.OPENID,
+			B.MERCHANTNO,
+			I.SOURCESFUNDING,
+			I.FUNDID
+			 
+		FROM
+			inst_billinfo B 
+			LEFT JOIN acc_openinfo A on A.REGID = B.REGID
+				LEFT JOIN inst_info I on I.ORDERID = B.ORDERID and I.`STATUS` = 0
+		where 
+		B.STATUS &lt;= 2
+				<if test="curRepayDate != null and curRepayDate != ''">
+					<![CDATA[ 
+						AND B.ORDERDATE <= #{curRepayDate}
+						AND (
+							B.CUR_REPAYDATE > #{curRepayDate}
+							OR B.CUR_REPAYDATE IS NULL
+						)
+					]]>
+				</if>
+				<if test="orderId != null and orderId != ''">
+					and B.ORDERID = #{orderId} 
+				</if>
+				<if test="regId != null and regId != ''">
+					and B.REGID = #{regId} 
+				</if>
+				<if test="merchantNos != null and merchantNos.size() > 0">
+					and B.MERCHANTNO in
+					<foreach item="item" index="index" collection="merchantNos"
+						open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				GROUP BY ORDERID
+		) G
+	</select>
+	
+	<sql id="condition_StockSQL">
+		<where>
+			B.STATUS != 4
+			<if test="orderId != null and orderId != ''">
+				and B.ORDERID = #{orderId} 
+			</if>
+			<if test="regId != null and regId != ''">
+				and B.REGID = #{regId} 
+			</if>
+			<if test="merchantNos != null and merchantNos.size() > 0">
+				and B.MERCHANTNO in
+				<foreach item="item" index="index" collection="merchantNos"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="curRepayDate != null and curRepayDate != ''">
+				<![CDATA[ 
+					AND B.ORDERDATE <= #{curRepayDate}
+				]]>
+			</if>
+			
+		</where>
+	</sql>
+	
+	<!-- 正常还款 -->
+	<update id="deratePenalty" parameterType="map">
+		UPDATE
+		<include refid="table" />
+		<set>
+			<if test="cutInterest != null and cutInterest != '' ">
+				CUT_INTEREST = ifnull(CUT_INTEREST,0) + #{cutInterest},
+			</if>
+			<if test="cutOverdueInterest != null and cutOverdueInterest != '' ">
+				CUT_OVERDUE_INTEREST = ifnull(CUT_OVERDUE_INTEREST,0) + #{cutOverdueInterest},
+			</if>
+			<if test="cutFixedOverdueAmt != null and cutFixedOverdueAmt != '' ">
+				CUT_FIXED_OVERDUE_AMT = ifnull(CUT_FIXED_OVERDUE_AMT,0) + #{cutFixedOverdueAmt},
+			</if>
+			<if test="cutCurRepayAmt != null and cutCurRepayAmt != '' ">
+				CUR_REPAY_AMT = ifnull(CUR_REPAY_AMT,0) - #{cutCurRepayAmt},
+			</if>
+		</set>
+		<where>
+			INSTALLDETAILID = #{installDetailId}
+		</where>
+	</update>
+	
+	<!-- 抵押车业务分成-订单明细查询 -->
+	<select id="queryBillByParamsForMortgage" parameterType="java.util.Map" resultMap="ToRiskBillInfo">
+		SELECT
+			A.ORDERID,
+			A.REGID,
+			B.REALNAME,
+			A.`STATUS`,
+			A.LASTREPAYDATE,
+			A.MERCHANTNO,
+			A.REPAYNO
+		FROM inst_billinfo A,acc_openinfo B
+		<where>
+			A.REGID=B.REGID and A.OPENID=B.PID
+			and A.STATUS !=4 and A.OPENID='10103'
+			<if test="orderId != null and orderId != ''">
+				and A.ORDERID = #{orderId} 
+			</if>
+			<if test="regId != null and regId != ''">
+				and A.REGID = #{regId} 
+			</if>
+			<if test="realName != null and realName != ''">
+				and B.REALNAME = #{realName} 
+			</if>
+			<if test="lastRepayDate !=null and lastRepayDate !=''">
+				and A.LASTREPAYDATE &lt;= #{lastRepayDate}
+			</if>
+			<if test="status != null and status !='' ">
+				and A.STATUS = #{status} 
+			</if>
+			<if test="merList != null and merList.size() > 0">
+				AND A.MERCHANTNO in
+				<foreach item="item" index="index" collection="merList" open="("
+					separator="," close=")">
+					#{item.merchantNo}
+				</foreach>
+			</if>
+		</where>
+		<![CDATA[ GROUP BY A.ORDERID,A.REPAYNO]]>
+	</select>
+	
+	<!-- 抵押车业务分成-订单明细查询 -->
+	<select id="queryBillByParamsForMortgageCount" parameterType="java.util.Map" resultType="long">
+		SELECT count(1) FROM (SELECT A.ORDERID FROM inst_billinfo A,acc_openinfo B
+		
+		<where>
+			A.REGID=B.REGID and A.OPENID=B.PID
+			and A.STATUS !=4 and A.OPENID='10103'
+			<if test="orderId != null and orderId != ''">
+				and A.ORDERID = #{orderId} 
+			</if>
+			<if test="regId != null and regId != ''">
+				and A.REGID = #{regId} 
+			</if>
+			<if test="realName != null and realName != ''">
+				and B.REALNAME = #{realName} 
+			</if>
+			<if test="lastRepayDate !=null and lastRepayDate !=''">
+				and A.LASTREPAYDATE &lt;= #{lastRepayDate}
+			</if>
+			<if test="status != null and status !='' ">
+				and A.STATUS = #{status}
+			</if>
+			<if test="merList != null and merList.size() > 0">
+				AND A.MERCHANTNO in
+				<foreach item="item" index="index" collection="merList" open="("
+					separator="," close=")">
+					#{item.merchantNo}
+				</foreach>
+			</if>
+		</where>)
+		D
+	</select>
+	
+	<!-- 查询账户系统   订单要素 违约金 最后还款日 当期期数-->
+	<select id="getFactors" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+		A.repayno as curItems,A.lastrepaydate as expiryDate,a.installAmt,
+		A.CUR_REPAY_AMT,A.REMAINPRINCIPAL,A.CUR_REPAY_PRINCIPAL, A.CUR_REPAY_INTEREST
+		FROM
+			inst_billinfo A
+		<where>
+			 A.STATUS != 4
+			AND A.STATUS &lt;= 2
+			<if test="orderId != null and orderId != ''">
+				and  A.ORDERID = #{orderId} 
+			</if>
+		</where>
+		<![CDATA[ LIMIT 0,1]]>
+	</select>
+	
+	<!-- 查询账户系统 订单要素 已还金额-->
+	<select id="getPayAmt" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+		    orderId,
+		    SUM(CUR_REAL_REPAYAMT) AS hasRepayAmt,
+		    SUM(cur_repay_principal) AS curRepayPrincipal,
+		    COUNT(id) AS hasRepayNo,
+		    MAX(LASTREPAYDATE) AS lastRepayDate
+		FROM
+		    inst_billinfo
+		<where>
+			  STATUS = 3
+			<if test="orderId != null and orderId != ''">
+				and  ORDERID = #{orderId} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="getAddAmt" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            cur_repay_amt AS hasRepayAmt
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND
+            repayNo = #{hasRepayNo}
+    </select>
+    
+    <select id="sumYhbj" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            SUM(cur_repay_principal)
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND
+            repayNo &lt;= #{repayNo}
+        AND
+            status != 4
+    </select>
+    
+    <select id="sumYhlx" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            SUM(cur_repay_interest)
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND
+            repayNo &lt;= #{repayNo}
+        AND
+            status != 4
+    </select>
+    
+    <select id="sjyhjeByOid" parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT
+            SUM(cur_repay_amt)
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND
+            status = 3
+    </select>
+    
+    <select id="isTakeMonth" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            takemonth
+        FROM
+            inst_info
+        WHERE
+            orderId = #{orderId}
+        LIMIT 1
+    </select>
+    
+    <select id="getCurrentBill" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT
+            *
+        FROM
+            inst_billinfo
+        WHERE
+            orderid = #{orderId}
+        AND
+            lastrepaydate &gt; #{yesterday}
+        AND
+            status != 4
+        LIMIT 1
+    </select>
+    
+    <select id="getLastBill" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT
+            *
+        FROM
+            inst_billinfo
+        WHERE
+            orderid = #{orderId}
+        AND
+            status != 4
+        ORDER BY 
+            id 
+        DESC 
+        LIMIT 1
+    </select>
+    
+    <update id="finishBillStepOne" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+        UPDATE
+            inst_billinfo
+        SET
+            cur_repaydate = #{curRepayDate},
+            cur_real_repayamt = 0,
+            status = 3
+        WHERE
+            orderid = #{orderId}
+        AND 
+            status NOT IN(3,4)
+        AND
+            repayno &lt; #{repayNo}
+    </update>
+    
+    <update id="finishBillStepTwo" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+        UPDATE
+            inst_billinfo
+        SET
+            cur_repaydate = #{curRepayDate},
+            cur_real_repayamt = #{curRealRepayamt},
+            status = 3
+        WHERE
+            id = #{id}
+    </update>
+    
+    <update id="finishBillStepThree" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+        UPDATE
+            inst_billinfo
+        SET
+            cur_repaydate = #{curRepayDate},
+            cur_real_repayamt = 0,
+            status = 4
+        WHERE
+            orderid = #{orderId}
+        AND 
+            status NOT IN(3,4)
+        AND
+            repayno &gt; #{repayNo}
+    </update>
+    
+    <select id="getLastRepayInfoByOId" parameterType="java.lang.String" resultType="com.iqb.consumer.data.layer.mysql.bean.pojo.PrepaymentAnalysisPojo">
+        SELECT
+            id,
+		    lastrepaydate,
+		    repayno
+		FROM
+		    inst_billinfo
+		WHERE
+		    orderId = #{orderId}
+		AND STATUS = 3
+		ORDER BY
+		    lastrepaydate DESC
+		LIMIT 1;
+    </select>
+    
+	<!-- 转租 修改订单信息 -->
+	<update id="updateForRepaymentByOrderId"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			<if test="regId != null and regId != '' ">
+				REGID = #{regId},
+			</if>
+			<if test="curRepayAmt != null and curRepayAmt != '' ">
+				CUR_REPAY_AMT = CUR_REPAY_AMT-#{curRepayAmt},
+			</if>
+			<if test="status != null">
+				STATUS = #{status},
+			</if>
+			<if test="offsetAmt != null">
+				OFFSETAMT = #{offsetAmt},
+			</if>
+			
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+			<if test="smsMobile != null and smsMobile != '' ">
+                smsMobile = #{smsMobile},
+            </if>
+		</set>
+		<where>
+			ORDERID = #{orderId}
+			AND STATUS !=3
+		</where>
+	</update>
+	
+	<!-- 转租 根据id修改订单信息 -->
+	<update id="updateForRepaymentById"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			<if test="repayNo != null">
+				REPAYNO = #{repayNo},
+			</if>
+			<if test="lastRepayDate != null and lastRepayDate != '' ">
+				LASTREPAYDATE = #{lastRepayDate},
+			</if>
+			<if test="delayBeginDate != null and delayBeginDate != '' ">
+				DELAYBEGINDATE = #{delayBeginDate},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+			AND STATUS !=3
+		</where>
+	</update>
+	
+	<select id="getAllInstallmentBillInfoByOid" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT  
+            status, lastrepaydate
+        FROM
+        <include refid="table" />
+        <where>
+            ORDERID = #{orderId}
+        </where>
+    </select>
+    <!-- 根据orderId集合获取逾期账单 -->
+    <select id="getOverdueInstallmentBillInfo" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT  
+            <include refid="cols"></include>
+        FROM
+        <include refid="table" />
+        <where>
+            status='0'
+            <if test="orderIdList != null and orderIdList.size() > 0">
+				and orderId in
+				<foreach item="item" index="index" collection="orderIdList" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+        </where>
+    </select>
+    
+    <!-- 根据订单号获取全部未失效账单-中阁使用 -->	
+	<select id="listInstallmentBillInfoPage" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+		ID,
+		ORDERID,
+		ORDERDATE,
+		MERCHANTNO,
+		REPAYNO,
+		INSTALLINFOID,
+		INSTALLDETAILID,
+		REGID,
+		OPENID,
+		LASTREPAYDATE,
+		DELAYBEGINDATE,
+		SUM(CUR_REPAY_AMT) / 100 AS CUR_REPAY_AMT,
+		CUR_REPAYDATE,
+		EARLIEST_PAY_DATE,
+		SUM(CUR_REPAY_PRINCIPAL) / 100 AS CUR_REPAY_PRINCIPAL,
+		SUM(CUR_REPAY_INTEREST) / 100 AS CUR_REPAY_INTEREST,
+		SUM(PRE_INTEREST) / 100 AS PRE_INTEREST,
+		SUM(CUR_REPAY_OVERDUE_INTEREST) / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+		SUM(PRE_OVERDUE_INTEREST) / 100 AS PRE_OVERDUE_INTEREST,
+		SUM(MONTH_OVERDUE_AMT) / 100 AS MONTH_OVERDUE_AMT,
+		SUM(FIXED_OVERDUE_AMT) / 100 AS FIXED_OVERDUE_AMT,
+		OVERDUE_DAYS,
+		SUM(CUR_REAL_REPAYAMT) / 100 AS CUR_REAL_REPAYAMT,
+		SUM(PRINCIPAL) / 100 AS PRINCIPAL,
+		SUM(REALPAYAMT) / 100 AS REALPAYAMT,
+		SUM(REMAINPRINCIPAL) / 100 AS REMAINPRINCIPAL,
+		INSTALLSUMAMT / 100,
+		SUM(INSTALLAMT) / 100 AS INSTALLAMT,
+		
+		SUM(CUT_INTEREST) / 100 AS CUT_INTEREST,
+		SUM(CUT_OVERDUE_INTEREST) / 100 AS CUT_OVERDUE_INTEREST,
+		SUM(CUT_FIXED_OVERDUE_AMT) / 100 AS CUT_FIXED_OVERDUE_AMT,
+		
+		PREPAYMENT,
+		PARTPAYMENT,
+		INSTORDER,
+		STATUS,
+		PLANID,
+		VERSION,
+		CREATETIME,
+		UPDATETIME
+		FROM
+		<include refid="table" />
+		<where>
+			STATUS !=4
+			<if test="orderId != null and orderId != ''">
+				and ORDERID = #{orderId}
+			</if>
+		</where>
+		<![CDATA[GROUP BY ORDERID,REPAYNO]]>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+	
+	<!-- 根据订单号获取全部未失效账单数量-中阁使用-->
+	<select id="listInstallmentBillInfoPageCount" parameterType="java.util.Map"
+		resultType="long">
+		select count(1) from (
+		SELECT
+		ID,
+		ORDERID,
+		ORDERDATE,
+		MERCHANTNO,
+		REPAYNO,
+		INSTALLINFOID,
+		INSTALLDETAILID,
+		REGID,
+		OPENID,
+		LASTREPAYDATE,
+		DELAYBEGINDATE,
+		SUM(CUR_REPAY_AMT) / 100 AS CUR_REPAY_AMT,
+		CUR_REPAYDATE,
+		EARLIEST_PAY_DATE,
+		SUM(CUR_REPAY_PRINCIPAL) / 100 AS CUR_REPAY_PRINCIPAL,
+		SUM(CUR_REPAY_INTEREST) / 100 AS CUR_REPAY_INTEREST,
+		SUM(PRE_INTEREST) / 100 AS PRE_INTEREST,
+		SUM(CUR_REPAY_OVERDUE_INTEREST) / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+		SUM(PRE_OVERDUE_INTEREST) / 100 AS PRE_OVERDUE_INTEREST,
+		SUM(MONTH_OVERDUE_AMT) / 100 AS MONTH_OVERDUE_AMT,
+		SUM(FIXED_OVERDUE_AMT) / 100 AS FIXED_OVERDUE_AMT,
+		OVERDUE_DAYS,
+		SUM(CUR_REAL_REPAYAMT) / 100 AS CUR_REAL_REPAYAMT,
+		SUM(PRINCIPAL) / 100 AS PRINCIPAL,
+		SUM(REALPAYAMT) / 100 AS REALPAYAMT,
+		SUM(REMAINPRINCIPAL) / 100 AS REMAINPRINCIPAL,
+		INSTALLSUMAMT / 100,
+		SUM(INSTALLAMT) / 100 AS INSTALLAMT,
+		
+		SUM(CUT_INTEREST) / 100 AS CUT_INTEREST,
+		SUM(CUT_OVERDUE_INTEREST) / 100 AS CUT_OVERDUE_INTEREST,
+		SUM(CUT_FIXED_OVERDUE_AMT) / 100 AS CUT_FIXED_OVERDUE_AMT,
+		
+		PREPAYMENT,
+		PARTPAYMENT,
+		INSTORDER,
+		STATUS,
+		PLANID,
+		VERSION,
+		CREATETIME,
+		UPDATETIME
+		FROM
+		<include refid="table" />
+		<where>
+			STATUS !=4
+			<if test="orderId != null and orderId != ''">
+				and ORDERID = #{orderId}
+			</if>
+		</where>
+		<![CDATA[GROUP BY ORDERID,REPAYNO]]>
+		<![CDATA[ order by REPAYNO asc]]> ) D
+	</select>
+	<!-- 根据订单号 期数获取应还款金额 -->
+	<select id="getCurRepayAmtByRepayno" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT  
+            orderid,regid,sum(CUR_REPAY_AMT) CUR_REPAY_AMT,CUR_REAL_REPAYAMT
+        FROM
+        <include refid="table" />
+        <where>
+            ORDERID = #{orderId}
+            <if test="repayNos != null and repayNos.length > 0">
+				and REPAYNO in
+				<foreach item="item" index="index" collection="repayNos" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			AND STATUS &lt;= 2
+        </where>
+    </select>
+    <!--根据订单号 手机号码 还款期数 查询账单信息  -->
+    <select id="selectBillsByCondition" parameterType="java.util.Map" resultMap="installmentBillInfoNormalRepay">
+        SELECT  
+            REGID,OPENID,ORDERID,MERCHANTNO,REPAYNO,(CUR_REPAY_AMT - CUR_REAL_REPAYAMT )/100 as AMT
+        FROM
+        <include refid="table" />
+        <where>
+        	 STATUS != 4
+			 AND STATUS &lt;= 2
+			<if test="orderId != null and orderId != ''">
+				AND  ORDERID = #{orderId} 
+			</if>
+			<if test="regId != null and regId != ''">
+				AND  REGID = #{regId} 
+			</if>
+            <if test="repayNos != null and repayNos.length > 0">
+				AND  REPAYNO in
+				<foreach item="item" index="index" collection="repayNos" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+        </where>
+    </select>
+    
+    <select id="overdueBillQuery" parameterType="com.iqb.consumer.data.layer.mysql.bean.request.QueryCondition" 
+        resultType="com.iqb.consumer.data.layer.mysql.bean.request.OverDueBillPojo">
+        SELECT  
+            orderid, repayno, cur_repay_amt/100 as amt
+        FROM 
+            inst_billinfo
+        WHERE 
+            status='0' 
+        AND 
+            orderid=#{orderId}
+        AND 
+            repayno=#{repayNo}
+    </select>
+    
+    <!-- 存量统计查询 查询应还总额 已还本金 未还本金 -->
+    <select id="listStockStatisticsAmtPage" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+		AA.ORDERID,
+		AA.INSTALLSUMAMT,
+		AA.CUR_REPAY_PRINCIPAL,
+			CASE
+			WHEN (
+				AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+			) IS NULL THEN
+				AA.INSTALLSUMAMT
+			ELSE
+				AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+			END AS REMAINPRINCIPAL
+		FROM
+			(
+				SELECT
+					A.ORDERID,
+					A.INSTALLSUMAMT / 100 AS 'INSTALLSUMAMT',
+					(
+						SELECT
+							SUM(B.CUR_REPAY_PRINCIPAL) / 100
+						FROM
+							inst_billinfo B
+						WHERE
+							A.ORDERID = B.ORDERID
+						AND B. STATUS = 3
+					) CUR_REPAY_PRINCIPAL
+				FROM
+					inst_billinfo A
+				WHERE
+					A. STATUS &lt;= 2
+					AND  A.OPENID='10102'
+					AND A.MERCHANTNO NOT IN ('hykc')
+					<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+				GROUP BY
+				A.ORDERID
+		) AA
+	</select>
+	
+	<!-- 存量统计查询 查询应还总额 已还本金 未还本金 总条数-->
+    <select id="listStockStatisticsAmtPageCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+		(
+			SELECT
+			AA.ORDERID,
+			AA.INSTALLSUMAMT,
+			AA.CUR_REPAY_PRINCIPAL,
+				CASE
+				WHEN (
+					AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+				) IS NULL THEN
+					AA.INSTALLSUMAMT
+				ELSE
+					AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+				END AS REMAINPRINCIPAL
+			FROM
+				(
+					SELECT
+						A.ORDERID,
+						A.INSTALLSUMAMT / 100 AS 'INSTALLSUMAMT',
+						(
+							SELECT
+								SUM(B.CUR_REPAY_PRINCIPAL) / 100
+							FROM
+								inst_billinfo B
+							WHERE
+								A.ORDERID = B.ORDERID
+							AND B. STATUS = 3
+						) CUR_REPAY_PRINCIPAL
+					FROM
+						inst_billinfo A
+					WHERE
+						A. STATUS &lt;= 2
+						AND  A.OPENID='10102'
+						AND A.MERCHANTNO NOT IN ('hykc')
+						<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					GROUP BY
+					A.ORDERID
+			) AA
+		) G
+	</select>
+	
+	<!-- 存量统计查询 查询总期数 已还期数查询 未还期数-->
+    <select id="listStockStatisticsNosPage" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+			AA.ORDERID,
+			AA.INSTALLTERMS,
+			AA.REPAYNO,
+			CASE
+		WHEN (AA.INSTALLTERMS - AA.REPAYNO) IS NULL THEN
+			AA.INSTALLTERMS
+		ELSE
+			(AA.INSTALLTERMS - AA.REPAYNO)
+		END AS NONREPAYNO
+		FROM
+			(
+				SELECT
+					A.ORDERID,
+					max(A.repayno) AS INSTALLTERMS,
+					(
+						SELECT
+							max(B.REPAYNO)
+						FROM
+							inst_billinfo B
+						WHERE
+							B.ORDERID = A.ORDERID
+						AND B.`STATUS` = 3
+					) AS REPAYNO
+				FROM
+					inst_billinfo A
+				WHERE
+					A.STATUS &lt;= 2
+					AND  A.OPENID='10102'
+					AND A.MERCHANTNO NOT IN ('hykc')
+					<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					
+				GROUP BY
+					ORDERID
+			) AA
+	</select>
+	
+	<!-- 存量统计查询 查询总期数 已还期数查询 未还期数 总条数-->
+    <select id="listStockStatisticsNosPageCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+		(
+			SELECT
+				AA.ORDERID,
+				AA.INSTALLTERMS,
+				AA.REPAYNO,
+				CASE
+			WHEN (AA.INSTALLTERMS - AA.REPAYNO) IS NULL THEN
+				AA.INSTALLTERMS
+			ELSE
+				(AA.INSTALLTERMS - AA.REPAYNO)
+			END AS NONREPAYNO
+			FROM
+				(
+					SELECT
+						A.ORDERID,
+						max(A.repayno) AS INSTALLTERMS,
+						(
+							SELECT
+								max(B.REPAYNO)
+							FROM
+								inst_billinfo B
+							WHERE
+								B.ORDERID = A.ORDERID
+							AND B.`STATUS` = 3
+						) AS REPAYNO
+					FROM
+						inst_billinfo A
+					WHERE
+						A.STATUS &lt;= 2
+						AND  A.OPENID='10102'
+						AND A.MERCHANTNO NOT IN ('hykc')
+						<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					GROUP BY
+						ORDERID
+				) AA
+			) G
+	</select>
+	
+	<!-- 存量统计查询 优化-->
+    <select id="listStockStatisticsPageNew" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+			B.ORDERID,
+			A.REALNAME,
+			B.REGID,
+			B.OPENID,
+			B.MERCHANTNO,
+			I.SOURCESFUNDING,
+			I.FUNDID
+			 
+		FROM
+			inst_billinfo B 
+			LEFT JOIN acc_openinfo A on A.REGID = B.REGID
+				LEFT JOIN inst_info I on I.ORDERID = B.ORDERID and I.`STATUS` = 0
+		where 
+		B.STATUS &lt;= 2
+		AND  B.OPENID='10102'
+		AND B.MERCHANTNO NOT IN ('hykc')
+				<if test="curRepayDate != null and curRepayDate != ''">
+					<![CDATA[ 
+						AND B.ORDERDATE <= #{curRepayDate}
+						AND (
+							B.CUR_REPAYDATE > #{curRepayDate}
+							OR B.CUR_REPAYDATE IS NULL
+						)
+					]]>
+				</if>
+				<if test="orderId != null and orderId != ''">
+					and B.ORDERID = #{orderId} 
+				</if>
+				<if test="regId != null and regId != ''">
+					and B.REGID = #{regId} 
+				</if>
+				<if test="merchantNos != null and merchantNos.size() > 0">
+					and B.MERCHANTNO in
+					<foreach item="item" index="index" collection="merchantNos"
+						open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				GROUP BY ORDERID
+	</select>
+	
+	<!-- 存量统计查询 优化-->
+    <select id="listStockStatisticsPageNewCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+		(
+			SELECT
+				B.ORDERID,
+				A.REALNAME,
+				B.REGID,
+				B.OPENID,
+				B.MERCHANTNO,
+				I.SOURCESFUNDING,
+				I.FUNDID
+				 
+			FROM
+				inst_billinfo B 
+				LEFT JOIN acc_openinfo A on A.REGID = B.REGID
+					LEFT JOIN inst_info I on I.ORDERID = B.ORDERID and I.`STATUS` = 0
+			where 
+			B.STATUS &lt;= 2
+			AND  B.OPENID='10102'
+			AND B.MERCHANTNO NOT IN ('hykc')
+					<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND B.ORDERDATE <= #{curRepayDate}
+							AND (
+								B.CUR_REPAYDATE > #{curRepayDate}
+								OR B.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and B.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and B.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and B.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					GROUP BY ORDERID
+				) G
+	</select>
+	
+	<!-- 部分还款 -->
+	<update id="updateForPartRepayment"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="curRealRepayamt != null and curRealRepayamt != '' ">
+				CUR_REAL_REPAYAMT = CUR_REAL_REPAYAMT + #{curRealRepayamt},
+			</if>
+			<if test="curRepayDate != null and curRepayDate != '' ">
+				CUR_REPAYDATE = #{curRepayDate},
+			</if>
+			<if test="status != null and status != '' ">
+				STATUS = #{status},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			STATUS != 4
+			<if test="orderId != null and orderId != '' ">
+				AND ORDERID = #{orderId}
+			</if>
+			<if test="repayNo != null and repayNo != '' ">
+				AND REPAYNO = #{repayNo}
+			</if>
+		</where>
+	</update>
+	
+	<!-- 查询每日到期账单-->
+    <select id="selectEveryDayExpireBill" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+			A.ORDERID,
+			A.REPAYNO,
+			A.OPENID,
+			(A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+			(A.CUR_REPAY_PRINCIPAL+A.CUR_REPAY_INTEREST)/100 as monthInterest,
+			CASE
+				WHEN A.`STATUS` = '0' THEN '2'
+			ELSE '1'
+			END tradeType,
+			A.MERCHANTNO,
+			A.CUR_REPAY_OVERDUE_INTEREST/100,
+			A.OVERDUE_DAYS,
+			A.LASTREPAYDATE,
+			A.STATUS
+		FROM
+			inst_billinfo A 
+			LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+		WHERE
+			A.`STATUS` &lt;= 2
+			AND A.LASTREPAYDATE &lt;= DATE_FORMAT(now(), '%Y-%m-%d')
+			<if test="startDate !=null and startDate != ''">
+				AND B.BEGINDATE &gt;= DATE_FORMAT(#{startDate},'%Y%m%d')
+			</if>
+			<if test="orderDate !=null and orderDate != ''">
+                AND B.ORDERDATE &gt;= DATE_FORMAT(#{orderDate},'%Y%m%d')
+            </if>
+			<if test="merchantNo !=null and merchantNo != ''">
+				AND  A.MERCHANTNO = #{merchantNo}
+			</if>
+			<if test="openId !=null and openId != ''">
+                AND  A.OPENID = #{openId}
+            </if>
+		ORDER BY A.CREATETIME
+	</select>
+	
+	<select id="selectEveryDayExpireBillCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM
+		(
+		
+			SELECT
+			A.ORDERID,
+			A.REPAYNO,
+			A.OPENID,
+			(A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+			CASE
+				WHEN A.`STATUS` = '0' THEN '2'
+			ELSE '1'
+			END tradeType,
+			A.MERCHANTNO,
+            A.CUR_REPAY_OVERDUE_INTEREST,
+            A.OVERDUE_DAYS,
+            A.LASTREPAYDATE,
+            A.STATUS
+		FROM
+			inst_billinfo A 
+			LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+		WHERE
+			A.`STATUS` &lt;= 2
+            AND A.LASTREPAYDATE &lt;= DATE_FORMAT(now(), '%Y-%m-%d')
+			<if test="startDate !=null and startDate != ''">
+				AND B.BEGINDATE &gt;= DATE_FORMAT(#{startDate},'%Y%m%d')
+			</if>
+			<if test="orderDate !=null and orderDate != ''">
+                AND B.ORDERDATE &gt;= DATE_FORMAT(#{orderDate},'%Y%m%d')
+            </if>
+			<if test="merchantNo !=null and merchantNo != ''">
+				AND  A.MERCHANTNO = #{merchantNo}
+			</if>
+			<if test="openId !=null and openId != ''">
+                AND  A.OPENID = #{openId}
+            </if>
+			ORDER BY A.CREATETIME
+		) G
+	</select>
+	
+	<!-- 存量统计查询 查询应还总额 已还本金 未还本金 -->
+    <select id="listStockStatisticsAmt" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+		AA.ORDERID,
+		AA.INSTALLSUMAMT,
+		AA.CUR_REPAY_PRINCIPAL,
+			CASE
+			WHEN (
+				AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+			) IS NULL THEN
+				AA.INSTALLSUMAMT
+			ELSE
+				AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+			END AS REMAINPRINCIPAL
+		FROM
+			(
+				SELECT
+					A.ORDERID,
+					A.INSTALLSUMAMT / 100 AS 'INSTALLSUMAMT',
+					(
+						SELECT
+							SUM(B.CUR_REPAY_PRINCIPAL) / 100
+						FROM
+							inst_billinfo B
+						WHERE
+							A.ORDERID = B.ORDERID
+						AND B. STATUS = 3
+					) CUR_REPAY_PRINCIPAL
+				FROM
+					inst_billinfo A
+				WHERE
+					A. STATUS &lt;= 2
+					AND A.OPENID='10102'
+					AND A.MERCHANTNO NOT IN ('hykc')
+					<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+				GROUP BY
+				A.ORDERID
+		) AA
+	</select>
+	
+	<!-- 存量统计查询 查询总期数 已还期数查询 未还期数-->
+    <select id="listStockStatisticsNos" parameterType="java.util.Map" resultMap="StockStatisticsBean">
+		SELECT
+			AA.ORDERID,
+			AA.INSTALLTERMS,
+			AA.REPAYNO,
+			CASE
+		WHEN (AA.INSTALLTERMS - AA.REPAYNO) IS NULL THEN
+			AA.INSTALLTERMS
+		ELSE
+			(AA.INSTALLTERMS - AA.REPAYNO)
+		END AS NONREPAYNO
+		FROM
+			(
+				SELECT
+					A.ORDERID,
+					max(A.repayno) AS INSTALLTERMS,
+					(
+						SELECT
+							max(B.REPAYNO)
+						FROM
+							inst_billinfo B
+						WHERE
+							B.ORDERID = A.ORDERID
+						AND B.`STATUS` = 3
+					) AS REPAYNO
+				FROM
+					inst_billinfo A
+				WHERE
+					A. STATUS &lt;= 2
+					AND A.OPENID='10102'
+					AND A.MERCHANTNO NOT IN ('hykc')
+					<if test="curRepayDate != null and curRepayDate != ''">
+						<![CDATA[ 
+							AND A.ORDERDATE <= #{curRepayDate}
+							AND (
+								A.CUR_REPAYDATE > #{curRepayDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+						]]>
+					</if>
+					<if test="orderId != null and orderId != ''">
+						and A.ORDERID = #{orderId} 
+					</if>
+					<if test="regId != null and regId != ''">
+						and A.REGID = #{regId} 
+					</if>
+					<if test="merchantNos != null and merchantNos.size() > 0">
+						and A.MERCHANTNO in
+						<foreach item="item" index="index" collection="merchantNos"
+							open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+		
+				GROUP BY
+					ORDERID
+			) AA
+	</select>
+	
+	<!-- 修改上收月供剩余本金 -->
+	<update id="updatePrincipalForBillInfo"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			<if test="remainPrincipal != null and remainPrincipal != '' ">
+				REMAINPRINCIPAL = #{remainPrincipal},
+			</if>
+			updatetime = now()
+		</set>
+		<where>
+			STATUS != 4
+			<if test="orderId != null and orderId != '' ">
+				AND ORDERID = #{orderId}
+			</if>
+			<if test="repayNo != null and repayNo != '' ">
+				AND REPAYNO = #{repayNo}
+			</if>
+		</where>
+	</update>
+	<!-- 房贷-根据订单号获取子订单信息 -->
+	<select id="getSubOrderNoByOrderNo" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+			A.SUBORDERID,
+			B.INSTALLAMT / 100 AS sumCurRepayAmt
+		FROM
+			inst_billinfo A
+		LEFT JOIN inst_info B ON A.SUBORDERID = B.SUBORDERID
+		WHERE
+			A.ORDERID = #{orderId}
+		AND A.SUBORDERID IS NOT NULL
+		GROUP BY
+			A.SUBORDERID;
+	</select>
+	
+	<!-- 房贷-根据订单号获取账单信息 -->
+	<select id="getMorgateOrderInfoByOrderId" parameterType="java.util.Map" resultMap="installmentBillInfo">
+		SELECT
+			ORDERID,
+			SUBORDERID,
+			REPAYNO,
+			LASTREPAYDATE,
+			CUR_REPAY_AMT/100 as CUR_REPAY_AMT,
+			CUR_REAL_REPAYAMT/100 as CUR_REAL_REPAYAMT,
+			(CUR_REPAY_OVERDUE_INTEREST-CUT_OVERDUE_INTEREST)/100 as PRE_OVERDUE_INTEREST,
+			OVERDUE_DAYS,
+			`STATUS`
+		FROM
+			<include refid="table" />
+		<where>
+			STATUS != 4
+			<if test="subOrderId != null and subOrderId != '' ">
+				AND SUBORDERID = #{subOrderId}
+			</if>
+		</where>
+		ORDER BY REPAYNO;
+	</select>
+	<!-- 根据订单号获取总罚息 -->
+	<select id="getTotalOverDueInterest" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(SUM(CUR_REPAY_OVERDUE_INTEREST),0)-IFNULL(SUM(CUT_OVERDUE_INTEREST),0)
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND 
+            status = 0
+    </select>
+    <!-- 根据订单号获取逾期期数 -->
+    <select id="getOverdueItems" parameterType="java.lang.String" resultType="int">
+        SELECT
+            count(orderId)
+        FROM
+            inst_billinfo
+        WHERE
+            orderId = #{orderId}
+        AND 
+            status = 0
+    </select>
+    
+    <!-- 查询每日到期账单(自动划扣使用)-->
+    <select id="selectEveryDayExpireBillForAuto" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT
+            A.ORDERID,
+            A.REPAYNO,
+            A.OPENID,
+            (A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+            (A.CUR_REPAY_PRINCIPAL+A.CUR_REPAY_INTEREST)/100 as monthInterest,
+            CASE
+                WHEN A.`STATUS` = '0' THEN '2'
+            ELSE '1'
+            END tradeType,
+            A.MERCHANTNO,
+            A.CUR_REPAY_OVERDUE_INTEREST/100,
+            A.OVERDUE_DAYS,
+            A.LASTREPAYDATE,
+            A.STATUS
+        FROM
+            inst_billinfo A 
+            LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+        WHERE
+            A.`STATUS` &lt;= 2
+            AND A.LASTREPAYDATE = DATE_FORMAT(now(), '%Y-%m-%d')
+            <if test="startDate !=null and startDate != ''">
+                AND B.BEGINDATE &gt;= DATE_FORMAT(#{startDate},'%Y%m%d')
+            </if>
+            <if test="orderDate !=null and orderDate != ''">
+                AND B.ORDERDATE &gt;= DATE_FORMAT(#{orderDate},'%Y%m%d')
+            </if>
+            <if test="merchantNo !=null and merchantNo != ''">
+                AND  A.MERCHANTNO = #{merchantNo}
+            </if>
+            <if test="openId !=null and openId != ''">
+                AND  A.OPENID = #{openId}
+            </if>
+        ORDER BY A.CREATETIME
+    </select>
+    
+    <select id="selectEveryDayExpireBillForAutoCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT 
+            count(1)
+        FROM
+        (
+        
+            SELECT
+            A.ORDERID,
+            A.REPAYNO,
+            A.OPENID,
+            (A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+            CASE
+                WHEN A.`STATUS` = '0' THEN '2'
+            ELSE '1'
+            END tradeType,
+            A.MERCHANTNO,
+            A.CUR_REPAY_OVERDUE_INTEREST,
+            A.OVERDUE_DAYS,
+            A.LASTREPAYDATE,
+            A.STATUS
+        FROM
+            inst_billinfo A 
+            LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+        WHERE
+            A.`STATUS` &lt;= 2
+            AND A.LASTREPAYDATE = DATE_FORMAT(now(), '%Y-%m-%d')
+            <if test="startDate !=null and startDate != ''">
+                AND B.BEGINDATE &gt;= DATE_FORMAT(#{startDate},'%Y%m%d')
+            </if>
+            <if test="orderDate !=null and orderDate != ''">
+                AND B.ORDERDATE &gt;= DATE_FORMAT(#{orderDate},'%Y%m%d')
+            </if>
+            <if test="merchantNo !=null and merchantNo != ''">
+                AND  A.MERCHANTNO = #{merchantNo}
+            </if>
+            <if test="openId !=null and openId != ''">
+                AND  A.OPENID = #{openId}
+            </if>
+            ORDER BY A.CREATETIME
+        ) G
+    </select>
+    <!-- 根据订单号查询当期账单信息 -->
+    <select id="getAllInstallmentBillInfoByOrderId" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT CUR_REPAY_AMT
+        ,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+        CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+        PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+        PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME
+        FROM inst_billinfo
+        <where>
+            ORDERID = #{orderId}
+            AND LASTREPAYDATE &lt; #{orderDate}
+            ORDER BY id DESC LIMIT 1 
+        </where>
+    </select>
+    <!-- 根据订单号查询当期账单信息 -->
+    <select id="getAllInstallmentBillInfoByOrderIdList" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT CUR_REPAY_AMT
+        ,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+        CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+        PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+        PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME
+        FROM inst_billinfo
+        <where>
+            ORDERID = #{orderId}
+            AND REPAYNO &lt;#{repayNo}
+        </where>
+    </select>
+    <select id="queryBillLastDateThree" parameterType="java.util.Map" resultMap="installmentBillInfo">
+			SELECT
+				CUR_REPAY_AMT /100 AS CUR_REPAY_AMT,
+				FIXED_OVERDUE_AMT/100 AS FIXED_OVERDUE_AMT,
+				ORDERID,
+				ORDERDATE,
+				REPAYNO,
+				INSTALLINFOID,
+				INSTALLDETAILID,
+				REGID,
+				OPENID,
+				LASTREPAYDATE,
+				DELAYBEGINDATE,
+				CUR_REPAYDATE,
+				EARLIEST_PAY_DATE,
+				CUR_REPAY_PRINCIPAL/100 AS CUR_REPAY_PRINCIPAL,
+				CUR_REPAY_INTEREST/100 AS CUR_REPAY_INTEREST,
+				PRE_INTEREST/100 AS PRE_INTEREST,
+				(CUR_REPAY_OVERDUE_INTEREST-CUT_OVERDUE_INTEREST)/100 AS CUR_REPAY_OVERDUE_INTEREST,
+				PRE_OVERDUE_INTEREST/100 AS PRE_OVERDUE_INTEREST,
+				OVERDUE_DAYS,
+				CUR_REAL_REPAYAMT/100 AS CUR_REAL_REPAYAMT,
+				PRINCIPAL/100 AS PRINCIPAL,
+				REALPAYAMT/100 AS REALPAYAMT,
+				REMAINPRINCIPAL/100 AS REMAINPRINCIPAL,
+				INSTALLAMT/100 AS INSTALLAMT,
+				PREPAYMENT,
+				PARTPAYMENT,
+				INSTORDER,
+				STATUS,
+				VERSION,
+				CREATETIME
+			FROM
+				inst_billinfo a
+			WHERE
+				a.OVERDUE_DAYS &gt; 0
+			AND a.OVERDUE_DAYS &lt;= 5
+			AND (
+				a. STATUS = 1
+				OR a. STATUS = 2
+				OR a. STATUS = 0
+			)
+			AND (a.OPENID = '10102' or a.OPENID = '10104')
+    </select>
+    <!-- 批量根据订单号还有当前期数查询账单信息-->
+    <select id="queryBillInfoByOrderIdPage" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfoNormalRepay" resultMap="installmentBillInfo">
+    	SELECT
+			ID,
+            ORDERID,
+            ORDERDATE,
+            MERCHANTNO,
+            REPAYNO,
+            INSTALLINFOID,
+            INSTALLDETAILID,
+            REGID,
+            OPENID,
+            LASTREPAYDATE,
+            DELAYBEGINDATE,
+            CUR_REPAY_AMT / 100 AS CUR_REPAY_AMT,
+            CUR_REPAYDATE,
+            EARLIEST_PAY_DATE,
+            CUR_REPAY_PRINCIPAL / 100 AS CUR_REPAY_PRINCIPAL,
+            CUR_REPAY_INTEREST / 100 AS CUR_REPAY_INTEREST,
+            PRE_INTEREST / 100 AS PRE_INTEREST,
+            CUR_REPAY_OVERDUE_INTEREST / 100 AS CUR_REPAY_OVERDUE_INTEREST,
+            PRE_OVERDUE_INTEREST / 100 AS PRE_OVERDUE_INTEREST,
+            MONTH_OVERDUE_AMT / 100 AS MONTH_OVERDUE_AMT,
+            FIXED_OVERDUE_AMT / 100 AS FIXED_OVERDUE_AMT,
+            OVERDUE_DAYS,
+            CUR_REAL_REPAYAMT / 100 AS CUR_REAL_REPAYAMT,
+            PRINCIPAL / 100 AS PRINCIPAL,
+            REALPAYAMT / 100 AS REALPAYAMT,
+            REMAINPRINCIPAL / 100 AS REMAINPRINCIPAL,
+            INSTALLSUMAMT / 100,
+            INSTALLAMT / 100 AS INSTALLAMT,
+            CUT_INTEREST / 100 AS CUT_INTEREST,
+            CUT_OVERDUE_INTEREST / 100 AS CUT_OVERDUE_INTEREST,
+            CUT_FIXED_OVERDUE_AMT / 100 AS CUT_FIXED_OVERDUE_AMT,
+            PREPAYMENT,
+            PARTPAYMENT,
+            INSTORDER,
+            STATUS,
+            PLANID,
+            VERSION,
+            CREATETIME,
+            UPDATETIME
+		FROM
+			inst_billinfo
+		WHERE
+		  status &lt; 4
+		and orderId = #{orderId} and repayNo = #{repayNo}
+		limit 1
+    </select>
+    <select id="queryBillLastDateGreaterThanFive" parameterType="java.util.Map" resultMap="installmentBillInfo">
+			SELECT
+				CUR_REPAY_AMT /100 AS CUR_REPAY_AMT,
+                FIXED_OVERDUE_AMT/100 AS FIXED_OVERDUE_AMT,
+                ORDERID,
+                ORDERDATE,
+                REPAYNO,
+                INSTALLINFOID,
+                INSTALLDETAILID,
+                REGID,
+                OPENID,
+                LASTREPAYDATE,
+                DELAYBEGINDATE,
+                CUR_REPAYDATE,
+                EARLIEST_PAY_DATE,
+                CUR_REPAY_PRINCIPAL/100 AS CUR_REPAY_PRINCIPAL,
+                CUR_REPAY_INTEREST/100 AS CUR_REPAY_INTEREST,
+                PRE_INTEREST/100 AS PRE_INTEREST,
+                (CUR_REPAY_OVERDUE_INTEREST-CUT_OVERDUE_INTEREST)/100 AS CUR_REPAY_OVERDUE_INTEREST,
+                PRE_OVERDUE_INTEREST/100 AS PRE_OVERDUE_INTEREST,
+                OVERDUE_DAYS,
+                CUR_REAL_REPAYAMT/100 AS CUR_REAL_REPAYAMT,
+                PRINCIPAL/100 AS PRINCIPAL,
+                REALPAYAMT/100 AS REALPAYAMT,
+                REMAINPRINCIPAL/100 AS REMAINPRINCIPAL,
+                INSTALLAMT/100 AS INSTALLAMT,
+                PREPAYMENT,
+                PARTPAYMENT,
+                INSTORDER,
+                STATUS,
+                VERSION,
+                CREATETIME
+			FROM
+				inst_billinfo a
+			WHERE
+				a.OVERDUE_DAYS &gt; 5
+			AND (
+				a. STATUS = 1
+				OR a. STATUS = 2
+				OR a. STATUS = 0
+			)
+			AND (A.OPENID='10102' or A.OPENID = '10104') 
+			GROUP BY
+				a.orderId
+    </select>
+     <!-- 获取以租代购所有待还款账单-->
+    <select id="selectLatelyThreeDaysBill" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT
+            A.ORDERID,
+            A.REPAYNO,
+            A.MERCHANTNO,
+            A.LASTREPAYDATE,
+            (A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+            (A.REMAINPRINCIPAL)/(100*1000)*2 as monthOverdueAmt,
+            A.STATUS
+        FROM
+            inst_billinfo A 
+            LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+        WHERE
+            (A.`STATUS`=1 or A.`STATUS`=2)
+            AND (A.OPENID='10102' or A.OPENID = '10104')
+        ORDER BY A.CREATETIME
+    </select>
+    <select id="selectLatelyThreeDaysBillCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from (
+            SELECT
+            A.ORDERID,
+            A.REPAYNO,
+            A.MERCHANTNO,
+            A.LASTREPAYDATE,
+            (A.CUR_REPAY_AMT - A.CUR_REAL_REPAYAMT ) / 100 AS CUR_REPAY_AMT,
+            (A.REMAINPRINCIPAL)/(100*1000)*2 as monthOverdueAmt,
+            A.STATUS
+        FROM
+            inst_billinfo A 
+            LEFT JOIN inst_info B on A.ORDERID = B.ORDERID
+        WHERE
+            (A.`STATUS`=1 or A.`STATUS`=2)
+            AND (A.OPENID='10102' or A.OPENID = '10104')           
+        ORDER BY A.CREATETIME
+        ) G
+    </select>
+    
+     <!-- 根据订单号 期数查询账单信息 -->
+    <select id="getInstallmentBillInfoByOrderId" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT CUR_REPAY_AMT
+        ,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+        CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+        PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+        PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME
+        FROM inst_billinfo
+        <where>
+            ORDERID = #{orderId}
+            AND REPAYNO = #{repayNo}
+            ORDER BY id DESC LIMIT 1 
+        </where>
+    </select>
+    <!-- 批量修改接收短信手机号码-->
+    <update id="updateInstallmentBillInfoByOrderId"
+        parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentBillInfo">
+        UPDATE
+        <include refid="table" />
+        <set>          
+            <if test="updateTime != null and updateTime != '' ">
+                UPDATETIME = #{updateTime},
+            </if>
+            <if test="smsMobile != null and smsMobile != '' ">
+                smsMobile = #{smsMobile},
+            </if>
+        </set>
+        <where>
+            ORDERID = #{orderId}
+            AND STATUS !=3
+        </where>
+    </update>
+    <!-- 获得当前订单最后还款期数 -->
+    <select id="getRemainPrincipal" parameterType="String" resultType="java.util.Map">
+        SELECT MIN(REPAYNO) AS repayNo,REMAINPRINCIPAL as remainPrincipal from inst_billinfo WHERE ORDERID=#{orderId} and `STATUS`&lt;3
+    </select>
+    
+    <!-- 按订单分组汇总账单信息 -->
+    <select id="collectBillDataByOrder" parameterType="java.util.Map" resultType="map">
+        select ibi.ORDERID as orderId,
+         ifnull((select count(INSTALLDETAILID) from inst_billinfo where ORDERID=ibi.ORDERID and `STATUS`=3),0) as finiCnt,
+         ifnull((select max(OVERDUE_DAYS) from inst_billinfo where ORDERID=ibi.ORDERID and `STATUS`=0),0) as overMax
+        from inst_billinfo ibi where 1=1 
+        <if test="orderId != null and orderId != '' ">
+           and ibi.ORDERID = #{orderId}
+        </if>
+        <if test="orderIdList != null and orderIdList.size() > 0">
+            and ibi.ORDERID in
+            <foreach item="item" index="index" collection="orderIdList" open="("
+                separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        group by ibi.ORDERID order by ibi.ORDERID
+    </select>
+    <!-- 根据订单号查询首次还款时间 -->
+    <select id="getFirstLastRepayDateByOrderId" parameterType="String" resultMap="installmentBillInfo">
+        SELECT MIN(REPAYNO),
+	        CUR_REPAY_AMT,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+	        CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+	        PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+	        PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME 
+        from inst_billinfo WHERE ORDERID=#{orderId} and `STATUS`&lt;4
+    </select>
+    <!-- 根据订单号,放款时间查询小于最迟还款日最近的一期账单(倒叙) -->
+    <select id="getLatelyInstallmentBillInfoDesc" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT 
+            CUR_REPAY_AMT,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+            CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+            PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+            PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME 
+        from inst_billinfo WHERE ORDERID=#{orderId} and status &lt;4 and LASTREPAYDATE &lt;= #{loanDate} 
+        ORDER BY REPAYNO desc LIMIT 1
+    </select>
+    <!-- 根据订单号,放款时间查询大于最迟还款日最近的一期账单 -->
+    <select id="getLatelyInstallmentBillInfoAsc" parameterType="java.util.Map" resultMap="installmentBillInfo">
+        SELECT MIN(REPAYNO),
+            CUR_REPAY_AMT,ORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,INSTALLDETAILID,REGID,OPENID,LASTREPAYDATE,DELAYBEGINDATE,
+            CUR_REPAYDATE,EARLIEST_PAY_DATE,CUR_REPAY_PRINCIPAL,CUR_REPAY_INTEREST,PRE_INTEREST,CUR_REPAY_OVERDUE_INTEREST,
+            PRE_OVERDUE_INTEREST,OVERDUE_DAYS,CUR_REAL_REPAYAMT,PRINCIPAL,REALPAYAMT,REMAINPRINCIPAL,INSTALLAMT,
+            PREPAYMENT,PARTPAYMENT,INSTORDER,STATUS,VERSION,CREATETIME 
+        from inst_billinfo WHERE ORDERID=#{orderId} and status &lt;4 and LASTREPAYDATE &gt;= #{loanDate}
+        limit 1
+    </select>
+    <select id="getBillNums" parameterType="java.lang.String" resultType="java.lang.Integer">
+       SELECT COUNT(repayNo) talNum from inst_billinfo WHERE ORDERID = #{orderId} and status &lt;4
+    </select>
+</mapper>

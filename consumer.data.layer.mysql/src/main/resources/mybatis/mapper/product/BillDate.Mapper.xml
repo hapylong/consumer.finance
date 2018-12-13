@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.product.BillDateDaoImpl">
+
+	<!-- getById -->
+	<select id="getById" parameterType="long" resultType="com.iqb.consumer.data.layer.mysql.bean.product.RepayDate">
+		SELECT 
+		  ID,
+		  TYPE,
+		  SPECIFIED_DATE AS specifiedDate,
+		  BILLS_HORT_DAY AS billsHortDay,
+		  BILL_DATE AS billDate,
+		  GRACE_DAYS AS graceDays,
+		  REMARK,
+		  VERSION,
+		  CREATE_TIME AS createTime,
+		  UPDATE_TIME AS updateTime 
+		FROM
+		  p_repay_date
+		where ID = #{id}
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM p_repay_date WHERE ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.RepayDate">
+		UPDATE 
+		  p_repay_date 
+		SET
+		  TYPE = #{type},
+		  SPECIFIED_DATE = #{specifiedDate},
+		  BILLS_HORT_DAY = #{billsHortDay},
+		  BILL_DATE = #{billDate},
+		  GRACE_DAYS = #{graceDays},
+		  REMARK = #{remark},
+		  VERSION= VERSION+ 1,
+		  UPDATE_TIME = #{updateTime} 
+		WHERE id = #{id} 
+	</update>
+	
+	<!-- insert -->
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.RepayDate" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO p_repay_date (
+		  TYPE,
+		  SPECIFIED_DATE,
+		  BILLS_HORT_DAY,
+		  BILL_DATE,
+		  GRACE_DAYS,
+		  REMARK,
+		  VERSION,
+		  CREATE_TIME,
+		  UPDATE_TIME
+		) 
+		VALUES
+		  (#{type}, #{specifiedDate}, #{billsHortDay}, #{billDate}, #{graceDays}, #{remark}, #{version}, #{createTime}, #{updateTime})
+	</insert>
+
+</mapper>

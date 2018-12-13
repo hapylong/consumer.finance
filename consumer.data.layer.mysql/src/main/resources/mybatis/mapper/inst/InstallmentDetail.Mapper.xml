@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.data.layer.mysql.dao.inst.InstallmentDetailDaoImpl">
+
+	<sql id="table">inst_detail</sql>
+
+	<resultMap type="InstallmentDetail" id="installmentDetail">
+		<result column="ID" property="id" />
+		<result column="ORDERID" property="orderId" />
+		<result column="SUBORDERID" property="subOrderId" />
+		<result column="ORDERDATE" property="orderDate" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="INSTALLINFOID" property="installInfoId" />
+		<result column="REGID" property="regId" />
+		<result column="OPENID" property="openId" />
+		<result column="INSTALLDATE" property="installDate" />
+		<result column="PRINCIPAL" property="principal" />
+		<result column="REMAINPRINCIPAL" property="remainPrincipal" />
+		<result column="REALPAYAMT" property="realPayamt" />
+		<result column="PLANID" property="planId" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="INSTALLSUMAMT" property="installSumAmt" />
+		<result column="INSTALLAMT" property="installAmt" />
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="INSTORDER" property="instOrder" />
+		<result column="STATUS" property="status" />
+		<result column="USEFREEINTEREST" property="useFreeInterest" />
+		<result column="TAKEINTEREST" property="takeInterest" />
+		<result column="TAKEMONTH" property="takeMonth" />
+		<result column="INTERESTAMT" property="interestAmt" />
+		<result column="TAKEPAYMENTAMT" property="takePaymentAmt" />
+		<result column="CYCLE" property="cycle" />
+		<!-- 其他费用 by yeoman begin -->
+		<result column="OTHERAMT" property="otherAmt" />
+		<!-- 力硕划扣 -->
+		<result column="INTERESTTERMS" property="interestTerms" />
+		<result column="TAKEOTHERAMT" property="takeOtherAmt" />
+		<!-- 其他费用 by yeoman end -->
+		<result column="TAKEPAYMENT" property="takePayment" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="cols">
+		ID,ORDERID,SUBORDERID,ORDERDATE,REPAYNO,INSTALLINFOID,REGID,OPENID,INSTALLDATE,PRINCIPAL,REMAINPRINCIPAL,REALPAYAMT,
+		PLANID,CONTRACTAMT,INSTALLSUMAMT,INSTALLAMT,INSTALLTERMS,MERCHANTNO,INSTORDER,STATUS,USEFREEINTEREST,TAKEINTEREST,TAKEMONTH,
+		INTERESTAMT,TAKEPAYMENTAMT,OTHERAMT,TAKEPAYMENT,CYCLE,INTERESTTERMS,TAKEOTHERAMT,
+		VERSION,CREATETIME,UPDATETIME
+	</sql>
+
+	<sql id="condition_sql">
+		<if test="installInfoId != null and installInfoId != ''"> and INSTALLINFOID = #{installInfoId}</if>
+		<if test="regId != null and regId != ''"> and REGID = #{regId}</if>
+		<if test="orderId != null and orderId != ''"> and ORDERID = #{orderId}</if>
+	</sql>
+
+	<select id="listBy" parameterType="java.util.Map" resultMap="installmentDetail">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			STATUS = 1 
+			<include refid="condition_sql" />
+		</where>
+	</select>
+
+	<!-- 批量插入分摊详情 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO
+		<include refid="table" />
+		(
+		ORDERID,SUBORDERID,ORDERDATE, REPAYNO, INSTALLINFOID, REGID, OPENID,
+		INSTALLDATE,
+		PRINCIPAL, REMAINPRINCIPAL, REALPAYAMT, PLANID,CONTRACTAMT,
+		INSTALLSUMAMT,INSTALLAMT,
+		INSTALLTERMS, MERCHANTNO, INSTORDER,STATUS,
+		USEFREEINTEREST,TAKEINTEREST,TAKEMONTH,CYCLE,
+		INTERESTAMT,TAKEPAYMENTAMT,OTHERAMT,INTERESTTERMS,TAKEOTHERAMT,TAKEPAYMENT,
+		VERSION,CREATETIME,UPDATETIME
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.orderId},#{item.subOrderId},#{item.orderDate}, #{item.repayNo},
+			#{item.installInfoId},
+			#{item.regId},
+			#{item.openId},
+			#{item.installDate}, #{item.principal},
+			#{item.remainPrincipal},
+			#{item.realPayamt}, #{item.planId},#{item.contractAmt},#{item.installSumAmt},
+			#{item.installAmt},
+			#{item.installTerms},
+			#{item.merchantNo},#{item.instOrder},
+			#{item.status},
+			#{item.useFreeInterest},#{item.takeInterest},#{item.takeMonth},#{item.cycle},
+			#{item.interestAmt},#{item.takePaymentAmt},#{item.otherAmt},#{item.interestTerms},#{item.takeOtherAmt},#{item.takePayment},
+			#{item.version},#{item.createTime},
+			#{item.updateTime}
+			)
+		</foreach>
+	</insert>
+
+	<!-- stopInstallmentDetail -->
+	<update id="stopInstallmentDetail"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentDetail">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			STATUS = 2
+		</set>
+		<where>
+			ORDERID = #{orderId}
+			AND REGID = #{regId}
+			AND OPENID = #{openId}
+		</where>
+	</update>
+	<!-- 转租 更新inst_detail -->
+	<update id="updateInstallmentForOrderId"
+		parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentDetail">
+		UPDATE
+		<include refid="table" />
+		<set>
+			<if test="regId != null and regId != '' ">
+				REGID = #{regId},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ORDERID = #{orderId}
+		</where>
+	</update>
+</mapper>

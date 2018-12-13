@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/consumer.common/consumer.common.iml" filepath="$PROJECT_DIR$/consumer.common/consumer.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.data.layer.mysql/consumer.data.layer.mysql.iml" filepath="$PROJECT_DIR$/consumer.data.layer.mysql/consumer.data.layer.mysql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.finance.iml" filepath="$PROJECT_DIR$/consumer.finance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.finance.activemq/consumer.finance.activemq.iml" filepath="$PROJECT_DIR$/consumer.finance.activemq/consumer.finance.activemq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.finance.batch/consumer.finance.batch.iml" filepath="$PROJECT_DIR$/consumer.finance.batch/consumer.finance.batch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.finance.cache/consumer.finance.cache.iml" filepath="$PROJECT_DIR$/consumer.finance.cache/consumer.finance.cache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.finance.notify.receive/consumer.finance.notify.receive.iml" filepath="$PROJECT_DIR$/consumer.finance.notify.receive/consumer.finance.notify.receive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.service/consumer.service.iml" filepath="$PROJECT_DIR$/consumer.service/consumer.service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.virtual.account/consumer.virtual.account.iml" filepath="$PROJECT_DIR$/consumer.virtual.account/consumer.virtual.account.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer.web/consumer.web.iml" filepath="$PROJECT_DIR$/consumer.web/consumer.web.iml" />
+    </modules>
+  </component>
+</project>

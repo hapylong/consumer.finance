@@ -1,0 +1,31 @@
+/**
+ * @Copyright (c) http://www.iqianbang.com/ All rights reserved.
+ * @Description: TODO
+ * @date 2016年7月25日 下午5:12:08
+ * @version V1.0
+ */
+
+package com.iqb.consumer.finance.batch.dao;
+
+import java.util.Date;
+
+import com.iqb.consumer.finance.batch.bean.DelayPayment;
+import com.iqb.consumer.finance.batch.dao.basic.BaseDao;
+
+/**
+ * @author <a href="zhuyaoming@aliyun.com">yeoman</a>
+ */
+public interface DelayPaymentDao extends BaseDao<DelayPayment> {
+
+    /**
+     * 
+     * Description: 获取逾期信息
+     * 
+     * @param
+     * @return DelayPayment
+     * @throws
+     * @Author wangxinbang Create Date: 2016年11月14日 下午6:05:33
+     */
+    public DelayPayment getDelayPayment(String billId, Date delaydate);
+
+}

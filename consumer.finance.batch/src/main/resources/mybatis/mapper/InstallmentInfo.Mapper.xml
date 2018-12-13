@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.finance.batch.dao.InstallmentInfoDaoImpl">
+
+	<sql id="table">inst_info</sql>
+
+	<resultMap type="InstallmentInfo" id="installmentInfo">
+		<result column="ID" property="id" />
+		<result column="ORDERID" property="orderId" />
+		<result column="ORDERDATE" property="orderDate" />
+		<result column="REGID" property="regId" />
+		<result column="BASEID" property="baseId" />
+		<result column="OPENID" property="openId" />
+		<result column="BEGINDATE" property="beginDate" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="INSTALLSUMAMT" property="installSumAmt" />
+		<result column="INSTALLAMT" property="installAmt" />
+		<result column="INTERESTAMT" property="interestAmt" />
+		<result column="TAKEPAYMENTAMT" property="takePaymentAmt" />
+		<result column="TAKEPAYMENT" property="takePayment" />
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="PLANID" property="planId" />
+		<result column="INSTORDER" property="instOrder" />
+		<result column="STATUS" property="status" />
+		<result column="USEFREEINTEREST" property="useFreeInterest" />
+		<result column="FREEINTERESTCOUNT" property="freeInterestCount" />
+		<result column="TAKEINTEREST" property="takeInterest" />
+		<result column="TAKEMONTH" property="takeMonth" />
+		<result column="SOURCESFUNDING" property="sourcesFunding" />
+		<result column="FUNDID" property="fundId" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 插入分期表信息 -->
+	<insert id="insert" parameterType="InstallmentInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(ORDERID,ORDERDATE, REGID, BASEID, OPENID, BEGINDATE,CONTRACTAMT, INSTALLSUMAMT,
+		INSTALLAMT,INTERESTAMT,TAKEPAYMENTAMT,TAKEPAYMENT,
+		INSTALLTERMS, MERCHANTNO, PLANID,INSTORDER, STATUS,
+		USEFREEINTEREST,FREEINTERESTCOUNT,TAKEINTEREST,TAKEMONTH,SOURCESFUNDING,FUNDID,
+		VERSION, CREATETIME, UPDATETIME)
+		VALUES (
+		#{orderId},#{orderDate}, #{regId}, #{baseId}, #{openId},
+		#{beginDate},#{contractAmt},
+		#{installSumAmt},
+		#{installAmt}, #{interestAmt},#{takePaymentAmt},#{takePayment},#{installTerms},
+		#{merchantNo},
+		#{planId},#{instOrder}, #{status}, #{useFreeInterest},
+		#{freeInterestCount},#{takeInterest},#{takeMonth},#{sourcesFunding},#{fundId},
+		#{version}, #{createTime}, #{updateTime});
+	</insert>
+
+	<sql id="condition_sql">
+		<if test="orderId != null and orderId !=''"> and ORDERID = #{orderId} </if>
+		<if test="openId != null and openId != ''"> and OPENID = #{openId} </if>
+	</sql>
+
+	<!-- 参数查询 -->
+	<select id="listBy" parameterType="java.util.Map" resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		ORDER BY INSTORDER DESC
+	</select>
+
+	<!-- 根据订单号查询分期信息 -->
+	<select id="getInstInfoByOrderId" parameterType="java.util.Map"
+		resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId} AND INSTORDER = 1;
+		</where>
+	</select>
+	
+	<!-- 根据订单号查询分期信息 -->
+	<select id="getLimitInstInfoByOrderId" parameterType="java.util.Map"
+		resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId} AND INSTORDER = 1;
+		</where>
+	</select>
+	
+	<!-- getById -->
+	<select id="getById" parameterType="long" resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		where ID = #{id}
+	</select>
+	
+	<!-- stopInstallmentInfo -->
+	<update id="stopInstallmentInfo" parameterType="com.iqb.consumer.finance.batch.bean.InstallmentDetail">
+		UPDATE 
+		  <include refid="table" />
+	  <set>
+			VERSION = #{version}+1 ,
+			STATUS = 2
+		</set>
+		<where>
+			ORDERID = #{orderId}
+			AND REGID = #{regId}
+			AND OPENID = #{openId}
+		</where>
+	</update>
+</mapper>

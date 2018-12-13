@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/filters/filter-dev-env.properties=UTF-8
+encoding//src/main/filters/filter-pro-env.properties=UTF-8
+encoding//src/main/filters/filter-test-env.properties=UTF-8
+encoding//src/main/filters/filter-uat-env.properties=UTF-8
+encoding//src/main/java/com/iqb/consumer/virtual/account/controller/product=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/resources/application.properties=UTF-8
+encoding/<project>=UTF-8

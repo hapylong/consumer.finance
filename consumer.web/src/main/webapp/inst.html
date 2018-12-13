@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Bootstrap 模板</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<!-- 新 Bootstrap 核心 CSS 文件 -->
+		<link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      	<![endif]-->
+		<style>
+			body {
+				padding-top: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<form class="form-horizontal instForm" role="form">
+			<div class="form-group">
+				<label for="orderId" class="col-sm-2 control-label">订单号</label>
+				<div class="col-sm-10">
+					<input type="text" name="orderId" class="form-control" id="orderId" placeholder="订单号">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="orderDate" class="col-sm-2 control-label">订单日期</label>
+				<div class="col-sm-10">
+					<input type="text" name="orderDate" class="form-control" id="orderDate" placeholder="订单日期">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="regId" class="col-sm-2 control-label">手机号</label>
+				<div class="col-sm-10">
+					<input type="text" name="regId" class="form-control" id="regId" placeholder="手机号">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="beginDate" class="col-sm-2 control-label">起息日期</label>
+				<div class="col-sm-10">
+					<input type="text" name="beginDate" class="form-control" id="beginDate" placeholder="起息日期">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="openId" class="col-sm-2 control-label">行业号</label>
+				<div class="col-sm-10">
+					<input type="text" name="openId" class="form-control" id="openId" placeholder="行业号">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="merchantNo" class="col-sm-2 control-label">商户号</label>
+				<div class="col-sm-10">
+					<input type="text" name="merchantNo" class="form-control" id="merchantNo" placeholder="商户号">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="installSumAmt" class="col-sm-2 control-label">分期总金额</label>
+				<div class="col-sm-10">
+					<input type="text" name="installSumAmt" class="form-control" id="installSumAmt" placeholder="分期总金额">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="installAmt" class="col-sm-2 control-label">分期实际金额</label>
+				<div class="col-sm-10">
+					<input type="text" name="installAmt" class="form-control" id="installAmt" placeholder="分期实际金额">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="installTerms" class="col-sm-2 control-label">期数</label>
+				<div class="col-sm-10">
+					<input type="text" name="installTerms" class="form-control" id="installTerms" placeholder="期数">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="planId" class="col-sm-2 control-label">分期方案编号</label>
+				<div class="col-sm-10">
+					<input type="text" name="planId" class="form-control" id="planId" placeholder="分期方案编号">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="takeInterest" class="col-sm-2 control-label">是否上收利息(1是2否)</label>
+				<div class="col-sm-10">
+					<input type="text" name="takeInterest" class="form-control" id="takeInterest" placeholder="是否上收利息">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="interestAmt" class="col-sm-2 control-label">剩余利息</label>
+				<div class="col-sm-10">
+					<input type="text" name="interestAmt" class="form-control" id="interestAmt" placeholder="剩余利息">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="takeMonth" class="col-sm-2 control-label">是否上收月供(1是2否)</label>
+				<div class="col-sm-10">
+					<input type="text" name="takeMonth" class="form-control" id="takeMonth" placeholder="是否上收月供(1是2否)">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="takePaymentAmt" class="col-sm-2 control-label">上收月供金额</label>
+				<div class="col-sm-10">
+					<input type="text" name="takePaymentAmt" class="form-control" id="takePaymentAmt" placeholder="上收月供金额">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="takePayment" class="col-sm-2 control-label">上收月供期数</label>
+				<div class="col-sm-10">
+					<input type="text" name="takePayment" class="form-control" id="takePayment" placeholder="上收月供期数">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" id="instBtn" class="btn btn-primary btn-block">开始分期</button>
+				</div>
+			</div>
+		</form>
+		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$("#instBtn").click(function() {
+					var params = $(".instForm").serialize();
+					console.log(params);
+					$.ajax({
+						type: "POST",
+						url: "/consumer.web/inst/fenqi.do",
+						data: params,
+						dataType: 'json',
+						success: function(jsonObj) {
+							alert("success:" + JSON.stringify(jsonObj));
+						},
+						error: function(msg){
+							alert(msg);
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

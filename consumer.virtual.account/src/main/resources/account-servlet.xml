@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<mvc:annotation-driven />
+	
+	<!-- 扫描包 -->
+	<context:component-scan base-package="com.iqb.consumer.virtual.account.controller" />
+	
+	<!--配置拦截器, 多个拦截器,顺序执行 -->   
+    <mvc:interceptors>    
+        <mvc:interceptor>    
+            <!-- 匹配的是url路径  -->
+            <mvc:mapping path="/**" />
+            <bean class="com.iqb.consumer.virtual.account.interceptor.WorkerInterceptor"></bean>    
+        </mvc:interceptor>  
+        <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->  
+    </mvc:interceptors>
+
+	<mvc:default-servlet-handler />
+	<!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->
+	<bean id="multipartResolver"    
+	        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">    
+	        <!-- 默认编码 -->  
+	        <property name="defaultEncoding" value="utf-8" />    
+	        <!-- 文件大小最大值 -->  
+	        <property name="maxUploadSize" value="10485760000" />    
+	        <!-- 内存中的最大值 -->  
+	        <property name="maxInMemorySize" value="40960" />    
+	    </bean>
+	    
+	<!--避免IE执行AJAX时，返回JSON出现下载文件 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonConverter" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="jsonConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="favorPathExtension" value="true" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="jsonp" value="application/javascript" />
+			</map>
+		</property>
+		<!-- 解决IE8 spring mvc返回json数据弹出下载页面 -->
+		<property name="defaultContentType" value="text/html"></property>
+		<!-- <property name="defaultContentType" value="application/json"></property> -->
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="com.iqb.consumer.common.spring.MappingJacksonJsonViewEx" />
+				<bean
+					class="com.iqb.consumer.common.spring.MappingJacksonJsonpViewEx" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- ViewResolver for jsp pages -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 资源访问处理器 -->
+	<mvc:resources mapping="/static/**" location="/static/"
+		cache-period="86400000" />
+
+</beans>

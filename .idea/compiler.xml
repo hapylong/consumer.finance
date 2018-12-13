@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="consumer.common" />
+        <module name="consumer.data.layer.mysql" />
+        <module name="consumer.finance.activemq" />
+        <module name="consumer.finance.batch" />
+        <module name="consumer.finance.cache" />
+        <module name="consumer.finance.notify.receive" />
+        <module name="consumer.service" />
+        <module name="consumer.virtual.account" />
+        <module name="consumer.web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="consumer.common" target="1.7" />
+      <module name="consumer.data.layer.mysql" target="1.7" />
+      <module name="consumer.finance" target="1.7" />
+      <module name="consumer.finance.activemq" target="1.7" />
+      <module name="consumer.finance.batch" target="1.7" />
+      <module name="consumer.finance.cache" target="1.7" />
+      <module name="consumer.finance.notify.receive" target="1.7" />
+      <module name="consumer.service" target="1.7" />
+      <module name="consumer.virtual.account" target="1.7" />
+      <module name="consumer.web" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

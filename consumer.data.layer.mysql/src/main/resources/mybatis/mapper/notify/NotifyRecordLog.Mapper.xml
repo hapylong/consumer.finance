@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.NotifyRecordLogDaoImpl">
+
+	<sql id="table">NOTIFYRECORDLOG</sql>
+
+	<resultMap type="NotifyRecordLog" id="notifyRecordLog">
+		<result column="ID" property="id" />
+		<result column="NOTIFYID" property="notifyID" />
+		<result column="REQUEST" property="request" />
+		<result column="RESPONSE" property="response" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="MERCHANTNOORDERNO" property="merchantOrderNo" />
+		<result column="HTTPSTATUS" property="httpStatus" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<insert id="insert" parameterType="NotifyRecordLog" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO NOTIFYRECORDLOG (NOTIFYID, REQUEST,
+		RESPONSE, MERCHANTNO, MERCHANTNOORDERNO, HTTPSTATUS, VERSION,
+		CREATETIME) VALUES (#{notifyID}, #{request}, #{response},
+		#{merchantNo}, #{merchantOrderNo}, #{httpStatus}, #{version}, #{createTime});
+	</insert>
+
+</mapper>

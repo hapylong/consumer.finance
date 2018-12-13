@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/consumer.finance.batch" />
+    <file type="web" url="file://$PROJECT_DIR$/consumer.virtual.account" />
+    <file type="web" url="file://$PROJECT_DIR$/consumer.web" />
+  </component>
+  <component name="Kotlin2JsCompilerArguments">
+    <option name="sourceMapEmbedSources" />
+    <option name="sourceMapPrefix" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/classes" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+  <component name="ValidationConfiguration">
+    <option name="VALIDATORS">
+      <map>
+        <entry key="EJB Validator" value="false" />
+        <entry key="Faces Validator" value="true" />
+        <entry key="FreeMarker" value="false" />
+        <entry key="Hibernate Validator" value="false" />
+        <entry key="JPA Validator" value="true" />
+        <entry key="Jasper Validator" value="false" />
+        <entry key="Spring Model Validator" value="true" />
+        <entry key="Spring Web Flow" value="true" />
+        <entry key="Struts 2 Model Validator" value="false" />
+        <entry key="Struts 2 Validation Model Validator" value="false" />
+        <entry key="Struts Model validator" value="false" />
+        <entry key="Struts Validation Model validator" value="false" />
+        <entry key="Tiles Model validator" value="true" />
+        <entry key="Web Xml Validator" value="true" />
+      </map>
+    </option>
+  </component>
+</project>

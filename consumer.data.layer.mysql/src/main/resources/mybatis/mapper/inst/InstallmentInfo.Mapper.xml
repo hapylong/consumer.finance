@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.data.layer.mysql.dao.inst.InstallmentInfoDaoImpl">
+
+	<sql id="table">inst_info</sql>
+
+	<resultMap type="InstallmentInfo" id="installmentInfo">
+		<result column="ID" property="id" />
+		<result column="ORDERID" property="orderId" />
+		<!-- 房贷子订单号 -->
+		<result column="SUBORDERID" property="subOrderId" />
+		<result column="ORDERDATE" property="orderDate" />
+		<result column="REGID" property="regId" />
+		<result column="BASEID" property="baseId" />
+		<result column="OPENID" property="openId" />
+		<result column="BEGINDATE" property="beginDate" />
+		<result column="CONTRACTAMT" property="contractAmt" />
+		<result column="INSTALLSUMAMT" property="installSumAmt" />
+		<result column="INSTALLAMT" property="installAmt" />
+		<result column="INTERESTAMT" property="interestAmt" />
+		<result column="TAKEPAYMENTAMT" property="takePaymentAmt" />
+		<!-- 添加其他费用 by yeoman Begin -->
+		<result column="OTHERAMT" property="otherAmt" />
+		<!-- 力硕需求划扣 -->
+		<result column="INTERESTTERMS" property="interestTerms" />
+		<result column="TAKEOTHERAMT" property="takeOtherAmt" />
+		<!-- 添加其他费用 by yeoman end -->
+		<result column="TAKEPAYMENT" property="takePayment" />
+		<result column="INSTALLTERMS" property="installTerms" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="PLANID" property="planId" />
+		<result column="INSTORDER" property="instOrder" />
+		<result column="STATUS" property="status" />
+		<result column="USEFREEINTEREST" property="useFreeInterest" />
+		<result column="FREEINTERESTCOUNT" property="freeInterestCount" />
+		<result column="TAKEINTEREST" property="takeInterest" />
+		<result column="TAKEMONTH" property="takeMonth" />
+		<result column="INSTDETAILS" property="instDetails" />
+		<result column="SOURCESFUNDING" property="sourcesFunding" />
+		<result column="FUNDID" property="fundId" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+		<result column="SMSMOBILE" property="smsMobile" />
+		
+	</resultMap>
+
+	<!-- 插入分期表信息 -->
+	<insert id="insert" parameterType="InstallmentInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(ORDERID,SUBORDERID,ORDERDATE, REGID, BASEID, OPENID, BEGINDATE,CONTRACTAMT, INSTALLSUMAMT,
+		INSTALLAMT,INTERESTAMT,TAKEPAYMENTAMT,OTHERAMT,INTERESTTERMS,TAKEOTHERAMT,TAKEPAYMENT,
+		INSTALLTERMS, MERCHANTNO, PLANID,INSTORDER, STATUS,
+		USEFREEINTEREST,FREEINTERESTCOUNT,TAKEINTEREST,TAKEMONTH,INSTDETAILS,SOURCESFUNDING,FUNDID,
+		VERSION, CREATETIME, UPDATETIME,SMSMOBILE)
+		VALUES (
+		#{orderId},#{subOrderId},#{orderDate}, #{regId}, #{baseId}, #{openId},
+		#{beginDate},#{contractAmt},
+		#{installSumAmt},
+		#{installAmt}, #{interestAmt},#{takePaymentAmt},#{otherAmt},#{interestTerms},#{takeOtherAmt},#{takePayment},#{installTerms},
+		#{merchantNo},
+		#{planId},#{instOrder}, #{status}, #{useFreeInterest},
+		#{freeInterestCount},#{takeInterest},#{takeMonth},#{instDetails},#{sourcesFunding},#{fundId},
+		#{version}, #{createTime}, #{updateTime},#{smsMobile});
+	</insert>
+
+	<sql id="condition_sql">
+		<if test="orderId != null and orderId !=''"> and ORDERID = #{orderId} </if>
+		<if test="openId != null and openId != ''"> and OPENID = #{openId} </if>
+	</sql>
+
+	<!-- 参数查询 -->
+	<select id="listBy" parameterType="java.util.Map" resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		ORDER BY INSTORDER DESC
+	</select>
+
+	<!-- 根据订单号查询分期信息 -->
+	<select id="getInstInfoByOrderId" parameterType="java.util.Map"
+		resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId} AND INSTORDER = 1;
+		</where>
+	</select>
+	
+	<!-- 根据订单号查询分期信息 -->
+	<select id="getLimitInstInfoByOrderId" parameterType="java.util.Map"
+		resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			ORDERID = #{orderId} AND INSTORDER = 1;
+		</where>
+	</select>
+	
+	<!-- getById -->
+	<select id="getById" parameterType="long" resultMap="installmentInfo">
+		select * from
+		<include refid="table" />
+		where ID = #{id}
+	</select>
+	
+	<!-- stopInstallmentInfo -->
+	<update id="stopInstallmentInfo" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentDetail">
+		UPDATE 
+		  <include refid="table" />
+	  <set>
+			VERSION = #{version}+1 ,
+			STATUS = 2
+		</set>
+		<where>
+			ORDERID = #{orderId}
+			AND REGID = #{regId}
+			AND OPENID = #{openId}
+		</where>
+	</update>
+	<!-- 转租 根据订单号修改Regid baseId -->
+	<update id="updateInstallmentInfoByOrderId" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentDetail">
+		UPDATE 
+		  <include refid="table" />
+	  <set>
+			<if test="regId != null and regId != '' ">
+				REGID = #{regId},
+			</if>
+			<if test="baseId != null and baseId != '' ">
+				BASEID = #{baseId},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+			<if test="smsMobile != null and smsMobile != '' ">
+                smsMobile = #{smsMobile},
+            </if>
+		</set>
+		<where>
+			ORDERID = #{orderId}
+		</where>
+	</update>
+	<!-- 根据regId openId orderId修改订单信息表 -->
+	<update id="updateInstallmentInfoByCondition" parameterType="com.iqb.consumer.data.layer.mysql.bean.inst.InstallmentDetail">
+		UPDATE 
+		  <include refid="table" />
+	  <set>
+			<if test="baseId != null and baseId != '' ">
+				BASEID = #{baseId},
+			</if>
+			<if test="orderDate != null and orderDate != '' ">
+				ORDERDATE = #{orderDate},
+			</if>
+			<if test="beginDate != null and beginDate != '' ">
+				beginDate = #{beginDate},
+			</if>
+			<if test="contractAmt != null and contractAmt != '' ">
+				CONTRACTAMT = #{contractAmt},
+			</if>
+			<if test="installSumAmt != null and installSumAmt != '' ">
+				INSTALLSUMAMT = #{installSumAmt},
+			</if>
+			<if test="installAmt != null and installAmt != '' ">
+				INSTALLAMT = #{installAmt},
+			</if>
+			<if test="interestAmt != null and interestAmt != '' ">
+				INTERESTAMT = #{interestAmt},
+			</if>
+			<if test="takePaymentAmt != null and takePaymentAmt != '' ">
+				TAKEPAYMENTAMT = #{takePaymentAmt},
+			</if>
+			<if test="otherAmt != null and otherAmt != '' ">
+				OTHERAMT = #{otherAmt},
+			</if>
+			<if test="takePayment != null and takePayment != '' ">
+				TAKEPAYMENT = #{takePayment},
+			</if>
+			<if test="installTerms != null and installTerms != '' ">
+				INSTALLTERMS = #{installTerms},
+			</if>
+			<if test="merchantNo != null and merchantNo != '' ">
+				MERCHANTNO = #{merchantNo},
+			</if>
+			<if test="planId != null and planId != '' ">
+				PLANID = #{planId},
+			</if>
+			<if test="instOrder != null and instOrder != '' ">
+				INSTORDER = #{instOrder},
+			</if>
+			<if test="status != null and status != '' ">
+				STATUS = #{status},
+			</if>
+			<if test="useFreeInterest != null and useFreeInterest != '' ">
+				USEFREEINTEREST = #{useFreeInterest},
+			</if>
+			<if test="freeInterestCount != null and freeInterestCount != '' ">
+				FREEINTERESTCOUNT = #{freeInterestCount},
+			</if>
+			<if test="takeInterest != null and takeInterest != '' ">
+				TAKEINTEREST = #{takeInterest},
+			</if>
+			<if test="takeMonth != null and takeMonth != '' ">
+				TAKEMONTH = #{takeMonth},
+			</if>
+			<if test="sourcesFunding != null and sourcesFunding != '' ">
+				SOURCESFUNDING = #{sourcesFunding},
+			</if>
+			<if test="fundId != null and fundId != '' ">
+				FUNDID = #{fundId},
+			</if>
+			
+		</set>
+		<where>
+			STATUS=0
+			<if test="orderId != null and orderId != '' ">
+				AND ORDERID = #{orderId}
+			</if>
+			<if test="regId != null and regId != '' ">
+				AND REGID = #{regId} 
+			</if>
+			<if test="openId != null and openId != '' ">
+				AND OPENID = #{openId}
+			</if>
+		</where>
+	</update>
+</mapper>

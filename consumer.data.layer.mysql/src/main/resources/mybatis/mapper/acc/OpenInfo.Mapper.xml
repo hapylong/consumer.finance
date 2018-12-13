@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.acc.OpenInfoDaoImpl">
+
+	<sql id="table">acc_openinfo</sql>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.acc.OpenInfo" id="openInfo">
+		<result column="ID" property="uuid" />
+		<result column="PID" property="pid" />
+		<result column="BID" property="bid" />
+		<result column="REGID" property="regId" />
+		<result column="REALNAME" property="realName" />
+		<result column="IDNO" property="idNo" />
+		<result column="BANKCARDNO" property="bankCardNo" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="OPENDAY" property="openDay" />
+		<result column="CANCELDAY" property="cancelDay" />
+		<result column="CREDITLIMIT" property="creditLimit" />
+		<result column="AVAILLIMIT" property="availLimit" />
+		<result column="ENABLE" property="enable" />
+		<result column="STATUS" property="status" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="cols">
+		ID,PID,BID,REGID,REALNAME,IDNO,BANKCARDNO,INDUSTRY,DESCRIPTION,OPENDAY,CANCELDAY,CREDITLIMIT,
+		AVAILLIMIT,ENABLE,STATUS,VERSION,CREATETIME,UPDATETIME
+	</sql>
+	
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.acc.OpenInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(ID,PID,BID,REGID,REALNAME,IDNO,BANKCARDNO,INDUSTRY,OPENDAY,CANCELDAY,CREDITLIMIT,
+		AVAILLIMIT,ENABLE,STATUS,VERSION,CREATETIME)
+		VALUES
+		(#{uuid},#{pid},#{bid},#{regId},#{realName},#{idNo},#{bankCardNo},#{industry},#{openDay},#{cancelDay},#{creditLimit}, 
+		#{availLimit},#{enable},#{status},#{version},#{createTime});
+	</insert>
+
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.bean.acc.OpenInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version,jdbcType=INTEGER} + 1,
+			<if test="pid != null and pid != ''">
+				PID = #{pid},
+			</if>
+			<if test="bid != null and bid != ''">
+				BID = #{bid},
+			</if>
+			<if test="regId != null and regId != ''">
+				REGID = #{regId},
+			</if>
+			<if test="realName != null and realName != ''">
+				REALNAME = #{realName},
+			</if>
+			<if test="bankCardNo != null and bankCardNo != ''">
+				BANKCARDNO = #{bankCardNo},
+			</if>
+			<if test="industry != null and industry != ''">
+				INDUSTRY = #{industry},
+			</if>
+			<if test="creditLimit != null and creditLimit != ''">
+				CREDITLIMIT = #{creditLimit},
+			</if>
+			<if test="availLimit != null and availLimit != ''">
+				AVAILLIMIT = #{availLimit},
+			</if>
+			<if test="enable != null and enable != ''">
+				ENABLE = #{enable},
+			</if>
+			<if test="status != null and status != ''">
+				STATUS = #{status},
+			</if>
+			UPDATETIME = NOW() 
+			<where>
+				<if test="idNo != null and idNo != ''">
+					AND IDNO = #{idNo}
+				</if>
+				<if test="uuid != null and uuid != ''">
+					AND ID = #{uuid}
+				</if>
+				<if test="pid != null and pid != ''">
+					AND PID = #{pid}
+				</if>
+			</where>
+		</set>	
+	</update>
+
+	<select id="getByCondition" parameterType="java.util.Map" resultMap="openInfo">
+		SELECT <include refid="cols" /> 
+		FROM <include refid="table" />
+		<where>
+			<if test="idNo != null and idNo != ''">
+				AND IDNO = #{idNo}
+			</if>
+			<if test="regId != null and regId != ''">
+				AND REGID = #{regId}
+			</if>
+			<if test="pid != null and pid != ''">
+				AND PID = #{pid}
+			</if>
+			<if test="status != null and status != ''">
+				AND STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="listByCondition" parameterType="java.util.Map" resultMap="openInfo">
+		SELECT <include refid="cols" /> 
+		FROM <include refid="table" />
+		<where>
+			<if test="regId != null and regId != ''">
+				AND REGID = #{regId}
+			</if>
+			<if test="status != null and status != ''">
+				AND STATUS = #{status}
+			</if>
+			<if test="idNo != null and idNo != ''">
+				AND IDNO = #{idNo}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 列出开户表的行业信息 -->
+	<select id="listOpenInfo4Base" resultMap="openInfo" >
+		SELECT <include refid="cols" /> 
+		FROM <include refid="table" />
+		WHERE
+			DESCRIPTION IS NOT NULL 
+	</select>
+	
+	<!-- 销户 -->
+	<update id="updateStatus" parameterType="com.iqb.consumer.data.layer.mysql.bean.acc.OpenInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version,jdbcType=INTEGER} + 1, STATUS = #{status},
+			UPDATETIME = NOW() 
+			<where>
+				<if test="regId != null and regId != ''">
+					AND REGID = #{regId}
+				</if>
+				<if test="idNo != null and idNo != ''">
+					AND IDNO = #{idNo}
+				</if>
+				<if test="pid != null and pid != ''">
+					AND PID like CONCAT(#{pid},'%') 
+				</if>
+			</where>
+		</set>	
+	</update>
+</mapper>

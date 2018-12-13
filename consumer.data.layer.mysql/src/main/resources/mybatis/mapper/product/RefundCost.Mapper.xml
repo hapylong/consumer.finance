@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.product.RefundCostDaoImpl">
+
+	<!-- getById -->
+	<select id="getById" parameterType="long" resultType="com.iqb.consumer.data.layer.mysql.bean.product.RefundCost">
+		SELECT 
+		  ID,
+		  TYPE,
+		  REFUND_METHOD AS refundMethod,
+		  VERSION,
+		  CREATE_TIME AS createTime,
+		  UPDATE_TIME AS updateTime 
+		FROM
+		  p_refund_cost
+		where ID = #{id}
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM p_refund_cost WHERE ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.RefundCost">
+		UPDATE 
+		  p_refund_cost 
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="type != null and type != '' ">
+				TYPE = #{type},
+			</if>
+			<if test="refundMethod != null and refundMethod != '' ">
+				REFUND_METHOD = #{refundMethod},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATE_TIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+	
+	<!-- insert -->
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.RefundCost" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO p_refund_cost (
+		  TYPE,
+		  REFUND_METHOD,
+		  VERSION,
+		  CREATE_TIME,
+		  UPDATE_TIME
+		) 
+		VALUES
+		  (#{type}, #{refundMethod}, #{version}, #{createTime}, #{updateTime})
+	</insert>
+
+</mapper>

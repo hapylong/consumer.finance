@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.NotifyRecordDaoImpl">
+
+	<sql id="table">NOTIFYRECORD</sql>
+
+	<resultMap type="NotifyRecord" id="notifyRecord">
+		<result column="ID" property="id" />
+		<result column="LASTNOTIFYTIME" property="lastNotifyTime" />
+		<result column="NOTIFYTIMES" property="notifyTimes" />
+		<result column="LIMITNOTIFYTIMES" property="limitNotifyTimes" />
+		<result column="URL" property="url" />
+		<result column="MSG" property="msg" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="MERCHANTORDERNO" property="merchantOrderNo" />
+		<result column="STATUS" property="status" />
+		<result column="NOTIFYTYPE" property="notifyType" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<insert id="insert" parameterType="NotifyRecord" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO NOTIFYRECORD (LASTNOTIFYTIME,
+		NOTIFYTIMES, LIMITNOTIFYTIMES, URL, MSG, MERCHANTNO, MERCHANTORDERNO,
+		STATUS, NOTIFYTYPE, VERSION, CREATETIME) VALUES (#{lastNotifyTime},
+		#{notifyTimes}, #{limitNotifyTimes}, #{url}, #{msg}, #{merchantNo}, #{merchantOrderNo}, #{status}, #{notifyType}, #{version}, #{createTime});
+	</insert>
+	
+	<sql id="Base_Column_List">
+		ID, VERSION, CREATETIME, LASTNOTIFYTIME, NOTIFYTIMES, LIMITNOTIFYTIMES, URL,
+		MERCHANTNO, MERCHANTORDERNO, STATUS, NOTIFYTYPE
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="condition_sql">
+		<!-- Equal query -->
+		<if test="beginDate != null and endDate != null and endDate !='' and beginDate !=''">
+			and CREATETIME between #{beginDate} AND CONCAT(#{endDate},' 23:59:59')
+		</if>
+		<if test="lastNotifyTime != null and lastNotifyTime != ''"> and LASTNOTIFYTIME = #{lastNotifyTime,jdbcType=TIMESTAMP}</if>
+		<if test="notifyTimes != null and notifyTimes != ''"> and NOTIFYTIMES = #{notifyTimes,jdbcType=SMALLINT}</if>
+		<if test="limitNotifyTimes != null and limitNotifyTimes != ''"> and LIMITNOTIFYTIMES = #{limitNotifyTimes,jdbcType=SMALLINT}</if>
+		<if test="url != null and url != ''"> and URL = #{url,jdbcType=VARCHAR}</if>
+		<if test="merchantNo != null and merchantNo != ''"> and MERCHANTNO = #{merchantNo}</if>
+		<if test="merchantOrderNo != null and merchantOrderNo != ''"> and MERCHANTORDERNO = #{merchantOrderNo,jdbcType=VARCHAR}</if>
+		<if test="status != null and status !=''"> and STATUS = #{status,jdbcType=SMALLINT}</if>
+		<if test="notifyType != null and notifyType !=''"> and NOTIFYTYPE = #{notifyType, jdbcType=SMALLINT}</if>
+		<!-- 此处foreach中的条件用于分页查询，要用${item},不用#{item} -->
+		<if test="statusList != null">
+			and STATUS in
+			<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<!-- 此处foreach中的条件用于分页查询，要用${item},不用#{item} -->
+		<if test="notifyTimeList != null">
+			and NOTIFYTIMES in
+			<foreach collection="notifyTimeList" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+	</sql>
+	
+	<update id="update" parameterType="NotifyRecord">
+		update
+		<include refid="table" />
+		set VERSION = #{version,jdbcType=SMALLINT} + 1,
+		LASTNOTIFYTIME = #{lastNotifyTime},
+		NOTIFYTIMES = #{notifyTimes,jdbcType=SMALLINT},
+		LIMITNOTIFYTIMES = #{limitNotifyTimes,jdbcType=SMALLINT},
+		STATUS = #{status,jdbcType=SMALLINT},UPDATETIME = #{updateTime}
+		where ID = #{id,jdbcType=BIGINT} and VERSION = #{version,jdbcType=SMALLINT}
+	</update>
+	
+	<!-- 根据ID获取实体 -->
+	<select id="getById" parameterType="java.lang.Long" resultMap="notifyRecord">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="table" />
+		where ID = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<!-- 分页查询待处理的问题 -->
+	<select id="listPage" parameterType="java.util.Map" resultMap="notifyRecord">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by ID desc]]>
+	</select>
+
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+
+</mapper>

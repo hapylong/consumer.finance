@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.data.layer.mysql.dao.acc.AccRepayHistoryDaoImpl">
+
+	<sql id="table">acc_repay_history</sql>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.acc.AccRepayHistory" id="accRepayHistory">
+		<result column="ID" property="id" />
+		<result column="ORDERID" property="orderId" />
+		<result column="OPENID" property="openId" />
+		<result column="REPAYNO" property="repayNo" />
+		<result column="REPAYAMT" property="repayAmt" />
+		<result column="CHARGEAMOUNT" property="chargeAmount" />
+		<result column="REPAYTYPE" property="repayType" />
+		<result column="TRADENO" property="tradeNo" />
+		<result column="BANKCARDNO" property="bankCardNo" />
+		<result column="BANKNAME" property="bankName" />
+		<result column="BANKID" property="bankId" />
+		<result column="MERCHANTNO" property="merchantNo" />
+		<result column="REGID" property="regId" />
+		<result column="REMARK" property="remark" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="cols" >
+		ID,ORDERID,OPENID, REPAYNO, REPAYAMT, CHARGEAMOUNT, REPAYTYPE, TRADENO, BANKCARDNO,
+		BANKNAME, BANKID, MERCHANTNO, REGID, REMARK, VERSION, CREATETIME,
+		UPDATETIME
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="condition_sql">
+		<!-- Equal query -->
+		<if test="regId != null and regId != ''">
+			and REGID = #{regId}
+		</if>
+		<if test="openId != null and openId != ''">
+			and OPENID = #{openId}
+		</if>
+		<if test="orderId != null and orderId != ''">
+			and ORDERID = #{orderId}
+		</if>
+		<if test="merchantNo != null and merchantNo != ''">
+			and MERCHANTNO = #{merchantNo}
+		</if>
+	</sql>
+	
+	<!-- 批量插入分摊详情 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO
+		<include refid="table" />
+		(
+		ORDERID,OPENID, REPAYNO, REPAYAMT, CHARGEAMOUNT, REPAYTYPE, TRADENO, BANKCARDNO,
+		BANKNAME, BANKID, MERCHANTNO, REGID, REMARK, VERSION, CREATETIME,
+		UPDATETIME
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.orderId},#{item.openId}, #{item.repayNo}, #{item.repayAmt},
+			#{item.chargeAmount}, #{item.repayType}, #{item.tradeNo},
+			#{item.bankCardNo},
+			#{item.bankName}, #{item.bankId}, #{item.merchantNo}, #{item.regId},
+			#{item.remark}, #{item.version},
+			#{item.createTime},
+			#{item.updateTime}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 分页查询账单信息 -->
+	<select id="listPage" parameterType="java.util.Map" resultMap="accRepayHistory">
+		SELECT
+		<include refid="cols" />
+		FROM
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by REPAYNO asc]]>
+	</select>
+	
+	<!-- 分页查询账单数量 -->
+	<select id="listPageCount" parameterType="java.util.Map"
+		resultType="long">
+		select count(1) from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<!-- 查询订单已还金额 -->
+	<select id="getRepayAmtByOrderId" parameterType="String"
+		resultType="double">
+		select SUM(REPAYAMT) from
+		<include refid="table" />
+		where ORDERID = #{orderId}
+	</select>
+</mapper>

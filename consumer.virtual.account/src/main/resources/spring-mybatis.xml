@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+   
+   <import resource="spring-jdbc-mysql-dbs.xml" />
+
+	<!-- 基于Druid数据库链接池的数据源配置 -->
+    <bean id="dataSource" class="com.iqb.consumer.common.db.SubDbDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="common_platform_iqb_master001" value-ref="common_platform_iqb_master001"/>
+                <entry key="common_platform_iqb_master001_slave001" value-ref="common_platform_iqb_master001_slave001"/>
+                <entry key="common_platform_iqb_master001_slave002" value-ref="common_platform_iqb_master001_slave002"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="common_platform_iqb_master001" />
+        <property name="subDbContextHolder" ref="common_platform_subDbContextHolder"/>
+    </bean>
+    
+    <bean id="common_platform_subDbContextHolder" class="com.iqb.consumer.common.db.SubDbContextHolder">   
+        <property name="SINGLE_DB_MAX_NUM" value="${common.db.max.num}" />
+        <property name="MASTER_DB_NUM" value="${common.master.num}" />
+        <property name="SLAVE_DB_NUM" value="${common.slave.num}" />
+        <property name="MASTER_DB_DBSTR" value="${common.master.dbstr}" />
+        <property name="SLAVE_DB_DBSTR" value="${common.slave.dbstr}" />   
+    </bean>
+    
+	<!-- 将数据源映射到sqlSessionFactory中 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- SqlSession模板类实例 -->
+	<bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="close" >
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!--======= 事务配置 Begin ================= -->
+	<!-- 事务管理器（由Spring管理MyBatis的事务） -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 关联数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 注解事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!--======= 事务配置 End =================== -->
+
+</beans>

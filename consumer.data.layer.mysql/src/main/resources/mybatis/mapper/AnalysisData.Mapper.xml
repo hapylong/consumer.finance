@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.AnalysisDataDaoImpl">
+
+	<sql id="table">r_overdue</sql>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.RoverdueEntity" id="roverdue">
+		<id column="ID" jdbcType="BIGINT" property="id" />
+	    <result column="MERCHANTNO" jdbcType="VARCHAR" property="merchantNo" />
+	    <result column="SCHEDUE_DATE" jdbcType="DATE" property="schedueDate" />
+	    <result column="OVERDUE_MONTH_MD5" jdbcType="DECIMAL" property="overdueMonthMd5" />
+	    <result column="OVERDUE_INTEREST_MD5" jdbcType="DECIMAL" property="overdueInterestMd5" />
+	    <result column="FIXED_OVERDUE_AMT_MD5" jdbcType="DECIMAL" property="fixedOverdueAmtMd5" />
+	    <result column="CUR_REPAY_AMT_MD5" jdbcType="DECIMAL" property="curRepayAmtMd5" />
+	    <result column="OVERDUE_RATE_MD5" jdbcType="DECIMAL" property="overdueRateMd5" />
+	    <result column="OVERDUE_MONTH_MB1" jdbcType="DECIMAL" property="overdueMonthMb1" />
+	    <result column="OVERDUE_INTEREST_MB1" jdbcType="DECIMAL" property="overdueInterestMb1" />
+	    <result column="FIXED_OVERDUE_AMT_MB1" jdbcType="DECIMAL" property="fixedOverdueAmtMb1" />
+	    <result column="CUR_REPAY_AMT_MB1" jdbcType="DECIMAL" property="curRepayAmtMb1" />
+	    <result column="OUT_OVERDUE_RATE_MB1" jdbcType="DECIMAL" property="outOverdueRateMb1" />
+	    <result column="OVERDUE_PRINCIPAL_MB1" jdbcType="DECIMAL" property="overduePrincipalMb1" />
+	    <result column="STOCK_AMT_MB1" jdbcType="DECIMAL" property="stockAmtMb1" />
+	    <result column="OVERDUE_RATE_MB1" jdbcType="DECIMAL" property="overdueRateMb1" />
+	    <result column="OVERDUE_PRINCIPAL_MB2" jdbcType="DECIMAL" property="overduePrincipalMb2" />
+	    <result column="STOCK_AMT_MB2" jdbcType="DECIMAL" property="stockAmtMb2" />
+	    <result column="OVERDUE_RATE_MB2" jdbcType="DECIMAL" property="overdueRateMb2" />
+	    <result column="OVERDUE_PRINCIPAL_MB3" jdbcType="DECIMAL" property="overduePrincipalMb3" />
+	    <result column="STOCK_AMT_MB3" jdbcType="DECIMAL" property="stockAmtMb3" />
+	    <result column="OVERDUE_RATE_MB3" jdbcType="DECIMAL" property="overdueRateMb3" />
+	    <result column="OVERDUE_PRINCIPAL_MB4" jdbcType="DECIMAL" property="overduePrincipalMb4" />
+	    <result column="STOCK_AMT_MB4" jdbcType="DECIMAL" property="stockAmtMb4" />
+	    <result column="OVERDUE_RATE_MB4" jdbcType="DECIMAL" property="overdueRateMb4" />
+	    <result column="VERSION" jdbcType="INTEGER" property="version" />
+	    <result column="CREATETIME" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="UPDATETIME" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<select id="getRoverDueList" parameterType="java.util.Map" resultMap="roverdue">
+		SELECT 
+            ID, MERCHANTNO, SCHEDUE_DATE, OVERDUE_MONTH_MD5/100 AS OVERDUE_MONTH_MD5, OVERDUE_INTEREST_MD5/100 AS OVERDUE_INTEREST_MD5, FIXED_OVERDUE_AMT_MD5/100 AS FIXED_OVERDUE_AMT_MD5,
+			CUR_REPAY_AMT_MD5/100 AS CUR_REPAY_AMT_MD5, OVERDUE_RATE_MD5, OVERDUE_MONTH_MB1/100 AS OVERDUE_MONTH_MB1, OVERDUE_INTEREST_MB1/100 AS OVERDUE_INTEREST_MB1,
+			FIXED_OVERDUE_AMT_MB1/100 AS FIXED_OVERDUE_AMT_MB1, CUR_REPAY_AMT_MB1/100 AS CUR_REPAY_AMT_MB1, OUT_OVERDUE_RATE_MB1, STOCK_AMT_MB1/100 AS STOCK_AMT_MB1,
+			OVERDUE_RATE_MB1, OVERDUE_PRINCIPAL_MB2/100 AS OVERDUE_PRINCIPAL_MB2, STOCK_AMT_MB2/100 AS STOCK_AMT_MB2, OVERDUE_RATE_MB2, OVERDUE_PRINCIPAL_MB3/100 AS OVERDUE_PRINCIPAL_MB3,
+			STOCK_AMT_MB3/100 AS STOCK_AMT_MB3, OVERDUE_RATE_MB3, OVERDUE_PRINCIPAL_MB4/100 AS OVERDUE_PRINCIPAL_MB4, STOCK_AMT_MB4/100 AS STOCK_AMT_MB4, OVERDUE_RATE_MB4,
+			VERSION, CREATETIME, UPDATETIME, OVERDUE_PRINCIPAL_MB1/100 AS OVERDUE_PRINCIPAL_MB1
+        FROM r_overdue
+		<where>
+		  <if test="schedueDate != null and schedueDate !=''">
+		     AND schedue_date = #{schedueDate}
+		  </if>
+		  <if test="merList != null">
+             AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+		</where>
+		  
+	</select>
+	
+	<select id="getRoverDueListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM r_overdue
+        <where>
+          <if test="schedueDate  != null and schedueDate !=''">
+              AND schedue_date = #{schedueDate}
+          </if>
+          <if test="merList != null">
+              AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+        </where>
+    </select>
+
+</mapper>

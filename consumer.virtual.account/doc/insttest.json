@@ -1,0 +1,83 @@
+开户提供参数：
+{
+    "regId": "手机号",
+    "idNo": "身份证号",
+    "realName": "真实姓名",
+    "openId": "行业号",
+    "bankCardNo": "银行卡号"
+}
+
+查询提供参数：
+{
+    "regId": "手机号",
+    "openId": "行业号"
+}
+
+销户提供参数：
+{
+    "regId": "手机号",
+    "idNo": "身份证号",
+    "openId": "行业号",
+    "flag": "销户类型:1.消除主账户 2.消除行业账户"
+}
+
+分期JSON
+{
+    "orderId": "订单号",
+    "regId": "手机号",
+    "orderDate": "订单日期yyyyMMdd",
+    "beginDate": "起息日期yyyyMMdd",
+    "openId": "行业号",
+    "merchantNo": "商户号",
+    "installSumAmt": "分期总金额",
+    "installAmt": "分期实际金额",
+    "installTerms": "期数",
+    "planId": "分期方案编号"
+}
+平账格式
+[
+    {
+        "orderId": 111111,
+        "openId": 2323,
+        "repayModel": "normal",
+        "regId": "110",
+        "merchantNo": "111",
+        "tradeNo": "123",
+        "repayDate": "2016",
+        "sumAmt": "27",
+        "repayList": [
+            {
+                "repayNo": 1,
+                "amt": "13"
+            },
+            {
+                "repayNo": 2,
+                "amt": "14"
+            }
+        ]
+    },
+    {
+        "orderId": 90000001,
+        "openId": 2323,
+        "repayModel": "normal",
+        "regId": "119",
+        "merchantNo": "111",
+        "tradeNo": "2016",
+        "repayDate": "2017",
+        "sumAmt": "55",
+        "repayList": [
+            {
+                "repayNo": 2,
+                "amt": "23"
+            },
+            {
+                "repayNo": 3,
+                "amt": "32"
+            }
+        ]
+    }
+]
+
+查询应还账单JSON
+{
+}

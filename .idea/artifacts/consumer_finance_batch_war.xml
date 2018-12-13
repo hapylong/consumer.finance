@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="consumer.finance.batch:war">
+    <output-path>$PROJECT_DIR$/consumer.finance.batch/target</output-path>
+    <root id="archive" name="consumer.finance.batch.war">
+      <element id="artifact" artifact-name="consumer.finance.batch:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.product.LockRepayDateDaoImpl">
+	<sql id="table">p_lockrepaydate</sql>
+	<sql id="cols">
+		ID,LOCKDAYS,LOCKREPAYTYPE,VERSION,CREATETIME,UPDATETIME
+	</sql>
+	<!-- getById -->
+	<select id="getById" parameterType="long" resultType="com.iqb.consumer.data.layer.mysql.bean.product.LockRepayDate">
+		SELECT 
+		  <include refid="cols" />
+		FROM
+		  <include refid="table"/>
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM <include refid="table"/> WHERE ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.LockRepayDate">
+		update
+		<include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="lockDays != null and lockDays != '' ">
+				LOCKDAYS = #{lockDays},
+			</if>
+			<if test="lockrepaytype != null and lockrepaytype != '' ">
+				LOCKREPAYTYPE = #{lockrepaytype},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+	
+	<!-- insert -->
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.product.LockRepayDate" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(LOCKDAYS,LOCKREPAYTYPE,VERSION,CREATETIME,UPDATETIME) VALUES
+		(#{lockDays} ,#{lockrepaytype} ,#{version} ,#{createTime} ,#{updateTime})
+	</insert>
+	
+</mapper>

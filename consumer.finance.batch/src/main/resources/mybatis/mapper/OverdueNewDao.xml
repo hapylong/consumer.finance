@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+    namespace="com.iqb.consumer.finance.batch.dao.OverdueNewDaoImpl">
+
+    <sql id="table">inst_billinfo</sql>
+
+    <resultMap
+        type="com.iqb.consumer.finance.batch.bean.OverdueNewBean"
+        id="overdueNewBean">
+        <result column="ID"                     property="id" />
+        <result column="ORDERID"                property="orderId" />
+        <result column="MERCHANTNO"             property="merchantNo" />
+        <result column="SCHEDUE_DATE"           property="schedueDate" />
+        
+        <result column="overdueNum"             property="overdueNum" />
+        <result column="overdueStockNum"        property="overdueStockNum" />
+        
+        <result column="overdueMonth"           property="overdueMonth" />
+        <result column="overduePincipal"        property="overduePincipal" />
+        <result column="stockAmt"               property="stockAmt" />
+        
+        <result column="overdueNumMD5"          property="overdueNumMD5" />
+        <result column="overdueMonthMD5"        property="overdueMonthMD5" />
+        <result column="overduePincipalMD5"     property="overduePincipalMD5" />
+        <result column="stockAmtMD5"            property="stockAmtMD5" />
+        
+        <result column="overdueNumMB1"          property="overdueNumMB1" />
+        <result column="overdueMonthMB1"        property="overdueMonthMB1" />
+        <result column="overduePincipalMB1"     property="overduePincipalMB1" />
+        <result column="stockAmtMB1"            property="stockAmtMB1" />
+        
+        <result column="overdueNumMB2"          property="overdueNumMB2" />
+        <result column="overdueMonthMB2"        property="overdueMonthMB2" />
+        <result column="overduePincipalMB2"     property="overduePincipalMB2" />
+        <result column="stockAmtMB2"            property="stockAmtMB2" />
+        
+        <result column="overdueNumMB3"          property="overdueNumMB3" />
+        <result column="overdueMonthMB3"        property="overdueMonthMB3" />
+        <result column="overduePincipalMB3"     property="overduePincipalMB3" />
+        <result column="stockAmtMB3"            property="stockAmtMB3" />
+        
+        <result column="overdueNumMB4"          property="overdueNumMB4" />
+        <result column="overdueMonthMB4"        property="overdueMonthMB4" />
+        <result column="overduePincipalMB4"     property="overduePincipalMB4" />
+        <result column="stockAmtMB4"            property="stockAmtMB4" />
+        
+        <result column="VERSION"                property="version" />
+        <result column="CREATETIME"             property="createTime" />
+        <result column="UPDATETIME"             property="updateTime" />
+    </resultMap>
+    <!-- 资产逾期数据批量插入 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO
+        r_overdue_new
+        (
+            MERCHANTNO,
+            SCHEDUE_DATE,
+            
+            OVERDUE_NUM,
+            OVERDUE_MONTH,
+            OVERDUE_PRINCIPAL,
+            STOCK_AMT,
+            
+            OVERDUE_NUM_MD5,
+            OVERDUE_MONTH_MD5,
+            OVERDUE_PRINCIPAL_MD5,
+            STOCK_AMT_MD5,
+            
+            OVERDUE_NUM_MB1,
+            OVERDUE_MONTH_MB1,
+            OVERDUE_PRINCIPAL_MB1,
+            STOCK_AMT_MB1,
+            
+            OVERDUE_NUM_MB2,
+            OVERDUE_MONTH_MB2,
+            OVERDUE_PRINCIPAL_MB2,
+            STOCK_AMT_MB2,
+            
+            OVERDUE_NUM_MB3,
+            OVERDUE_MONTH_MB3,
+            OVERDUE_PRINCIPAL_MB3,
+            STOCK_AMT_MB3,
+            
+            OVERDUE_NUM_MB4,
+            OVERDUE_MONTH_MB4,
+            OVERDUE_PRINCIPAL_MB4,
+            STOCK_AMT_MB4,
+            VERSION,
+            CREATETIME
+        ) VALUES
+        <foreach collection="list" item="item" index="index"
+            separator=",">
+            (
+            #{item.merchantNo},#{item.schedueDate},#{item.overdueNum}, #{item.overdueMonth},#{item.overduePincipal},
+            #{item.stockAmt},#{item.overdueNumMD5},#{item.overdueMonthMD5}, #{item.overduePincipalMD5},#{item.stockAmtMD5},
+            #{item.overdueNumMB1},#{item.overduePincipalMB1},#{item.overdueMonthMB1},#{item.stockAmtMB1},#{item.overdueNumMB2},
+            #{item.overduePincipalMB2},#{item.overdueMonthMB2},#{item.stockAmtMB2},#{item.overdueNumMB3},#{item.overduePincipalMB3},
+            #{item.overdueMonthMB3},#{item.stockAmtMB3},#{item.overdueNumMB4},#{item.overduePincipalMB4},#{item.overdueMonthMB4},#{item.stockAmtMB4},
+            #{item.version},now()
+            )
+        </foreach>
+    </insert>
+    <!-- 更新逾期报表数据 -->
+    <update id="update" parameterType="com.iqb.consumer.finance.batch.bean.OverdueNewBean">
+        UPDATE r_overdue_new  
+        <set>
+            <if test="overdueNum != null and overdueNum != '' ">
+                OVERDUE_NUM = #{overdueNum},
+            </if>
+            <if test="overdueStockNum != null and overdueStockNum != '' ">
+                OVERDUE_STOCK_NUM = #{overdueStockNum},
+            </if>
+            <if test="overdueMonth != null and overdueMonth != '' ">
+                OVERDUE_MONTH = #{overdueMonth},
+            </if>
+            <if test="overduePincipal != null and overduePincipal != '' ">
+                OVERDUE_PRINCIPAL = #{overduePincipal},
+            </if>
+            <if test="stockAmt != null and stockAmt != '' ">
+                STOCK_AMT = #{stockAmt},
+            </if>
+            
+            <if test="overdueNumMD5 != null and overdueNumMD5 != '' ">
+                OVERDUE_NUM_MD5 = #{overdueNumMD5},
+            </if>
+            <if test="overdueMonthMD5 != null and overdueMonthMD5 != '' ">
+                OVERDUE_MONTH_MD5 = #{overdueMonthMD5},
+            </if>
+            <if test="overduePincipalMD5 != null and overduePincipalMD5 != '' ">
+                OVERDUE_PRINCIPAL_MD5 = #{overduePincipalMD5},
+            </if>
+            <if test="stockAmtMD5 != null and stockAmtMD5 != '' ">
+                STOCK_AMT_MD5 = #{stockAmtMD5},
+            </if>
+            
+            <if test="overdueNumMB1 != null and overdueNumMB1 != '' ">
+                OVERDUE_NUM_MB1 = #{overdueNumMB1},
+            </if>
+            <if test="overdueMonthMB1 != null and overdueMonthMB1 != '' ">
+                OVERDUE_MONTH_MB1 = #{overdueMonthMB1},
+            </if>
+            <if test="overduePincipalMB1 != null and overduePincipalMB1 != '' ">
+                OVERDUE_PRINCIPAL_MB1 = #{overduePincipalMB1},
+            </if>
+            <if test="stockAmtMB1 != null and stockAmtMB1 != '' ">
+                STOCK_AMT_MB1 = #{stockAmtMB1},
+            </if>
+            
+            <if test="overdueNumMB2 != null and overdueNumMB2 != '' ">
+                OVERDUE_NUM_MB2 = #{overdueNumMB2},
+            </if>
+            <if test="overdueMonthMB2 != null and overdueMonthMB2 != '' ">
+                OVERDUE_MONTH_MB2 = #{overdueMonthMB2},
+            </if>
+            <if test="overduePincipalMB2 != null and overduePincipalMB2 != '' ">
+                OVERDUE_PRINCIPAL_MB2 = #{overduePincipalMB2},
+            </if>
+            <if test="stockAmtMB2 != null and stockAmtMB2 != '' ">
+                STOCK_AMT_MB2 = #{stockAmtMB2},
+            </if>
+            
+            <if test="overdueNumMB3 != null and overdueNumMB3 != '' ">
+                OVERDUE_NUM_MB3 = #{overdueNumMB3},
+            </if>
+            <if test="overdueMonthMB3 != null and overdueMonthMB3 != '' ">
+                OVERDUE_MONTH_MB3 = #{overdueMonthMB3},
+            </if>
+            <if test="overduePincipalMB3 != null and overduePincipalMB3 != '' ">
+                OVERDUE_PRINCIPAL_MB3 = #{overduePincipalMB3},
+            </if>
+            <if test="stockAmtMB3 != null and stockAmtMB3 != '' ">
+                STOCK_AMT_MB3 = #{stockAmtMB3},
+            </if>
+            
+            <if test="overdueNumMB4 != null and overdueNumMB4 != '' ">
+                OVERDUE_NUM_MB4 = #{overdueNumMB4},
+            </if>
+            <if test="overdueMonthMB4 != null and overdueMonthMB4 != '' ">
+                OVERDUE_MONTH_MB4 = #{overdueMonthMB4},
+            </if>
+            <if test="overduePincipalMB4 != null and overduePincipalMB4 != '' ">
+                OVERDUE_PRINCIPAL_MB4 = #{overduePincipalMB4},
+            </if>
+            <if test="stockAmtMB4 != null and stockAmtMB4 != '' ">
+                STOCK_AMT_MB4 = #{stockAmtMB4},
+            </if>
+            updateTime = now()
+                
+        </set>
+            where
+            MERCHANTNO = #{merchantNo}
+            AND SCHEDUE_DATE = #{schedueDate}
+    </update>
+    
+    <!-- 查询账单表中所有商户 -->
+    <select id="listMerchantNo" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT curdate() AS schedueDate,MERCHANTNO from inst_billinfo GROUP BY MERCHANTNO
+            ]]>
+    </select>
+    <!-- 获取资产逾期月供数据 -->
+    <select id="listOverdueMonth" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    IFNULL(sum(
+                    CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+                ),0) as overdueMonth
+			FROM
+			    inst_billinfo
+			WHERE
+			    `STATUS` = 0
+			AND MERCHANTNO = #{merchantNo}
+        ]]>
+    </select>
+    <!-- 获取资产逾期本金数据 -->
+    <select id="listOverduePincipal" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+                SELECT
+				    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) as overduePincipal
+				FROM
+				    inst_billinfo
+				WHERE
+				    `STATUS` <> 3
+				AND `STATUS` <> 4
+				AND ORDERID IN (
+				    SELECT DISTINCT
+				        ORDERID
+				    FROM
+				        inst_billinfo
+				    WHERE
+				        MERCHANTNO = #{merchantNo}
+				    AND `STATUS` = 0
+				)
+            ]]>
+    </select>
+    <!-- 获取资产逾期订单数-->
+    <select id="listOverdueNum" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    COUNT(B.ORDERID) AS overdueNum
+			FROM
+			    (
+			        SELECT
+			            MIN(REPAYNO),
+			            ORDERID,
+			            OVERDUE_DAYS
+			        FROM
+			            inst_billinfo
+			        WHERE
+			            MERCHANTNO = #{merchantNo}
+			        AND `STATUS` = 0
+			        GROUP BY
+			            ORDERID
+			    ) B
+            ]]>
+    </select>
+    <!-- 获取资产逾期MD5逾期剩余本金数据 -->
+    <select id="listOverduePincipalForMD5" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT
+		    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) AS overduePincipalMD5
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS <= 5
+		    )
+		AND `STATUS` <> 3
+		AND `STATUS` <> 4
+            ]]>
+    </select>
+    <!-- 获取资产逾期MD5逾期月供数据 -->
+    <select id="listOverdueMonthForMD5" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT
+		    IFNULL(sum(
+		        CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+		    ),0) as overdueMonthMD5
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS <= 5
+		    )
+		AND `STATUS` = 0
+            ]]>
+    </select>
+    <!-- 查询MD5订单逾期订单个数-->
+    <select id="listOverdueNumForMD5" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT
+		    COUNT(B.ORDERID) AS overdueNumMD5
+		FROM
+		    (
+		        SELECT
+		            MIN(REPAYNO),
+		            ORDERID,
+		            OVERDUE_DAYS
+		        FROM
+		            inst_billinfo
+		        WHERE
+		            MERCHANTNO = #{merchantNo}
+		        AND `STATUS` = 0
+		        GROUP BY
+		            ORDERID
+		    ) B
+		WHERE
+		    B.OVERDUE_DAYS <= 5
+            ]]>
+    </select>
+    <!-- 获取资产逾期MOB1剩余本金数据 -->
+    <select id="listOverduePincipalForMOB1" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+		    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) AS overduePincipalMB1
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS > 5
+		        AND B.OVERDUE_DAYS <= 30
+		    )
+		AND `STATUS` <> 3
+		AND `STATUS` <> 4
+            ]]>
+    </select>
+    <!-- 获取资产逾期MOB1逾期月供数据 -->
+    <select id="listOverdueMonthForMOB1" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+		    IFNULL(sum(
+		        CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+		    ),0 )as overdueMonthMB1
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS > 5
+		        AND B.OVERDUE_DAYS <= 30
+		    )
+		AND `STATUS` = 0
+            ]]>
+    </select>
+    <!--查询Mob1订单逾期订单个数 -->
+    <select id="listOverdueNumForMOB1" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+		    COUNT(B.ORDERID) as overdueNumMB1
+		FROM
+		    (
+		        SELECT
+		            MIN(REPAYNO),
+		            ORDERID,
+		            OVERDUE_DAYS
+		        FROM
+		            inst_billinfo
+		        WHERE
+		            MERCHANTNO = #{merchantNo}
+		        AND `STATUS` = 0
+		        GROUP BY
+		            ORDERID
+		    ) B
+		WHERE
+		    B.OVERDUE_DAYS > 5
+		AND B.OVERDUE_DAYS <= 30
+            ]]>
+    </select>
+    <!-- 获取资产逾期MOB2逾期剩余本金数据 -->
+    <select id="listOverduePincipalForMOB2" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT
+		    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) as overduePincipalMB2
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS > 30
+		        AND B.OVERDUE_DAYS <= 60
+		    )
+		AND `STATUS` <> 3
+		AND `STATUS` <> 4
+        ]]>
+    </select>
+    
+       <!-- 获取资产逾期MOB2逾期月供数据 -->
+    <select id="listOverdueMonthForMOB2" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+        SELECT
+		    IFNULL(sum(
+		        CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+		    ),0) as overdueMonthMB2
+		FROM
+		    inst_billinfo
+		WHERE
+		    ORDERID IN (
+		        SELECT
+		            ORDERID
+		        FROM
+		            (
+		                SELECT
+		                    MIN(REPAYNO),
+		                    ORDERID,
+		                    OVERDUE_DAYS
+		                FROM
+		                    inst_billinfo
+		                WHERE
+		                    MERCHANTNO = #{merchantNo}
+		                AND `STATUS` = 0
+		                GROUP BY
+		                    ORDERID
+		            ) B
+		        WHERE
+		            B.OVERDUE_DAYS > 30
+		        AND B.OVERDUE_DAYS <= 60
+		    )
+		AND `STATUS` = 0
+        ]]>
+    </select>
+    <!--查询Mob2订单逾期订单个数 -->
+    <select id="listOverdueNumForMOB2" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+            COUNT(B.ORDERID) as overdueNumMB2
+        FROM
+            (
+                SELECT
+                    MIN(REPAYNO),
+                    ORDERID,
+                    OVERDUE_DAYS
+                FROM
+                    inst_billinfo
+                WHERE
+                    MERCHANTNO = #{merchantNo}
+                AND `STATUS` = 0
+                GROUP BY
+                    ORDERID
+            ) B
+        WHERE
+            B.OVERDUE_DAYS > 30
+		AND B.OVERDUE_DAYS <= 60
+            ]]>
+    </select>
+    <!-- 获取资产逾期MOB3逾期剩余本金数据 -->
+    <select id="listOverduePincipalForMOB3" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) as overduePincipalMB3
+			FROM
+			    inst_billinfo
+			WHERE
+			    ORDERID IN (
+			        SELECT
+			            ORDERID
+			        FROM
+			            (
+			                SELECT
+			                    MIN(REPAYNO),
+			                    ORDERID,
+			                    OVERDUE_DAYS
+			                FROM
+			                    inst_billinfo
+			                WHERE
+			                    MERCHANTNO = #{merchantNo}
+			                AND `STATUS` = 0
+			                GROUP BY
+			                    ORDERID
+			            ) B
+			        WHERE
+			            B.OVERDUE_DAYS > 60
+			        AND B.OVERDUE_DAYS <= 90
+			    )
+			AND `STATUS` <> 3
+			AND `STATUS` <> 4
+        ]]>
+    </select>
+    
+    <!-- 获取资产逾期MOB3逾期月供数据 -->
+    <select id="listOverdueMonthForMOB3" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    IFNULL(sum(
+			        CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+			    ),0) as overdueMonthMB3
+			FROM
+			    inst_billinfo
+			WHERE
+			    ORDERID IN (
+			        SELECT
+			            ORDERID
+			        FROM
+			            (
+			                SELECT
+			                    MIN(REPAYNO),
+			                    ORDERID,
+			                    OVERDUE_DAYS
+			                FROM
+			                    inst_billinfo
+			                WHERE
+			                    MERCHANTNO = #{merchantNo}
+			                AND `STATUS` = 0
+			                GROUP BY
+			                    ORDERID
+			            ) B
+			        WHERE
+			            B.OVERDUE_DAYS > 60
+			        AND B.OVERDUE_DAYS <= 90
+			    )
+			AND `STATUS` = 0;
+        ]]>
+    </select>
+    <!--查询Mob3订单逾期订单个数 -->
+    <select id="listOverdueNumForMOB3" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+            COUNT(B.ORDERID) as overdueNumMB3
+        FROM
+            (
+                SELECT
+                    MIN(REPAYNO),
+                    ORDERID,
+                    OVERDUE_DAYS
+                FROM
+                    inst_billinfo
+                WHERE
+                    MERCHANTNO = #{merchantNo}
+                AND `STATUS` = 0
+                GROUP BY
+                    ORDERID
+            ) B
+        WHERE
+            B.OVERDUE_DAYS>60 
+            AND B.OVERDUE_DAYS<=90;
+            ]]>
+    </select>
+    <!-- 获取资产逾期MOB4逾期剩余本金数据 -->
+    <select id="listOverduePincipalForMOB4" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    IFNULL(sum(CUR_REPAY_PRINCIPAL),0) as overduePincipalMB4
+			FROM
+			    inst_billinfo
+			WHERE
+			    ORDERID IN (
+			        SELECT
+			            ORDERID
+			        FROM
+			            (
+			                SELECT
+			                    MIN(REPAYNO),
+			                    ORDERID,
+			                    OVERDUE_DAYS
+			                FROM
+			                    inst_billinfo
+			                WHERE
+			                    MERCHANTNO = #{merchantNo}
+			                AND `STATUS` = 0
+			                GROUP BY
+			                    ORDERID
+			            ) B
+			        WHERE
+			            B.OVERDUE_DAYS > 90
+			    )
+			AND `STATUS` <> 3
+			AND `STATUS` <> 4
+        ]]>
+    </select>
+    <!-- 获取资产逾期MOB4逾期月供数据 -->
+    <select id="listOverdueMonthForMOB4" parameterType="java.util.Map" resultMap="overdueNewBean">
+        <![CDATA[
+            SELECT
+			    IFNULL(sum(
+			        CUR_REPAY_PRINCIPAL + CUR_REPAY_INTEREST
+			    ),0) as overdueMonthMB4
+			FROM
+			    inst_billinfo
+			WHERE
+			    ORDERID IN (
+			        SELECT
+			            ORDERID
+			        FROM
+			            (
+			                SELECT
+			                    MIN(REPAYNO),
+			                    ORDERID,
+			                    OVERDUE_DAYS
+			                FROM
+			                    inst_billinfo
+			                WHERE
+			                    MERCHANTNO = #{merchantNo}
+			                AND `STATUS` = 0
+			                GROUP BY
+			                    ORDERID
+			            ) B
+			        WHERE
+			            B.OVERDUE_DAYS > 90
+			    )
+			AND `STATUS` = 0
+        ]]>
+    </select>
+    <!--查询Mob4订单逾期订单个数 -->
+    <select id="listOverdueNumForMOB4" parameterType="java.util.Map" resultMap="overdueNewBean">
+    <![CDATA[
+        SELECT
+            COUNT(B.ORDERID) as overdueNumMB4
+        FROM
+            (
+                SELECT
+                    MIN(REPAYNO),
+                    ORDERID,
+                    OVERDUE_DAYS
+                FROM
+                    inst_billinfo
+                WHERE
+                    MERCHANTNO = #{merchantNo}
+                AND `STATUS` = 0
+                GROUP BY
+                    ORDERID
+            ) B
+        WHERE
+            B.OVERDUE_DAYS>90
+            ]]>
+    </select>
+    <!-- 查询逾期指标 mob1、mob2、mob3、mob资产存量 -->
+    <select id="listStockStatisticsAmt" parameterType="java.util.Map" resultMap="overdueNewBean">
+            SELECT
+                BB.MERCHANTNO,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmt,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmtMD5,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmtMB1,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmtMB2,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmtMB3,
+                SUM(BB.REMAINPRINCIPAL) AS stockAmtMB4,
+                COUNT(BB.ORDERID) AS overdueStockNum
+            FROM
+                (
+                    SELECT
+                        AA.ORDERID,
+                        AA.MERCHANTNO,
+                        AA.INSTALLSUMAMT,
+                        AA.CUR_REPAY_PRINCIPAL,
+                        CASE
+                    WHEN (
+                        AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+                    ) IS NULL THEN
+                        AA.INSTALLSUMAMT
+                    ELSE
+                        AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+                    END AS REMAINPRINCIPAL
+                    FROM
+                        (
+                            SELECT
+                                A.ORDERID,
+                                A.MERCHANTNO,
+                                IF (
+					                    F.TAKEMONTH = 1,
+					                    A.INSTALLSUMAMT + A.CUR_REPAY_PRINCIPAL,
+					                    A.INSTALLSUMAMT
+					                ) AS INSTALLSUMAMT,
+                                (
+                                    SELECT
+                                        SUM(B.CUR_REPAY_PRINCIPAL)
+                                    FROM
+                                        inst_billinfo B
+                                    WHERE
+                                        A.ORDERID = B.ORDERID
+                                    AND B. STATUS = 3
+                                ) CUR_REPAY_PRINCIPAL
+                            FROM
+                                inst_billinfo A
+                                LEFT JOIN inst_info F ON A.ORDERID = F.ORDERID
+                            WHERE
+                                A. STATUS &lt;= 2
+                            <if test="currentDate != null and currentDate != ''">
+                                <![CDATA[ 
+                                    AND A.ORDERDATE <= #{currentDate}
+                                    AND (
+                                        A.CUR_REPAYDATE > #{currentDate}
+                                        OR A.CUR_REPAYDATE IS NULL
+                                    )
+                                ]]>
+                            </if>
+                            and A.MERCHANTNO = #{merchantNo}
+                            GROUP BY
+                                A.ORDERID
+                        ) AA
+                ) BB
+            GROUP BY
+                BB.MERCHANTNO
+    </select>
+</mapper>

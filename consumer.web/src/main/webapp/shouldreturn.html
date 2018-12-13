@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>应还账单</title>
+        <meta charset="UTF-8" />
+        <meta name="Author" content="" />
+        <meta name="Keywords" content="" />
+        <meta name="Description" content="" /> 
+        
+        <!-- 样式库 -->
+	    <link rel="stylesheet" href="js/bootstrap/themes/default/bootstrap.css" />
+	    
+	    <!-- 插件库 -->
+	    <script src="js/common/package.js"></script>
+		<script src="js/common/url.js"></script>
+		<script src="js/common/json2.js"></script>	
+		<script src="js/common/jquery-1.11.3.min.js"></script>		
+		<script src="js/bootstrap/bootstrap.js"></script>
+		
+		<!-- 业务库 -->
+		<script src="js/common/base.js"></script>
+		<script src="js/common/datagrid2.js"></script>
+		<script src="js/common/formatter.js"></script>	    
+	    <script src="shouldreturn.js"></script>
+		
+    </head>
+    <body>
+    	<div style="padding-top: 20px;" class="container">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+			    	<label for="regId" class="col-sm-2 control-label">手机号(regId)</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" class="form-control" id="regId" placeholder="请输入手机号">
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="openId" class="col-sm-2 control-label">行业号(openId)</label>
+			    	<div class="col-sm-10">
+			      		<input type="text" class="form-control" id="openId" placeholder="请输入行业号">
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			    	<div class="col-sm-offset-2 col-sm-10">
+			      		<button id="btn-query" type="button" class="btn btn-default">查询</button>
+			    	</div>
+			  	</div>
+			</form>
+		</div>
+		
+		<a id="btn-link" href="./shouldreturnlist.html" class="hidden"><span>Link</span></a>
+    </body>
+</html>

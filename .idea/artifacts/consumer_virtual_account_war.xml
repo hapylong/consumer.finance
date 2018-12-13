@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="consumer.virtual.account:war">
+    <output-path>$PROJECT_DIR$/consumer.virtual.account/target</output-path>
+    <root id="archive" name="consumer.virtual.account.war">
+      <element id="artifact" artifact-name="consumer.virtual.account:war exploded" />
+    </root>
+  </artifact>
+</component>

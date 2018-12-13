@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation=
+          "http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Default bean name is 'mongo' -->
+    <mongo:mongo id="mongo" host="${mongodb.host}" port="${mongodb.port}">
+        <mongo:options connect-timeout="${mongodb.connectTimeout}"
+                       connections-per-host="${mongodb.connectionsPerHost}"
+                       max-wait-time="${mongodb.maxWaitTime}"
+                       auto-connect-retry="true"
+                       socket-keep-alive="true"
+                       socket-timeout="${mongodb.connectTimeout}"
+                       write-number="1"
+                       write-timeout="0"
+                       write-fsync="true"
+                       slave-ok="true"
+        />
+    </mongo:mongo>
+    
+    <mongo:db-factory mongo-ref="mongo" 
+                      dbname="${mongodb.database}"
+                      username="${mongodb.username}"
+                      password="${mongodb.password}"/>
+
+    <bean id="zonloloMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
+ 
+    <!-- storage -->
+    <mongo:mongo id="storageMongo" replica-set="${mongodb.storage.replica.set}">
+        <mongo:options connect-timeout="${mongodb.connectTimeout}"
+                       connections-per-host="${mongodb.connectionsPerHost}"
+                       max-wait-time="${mongodb.maxWaitTime}"
+                       auto-connect-retry="true"
+                       socket-keep-alive="true"
+                       socket-timeout="${mongodb.connectTimeout}"
+                       write-number="1"
+                       write-timeout="0"
+                       write-fsync="true"
+                       slave-ok="true"
+        />
+    </mongo:mongo>
+    
+    <mongo:db-factory id="storageMongoDbFactory" mongo-ref="storageMongo" 
+                      dbname="${mongodb.storage.database}"
+                      username="${mongodb.storage.username}"
+                      password="${mongodb.storage.password}"/>
+       
+    <mongo:mapping-converter id="converter" />
+    
+    <!--用于存储图片或 audio -->
+    <bean id="blobGridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="storageMongoDbFactory" />
+        <constructor-arg ref="converter" />
+        <constructor-arg name="bucket" value="blob" />
+    </bean>
+    
+    <!--用于存储任务包 -->
+    <bean id="pkgGridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="storageMongoDbFactory" />
+        <constructor-arg ref="converter" />
+        <constructor-arg name="bucket" value="pkg" />
+    </bean>
+    
+    <!--用于存储导出的任务包结果 -->
+    <bean id="exportGridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="storageMongoDbFactory" />
+        <constructor-arg ref="converter" />
+        <constructor-arg name="bucket" value="export" />
+    </bean>
+</beans>

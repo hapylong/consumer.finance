@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.sys.SysSmsConfigDaoImpl">
+
+	<sql id="table">sys_sms_config</sql>
+
+	<resultMap type="SysSmsConfig" id="sysSmsConfig">
+		<result column="ID" property="id" />
+		<result column="OPENID" property="openId" />
+		<result column="WECHATNO" property="wechatNo" />
+		<result column="WECHATREMARK" property="wechatRemark" />
+		<result column="SMS_URL" property="smsUrl" />
+		<result column="SMS_NAME_INFO" property="smsName" />
+		<result column="SMS_PSWD_INFO" property="smsPswd" />
+		<result column="SMS_NEED_STATUS_INFO" property="smsNeedStatus" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 查询商户的短信渠道 -->
+	<select id="getSmsChannelByOpenId" parameterType="java.util.Map" resultMap="sysSmsConfig">
+		SELECT A.ID as
+		OPENID,S.ID,S.WECHATNO,S.WECHATREMARK,S.SMS_URL,S.SMS_NAME_INFO,S.SMS_PSWD_INFO,S.SMS_NEED_STATUS_INFO
+		from sys_sms_config S,acc_openinfo A WHERE S.ID = A.SMSCHANNEL AND
+		A.ID = #{openId}
+	</select>
+</mapper>

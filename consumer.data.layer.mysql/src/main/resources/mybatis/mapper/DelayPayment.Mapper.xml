@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.DelayPaymentDaoImpl">
+
+	<sql id="table">DELAYPAYMENT</sql>
+
+	<resultMap type="DelayPayment" id="delayPayment">
+		<result column="ID" property="id" />
+		<result column="BILLID" property="billId" />
+		<result column="PRINCIPALAMT" property="principalAmt" />
+		<result column="OVERDUERATE" property="overdueRate" />
+		<result column="DELAYAMT" property="delayAmt" />
+		<result column="DELAYDATE" property="delayDate" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.overdue.DelayPayment" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(REGID,OPENID,BILLID,REPAYNO,PRINCIPALAMT, OVERDUERATE, DELAYAMT, DELAYDATE, VERSION, CREATETIME)
+		VALUES (#{regId},#{openId},#{billId},#{repayNo},#{principalAmt}, #{overdueRate}, #{delayAmt}, #{delayDate},
+		#{version}, #{createTime});
+	</insert>
+
+	<!-- getDelayPayment -->
+	<select id="getDelayPayment" resultType="com.iqb.consumer.data.layer.mysql.bean.overdue.DelayPayment" parameterType="map">
+		SELECT ID FROM <include refid="table" /> WHERE BILLID = #{billId} AND DELAYDATE = #{delayDate}
+	</select>
+
+</mapper>

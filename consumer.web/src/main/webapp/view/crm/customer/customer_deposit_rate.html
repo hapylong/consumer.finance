@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>企业客户信息</title>
+        <meta charset="UTF-8" />
+        <meta name="Author" content="" />
+        <meta name="Keywords" content="" />
+        <meta name="Description" content="" /> 
+        <!-- 样式库 -->
+	    <link rel="stylesheet" href="../../../js/bootstrap/themes/default/bootstrap.css" />
+	    <link rel="stylesheet" href="../../../js/jquery-easyui-1.5/themes/bootstrap/validatebox.css" />
+	    <link rel="stylesheet" href="../../../js/jquery-easyui-1.5/themes/bootstrap/tooltip.css" />
+	    <link rel="stylesheet" href="../../../js/ztree/css/zTreeStyle/zTreeStyle.css" />
+	    <link rel="stylesheet" href="../../../css/jquery.select2.css" />
+	    <link rel="stylesheet" href="../../../css/jquery.select2-bootstrap.css" />
+   	    <link rel="stylesheet" href="../../../js/lightbox2/css/lightbox.css" />
+   	    <link rel="stylesheet" href="../../../js/bootstrap/themes/default/jquery.mCustomScrollbar.css" />
+	    
+	    <!-- 插件库 -->
+	    <script src="../../../js/common/package.js"></script>
+		<script src="../../../js/common/url.js"></script>
+		<script src="../../../js/common/json2.js"></script>	
+		<script src="../../../js/common/jquery-1.11.3.min.js"></script>	
+		<script src="../../../js/common/jquery.form.js"></script>		
+		<script src="../../../js/bootstrap/bootstrap.js"></script>
+		<script src="../../../js/bootstrap/plugins/bootstrap-paginator.js"></script>
+		<script src="../../../js/bootstrap/plugins/jquery.mCustomScrollbar.js"></script>
+		<script src="../../../js/jquery-easyui-1.5/jquery.easyui.min.js"></script>
+		<script src="../../../js/ztree/js/jquery.ztree.all.min.js"></script>
+		<script src="../../../js/common/jquery.select2.js"></script>
+		
+		<!-- 图片上传  -->
+		<link href="../../../js/uploadplugin/fine-uploader-gallery.css" rel="stylesheet" type="text/css" />
+		<link href="../../../js/uploadplugin/fine-uploader-new.css" rel="stylesheet" type="text/css" />
+		<link href="../../../js/uploadplugin/styles.css" rel="stylesheet" type="text/css" />
+		<script src="../../../js/uploadplugin/all.fine-uploader.js"></script>
+		<script src="../../../js/uploadplugin/pica.js"></script>
+		
+		<!-- 业务库 -->
+		<script src="../../../js/common/base.js"></script>
+		<script src="../../../js/common/datagrid2.js"></script>
+		<script src="../../../js/common/tree.js"></script>
+		<script src="../../../js/common/formatter.js"></script>	  
+        <script src="../../../js/each/crm/customer/customerdepositrate.js"></script>
+        <style type="text/css">
+            body {background:#eee url("../../../img/back.png") repeat;}
+            .container-fluid{
+                padding:5px;
+            }
+            .left-part {
+				height: 800px;
+			}
+			.modal-form {
+				margin: 15px 30px 15px 30px;
+				
+			}
+        </style>
+    </head>
+    <body>  
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-info">
+                    <div class="panel-heading">
+                    	<h3 class="panel-title">企业客户信息查询栏</h3>
+                    </div>
+                        <div class="panel-body">    
+                            <form id="searchForm" class="form-inline">                               
+                                <div class="form-group">
+                                    <label class="form-label">渠道名称:</label>
+                                </div>
+                                <div class="form-group">
+                                    <input name="customerName" type="text" class="form-control" placeholder="渠道名称">
+                                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <label class="form-label">业务类型:</label>
+                                </div>
+                                <div class="form-group">
+	                                <select id="query-businessClass" name="businessClass" class="form-control" style="width: 200px"></select>
+                                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <label class="form-label">业务子类:</label>
+                                </div>
+                                <div class="form-group">
+                                	<select id="query-businessDetail" name="businessDetail" class="form-control" style="width: 200px"></select>
+                                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <label class="form-label">保证金费率区间(%):</label>
+                                </div>
+                                <div class="form-group">
+                                    <input name="depositRateStart" type="text" class="form-control" placeholder="请输入">
+                                </div>&nbsp;&nbsp;~&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <input name="depositRateEnd" type="text" class="form-control" placeholder="请输入">
+                                </div>
+                                <button id="btn-search" type="button" class="btn btn-default btn-sm">查询</button>
+                                <button id="btn-reset" type="button" class="btn btn-default btn-sm">重置</button>                             
+                            </form>                                                         
+                        </div>
+					</div>		
+					<div class="panel panel-info">	
+                        <div class="panel-heading">
+                            <h3 class="panel-title">企业客户信息列表</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form id="listForm">                                
+                                <button id="btn-insert" type="button" class="btn btn-primary btn-sm">新增</button>
+                                <button id="btn-update" type="button" class="btn btn-warning btn-sm">修改</button>
+                                <button id="btn-remove" type="button" class="btn btn-danger btn-sm">删除</button>
+                                <button id="btn-check" type="button" class="btn btn-info btn-sm">查看</button>
+                            </form>
+                        </div>
+                        <table id="datagrid" class="table table-bordered table-hover" style="text-align:center">
+                            <thead>
+                                <tr>
+                                    <th field="ck"></th>
+                                    <th field="id" idField="true" hidden="true"></th>
+									<th field="rn" style="text-align:center">序号</th>
+									<th field="customerName" style="text-align:center" formatter="IQB.customerdepositrate.extFunc.parseCustomerName(val);">渠道名称</th>
+									<th field="businessClass" style="text-align:center" formatter="IQB.customerdepositrate.extFunc.parseBusinessClass(val, 'COMM_BIZ_TYPE');">业务类型</th>
+									<th field="businessDetail" style="text-align:center" formatter="IQB.customerdepositrate.extFunc.parseBusinessDetail(val, 'COMM_BIZ_SUBTYPE');">业务子类</th>
+									<th field="depositRate" style="text-align:center">保证金费率(%)</th>
+									<th field="remark" style="text-align:center">备注</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="panel-footer">
+                            <div id="paginator">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+        <div id="update-win" class="modal fade" role="dialog" aria-labelledby="update-win-label" aria-describedby="企业客户信息">
+			<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title" id="update-win-label">渠道客户信息</h5>
+		      		</div>
+		      		<div class="modal-form">
+		       			<form id="updateForm" class="form-horizontal">
+				  			<div class="form-group">
+				    			<label class="col-md-3 control-label">渠道名称</label>
+				    			<div class="col-md-9">
+<!-- 				      				<input id="customerName" name="customerName" type="text" class="form-control input-sm easyui-validatebox" placeholder="请输入客户名称" required="required" validType="maxLength[20]" /> -->
+				      				<select id="select-customerCode" name="customerCode" class="form-control"  style="width: 100%"></select>
+				    			</div>
+			    			</div>
+			    			<input type="hidden" id="id" name="id"/>
+			    			<div class="form-group">
+				    			<label class="col-md-3 control-label">业务类型</label>
+				    			<div class="col-md-9">
+				    				<select id="select-businessClass" name="businessClass" class="form-control"  style="width: 100%"></select>
+				    			</div>
+				  			</div>	
+				  			<div class="form-group">
+				  				<label class="col-md-3 control-label">业务子类</label>
+				    			<div class="col-md-9">
+				    				<select id="select-businessDetail" name="businessDetail" class="form-control"  style="width: 100%"></select>
+				    			</div>
+			    			</div>
+			    			<div class="form-group">
+				    			<label class="col-md-3 control-label">保证金费率(%)</label>
+				    			<div class="col-md-9">
+				    				<input name="depositRate" type="text" class="form-control input-sm easyui-validatebox" placeholder="请输入保证金费率" required="required" validType="maxLength[6]"></input>
+				    			</div>
+				  			</div>	
+				  			<div class="form-group">
+				    			<label class="col-md-3 control-label">备注</label>
+				    			<div class="col-md-9">
+				      				<input name="remark" type="text" class="form-control input-sm easyui-validatebox" placeholder="请输入备注" validType="maxLength[200]"></input>
+				    			</div>
+				  			</div>		
+		  				</form>
+		      		</div>
+		      		<div class="modal-footer">
+				        <button id="btn-save" type="button" class="btn btn-success btn-sm">保存</button>
+				        <button id="btn-close" type="button" class="btn btn-default btn-sm">关闭</button>		        
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+    </body>
+    <script src="../../../js/lightbox2/js/lightbox.js"></script>
+</html>

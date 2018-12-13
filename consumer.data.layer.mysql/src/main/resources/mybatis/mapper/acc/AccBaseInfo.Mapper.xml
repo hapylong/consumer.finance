@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.acc.AccBaseInfoDaoImpl">
+
+	<sql id="table">acc_baseinfo</sql>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.acc.AccBaseInfo" id="baseInfo">
+		<result column="ID" property="id" />
+		<result column="REALNAME" property="realName" />
+		<result column="IDNO" property="idNo" />
+		<result column="AMT" property="amt" />
+		<result column="FREEINTERESTCOUNT" property="freeInterestCount" />
+		<result column="POINTSUM" property="pointSum" />
+		<result column="STATUS" property="status" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<sql id="cols">
+		ID,REALNAME,IDNO,AMT,FREEINTERESTCOUNT,POINTSUM,STATUS,VERSION,CREATETIME,UPDATETIME
+	</sql>
+
+	<insert id="insert" parameterType="com.iqb.consumer.data.layer.mysql.bean.acc.AccBaseInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(REALNAME,IDNO,AMT,FREEINTERESTCOUNT,POINTSUM,STATUS,VERSION,CREATETIME)
+		VALUES
+		(#{realName},#{idNo},#{amt},#{freeInterestCount},#{pointSum},#{status},#{version},#{createTime});
+	</insert>
+
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.bean.acc.AccBaseInfo">
+		UPDATE
+		<include refid="table" />
+		<set>
+			VERSION = #{version,jdbcType=INTEGER} + 1,
+			<if test="realName != null and realName != ''">
+				REALNAME = #{realName},
+			</if>
+			<if test="amt != null and amt != ''">
+				AMT = #{amt},
+			</if>
+			<if test="freeInterestCount != null and freeInterestCount != ''">
+				FREEINTERESTCOUNT = #{freeInterestCount},
+			</if>
+			<if test="pointSum != null and pointSum != ''">
+				POINTSUM = #{pointSum},
+			</if>
+			<if test="status != null and status != ''">
+				STATUS = #{status},
+			</if>
+			UPDATETIME = NOW() 
+			WHERE IDNO = #{idNo}
+		</set>	
+	</update>
+
+	<select id="getByIDCard" parameterType="java.util.Map" resultMap="baseInfo">
+		SELECT <include refid="cols" /> 
+		FROM <include refid="table" />
+		WHERE IDNO = #{idNo} AND status = #{status}
+	</select>
+</mapper>

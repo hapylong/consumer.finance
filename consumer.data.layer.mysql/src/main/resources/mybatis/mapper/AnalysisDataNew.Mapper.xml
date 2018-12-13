@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.AnalysisDataNewDaoImpl">
+
+	<sql id="table">r_overdue_new</sql>
+
+	<resultMap type="com.iqb.consumer.data.layer.mysql.bean.NewRoverdueEntity" id="newroverdue">
+	    
+	    <id column="ID" jdbcType="BIGINT" property="id" />
+	    <result column="MERCHANTNO" jdbcType="VARCHAR" property="merchantNo" />
+	    <result column="SCHEDUE_DATE" jdbcType="DATE" property="schedueDate" />
+	    <result column="OVERDUE_NUM" jdbcType="INTEGER" property="overdueNum" />
+	    <result column="OVERDUE_STOCK_NUM" jdbcType="INTEGER" property="overdutStockNum" />
+	    <result column="OVERDUE_MONTH" jdbcType="DECIMAL" property="overdueMonth" />
+	    <result column="OVERDUE_PRINCIPAL" jdbcType="DECIMAL" property="overduePrincipal" />
+	    <result column="STOCK_AMT" jdbcType="DECIMAL" property="stockAmt" />
+	    <result column="OVERDUE_RATE" jdbcType="DECIMAL" property="overdueRate" />
+	    <result column="OVERDUE_NUM_MD5" jdbcType="INTEGER" property="overdueNumMb5" />
+	    <result column="OVERDUE_MONTH_MD5" jdbcType="DECIMAL" property="overdueMonthMb5" />
+	    <result column="OVERDUE_PRINCIPAL_MD5" jdbcType="DECIMAL" property="overduePrincipalMb5" />
+	    <result column="STOCK_AMT_MD5" jdbcType="DECIMAL" property="stockAmtMb5" />
+	    <result column="OVERDUE_RATE_MD5" jdbcType="DECIMAL" property="overdueRateMb5" />
+	    <result column="OVERDUE_NUM_MB1" jdbcType="INTEGER" property="overdueNumMb1" />
+	    <result column="OVERDUE_MONTH_MB1" jdbcType="DECIMAL" property="overdueMonthMb1" />
+	    <result column="OVERDUE_PRINCIPAL_MB1" jdbcType="DECIMAL" property="overduePrincipalMb1" />
+	    <result column="STOCK_AMT_MB1" jdbcType="DECIMAL" property="stockAmtMb1" />
+	    <result column="OVERDUE_RATE_MB1" jdbcType="DECIMAL" property="overdueRateMb1" />
+	    <result column="OVERDUE_NUM_MB2" jdbcType="INTEGER" property="overdueNumMb2" />
+	    <result column="OVERDUE_PRINCIPAL_MB2" jdbcType="DECIMAL" property="overduePrincipalMb2" />
+	    <result column="OVERDUE_MONTH_MB2" jdbcType="DECIMAL" property="overdueMonthMb2" />
+	    <result column="STOCK_AMT_MB2" jdbcType="DECIMAL" property="stockAmtMb2" />
+	    <result column="OVERDUE_RATE_MB2" jdbcType="DECIMAL" property="overdueRateMb2" />
+	    <result column="OVERDUE_NUM_MB3" jdbcType="INTEGER" property="overdueNumMb3" />
+	    <result column="OVERDUE_PRINCIPAL_MB3" jdbcType="DECIMAL" property="overduePrincipalMb3" />
+	    <result column="OVERDUE_MONTH_MB3" jdbcType="DECIMAL" property="overdueMonthMb3" />
+	    <result column="STOCK_AMT_MB3" jdbcType="DECIMAL" property="stockAmtMb3" />
+	    <result column="OVERDUE_RATE_MB3" jdbcType="DECIMAL" property="overdueRateMb3" />
+	    <result column="OVERDUE_NUM_MB4" jdbcType="INTEGER" property="overdueNumMb4" />
+	    <result column="OVERDUE_PRINCIPAL_MB4" jdbcType="DECIMAL" property="overduePrincipalMb4" />
+	    <result column="OVERDUE_MONTH_MB4" jdbcType="DECIMAL" property="overdueMonthMb4" />
+	    <result column="STOCK_AMT_MB4" jdbcType="DECIMAL" property="stockAmtMb4" />
+	    <result column="OVERDUE_RATE_MB4" jdbcType="DECIMAL" property="overdueRateMb4" />
+	    <result column="VERSION" jdbcType="INTEGER" property="version" />
+	    <result column="CREATETIME" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="UPDATETIME" jdbcType="TIMESTAMP" property="updateTime" />
+	    <!--  -->
+	     <result column="TOTAL_OVERDUE_PRINCIPAL" jdbcType="DECIMAL" property="totalOverduePrincipal" />
+	     <result column="TOTAL_STOCK_AMT" jdbcType="DECIMAL" property="totalStockAmt" />
+	     <result column="TOTAL_OVERDUE_PRINCIPAL_MD5" jdbcType="DECIMAL" property="totalOverduePrincipalMb5" />
+	     <result column="TOTAL_OVERDUE_PRINCIPAL_MD1" jdbcType="DECIMAL" property="totalOverduePrincipalMb1" />
+	     <result column="TOTAL_OVERDUE_PRINCIPAL_MD2" jdbcType="DECIMAL" property="totalOverduePrincipalMb2" />
+	     <result column="TOTAL_OVERDUE_PRINCIPAL_MD3" jdbcType="DECIMAL" property="totalOverduePrincipalMb3" />
+	     <result column="TOTAL_OVERDUE_PRINCIPAL_MD4" jdbcType="DECIMAL" property="totalOverduePrincipalMb4" />
+	     <!-- 外 -->
+	     <result column="TOTAL_OVERDUE_MONTH" jdbcType="DECIMAL" property="totalOverdueMonth" />
+	     <result column="TOTAL_OVERDUE_MONTH_MD5" jdbcType="DECIMAL" property="totalOverdueMonthMb5" />
+	     <result column="TOTAL_OVERDUE_MONTH_MD1" jdbcType="DECIMAL" property="totalOverdueMonthMb1" />
+	     <result column="TOTAL_OVERDUE_MONTH_MD2" jdbcType="DECIMAL" property="totalOverdueMonthMb2" />
+	     <result column="TOTAL_OVERDUE_MONTH_MD3" jdbcType="DECIMAL" property="totalOverdueMonthMb3" />
+	     <result column="TOTAL_OVERDUE_MONTH_MD4" jdbcType="DECIMAL" property="totalOverdueMonthMb4" />
+	     <!-- 个数总和 -->
+	      <result column="TOTAL_OVERDUE_NUM" jdbcType="INTEGER" property="totalOverdueNum" />													   
+	      <result column="TOTAL_OVERDUE_NUM_MD5" jdbcType="INTEGER" property="totalOverdueNumMb5" />													   
+	      <result column="TOTAL_OVERDUE_NUM_MD1" jdbcType="INTEGER" property="totalOverdueNumMb1" />													   
+	      <result column="TOTAL_OVERDUE_NUM_MD2" jdbcType="INTEGER" property="totalOverdueNumMb2" />													   
+	      <result column="TOTAL_OVERDUE_NUM_MD3" jdbcType="INTEGER" property="totalOverdueNumMb3" />													   
+	      <result column="TOTAL_OVERDUE_NUM_MD4" jdbcType="INTEGER" property="totalOverdueNumMb4" />													   
+	      <result column="TOTAL_OVERDUE_STOCK_NUM" jdbcType="INTEGER" property="totalOverdueStockNum" />													   
+	</resultMap>
+
+	<select id="getNewRoverDueList" parameterType="java.util.Map" resultMap="newroverdue">
+		SELECT 
+            ID, MERCHANTNO, SCHEDUE_DATE, OVERDUE_NUM,	OVERDUE_STOCK_NUM,	OVERDUE_MONTH/100 AS OVERDUE_MONTH,OVERDUE_PRINCIPAL/100 AS OVERDUE_PRINCIPAL,STOCK_AMT/100 AS STOCK_AMT,
+            OVERDUE_RATE,OVERDUE_NUM_MD5,OVERDUE_MONTH_MD5/100 AS OVERDUE_MONTH_MD5,OVERDUE_PRINCIPAL_MD5/100 AS OVERDUE_PRINCIPAL_MD5,STOCK_AMT_MD5/100 AS STOCK_AMT_MD5,OVERDUE_RATE_MD5,
+            OVERDUE_NUM_MB1,OVERDUE_MONTH_MB1/100 AS OVERDUE_MONTH_MB1,OVERDUE_PRINCIPAL_MB1/100 AS OVERDUE_PRINCIPAL_MB1,STOCK_AMT_MB1/100 AS STOCK_AMT_MB1,OVERDUE_RATE_MB1,
+            OVERDUE_NUM_MB2,OVERDUE_MONTH_MB2/100 AS OVERDUE_MONTH_MB2,OVERDUE_PRINCIPAL_MB2/100 AS OVERDUE_PRINCIPAL_MB2,STOCK_AMT_MB2/100 AS STOCK_AMT_MB2,OVERDUE_RATE_MB2,
+            OVERDUE_NUM_MB3,OVERDUE_MONTH_MB3/100 AS OVERDUE_MONTH_MB3,OVERDUE_PRINCIPAL_MB3/100 AS OVERDUE_PRINCIPAL_MB3,STOCK_AMT_MB3/100 AS STOCK_AMT_MB3,OVERDUE_RATE_MB3,
+            OVERDUE_NUM_MB4,OVERDUE_MONTH_MB4/100 AS OVERDUE_MONTH_MB4,OVERDUE_PRINCIPAL_MB4/100 AS OVERDUE_PRINCIPAL_MB4,STOCK_AMT_MB4/100 AS STOCK_AMT_MB4,OVERDUE_RATE_MB4,
+            VERSION, CREATETIME, UPDATETIME
+        FROM r_overdue_new
+		<where>
+		  <if test="schedueDate != null and schedueDate !=''">
+		     AND schedue_date = #{schedueDate}
+		  </if>
+		  <if test="merList != null">
+             AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+		</where>
+		  
+	</select>
+	
+	<select id="getTotalNewPageRoverDueList" parameterType="java.util.Map" resultMap="newroverdue">
+				
+		SELECT 
+            	SUM(OVERDUE_PRINCIPAL/100) AS TOTAL_OVERDUE_PRINCIPAL,
+							SUM(STOCK_AMT/100) AS TOTAL_STOCK_AMT,
+							SUM(OVERDUE_PRINCIPAL_MD5/100) AS TOTAL_OVERDUE_PRINCIPAL_MD5,
+							SUM(OVERDUE_PRINCIPAL_MB1/100) AS TOTAL_OVERDUE_PRINCIPAL_MD1,
+							SUM(OVERDUE_PRINCIPAL_MB2/100) AS TOTAL_OVERDUE_PRINCIPAL_MD2,
+							SUM(OVERDUE_PRINCIPAL_MB3/100) AS TOTAL_OVERDUE_PRINCIPAL_MD3,
+							SUM(OVERDUE_PRINCIPAL_MB4/100) AS TOTAL_OVERDUE_PRINCIPAL_MD4,
+							
+							SUM(OVERDUE_MONTH/100) AS TOTAL_OVERDUE_MONTH,
+							SUM(OVERDUE_MONTH_MD5/100) AS TOTAL_OVERDUE_MONTH_MD5,
+							SUM(OVERDUE_MONTH_MB1/100) AS TOTAL_OVERDUE_MONTH_MD1,
+							SUM(OVERDUE_MONTH_MB2/100) AS TOTAL_OVERDUE_MONTH_MD2,
+							SUM(OVERDUE_MONTH_MB3/100) AS TOTAL_OVERDUE_MONTH_MD3,
+							SUM(OVERDUE_MONTH_MB4/100) AS TOTAL_OVERDUE_MONTH_MD4,
+							
+							SUM(OVERDUE_NUM) AS TOTAL_OVERDUE_NUM,
+							SUM(OVERDUE_STOCK_NUM) AS TOTAL_OVERDUE_STOCK_NUM,
+							SUM(OVERDUE_NUM_MD5) AS TOTAL_OVERDUE_NUM_MD5,
+							SUM(OVERDUE_NUM_MB1) AS TOTAL_OVERDUE_NUM_MD1,
+							SUM(OVERDUE_NUM_MB2) AS TOTAL_OVERDUE_NUM_MD2,
+							SUM(OVERDUE_NUM_MB3) AS TOTAL_OVERDUE_NUM_MD3,
+							SUM(OVERDUE_NUM_MB4) AS TOTAL_OVERDUE_NUM_MD4
+        FROM r_overdue_new
+		<where>
+		  <if test="schedueDate != null and schedueDate !=''">
+		     AND schedue_date = #{schedueDate}
+		  </if>
+		  <if test="merList != null">
+             AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+		</where>
+		  
+	</select>
+	
+	<select id="getNoInsideTotalNewRoverDueList" parameterType="java.util.Map" resultType="java.util.Map">
+				
+		SELECT 
+            	SUM(OVERDUE_MONTH/100) AS TOTAL_OVERDUE_MONTH,
+							SUM(STOCK_AMT/100) AS TOTAL_STOCK_AMT,
+							SUM(OVERDUE_MONTH_MD5/100) AS TOTAL_OVERDUE_MONTH_MD5,
+							SUM(OVERDUE_MONTH_MB1/100) AS TOTAL_OVERDUE_MONTH_MD1,
+							SUM(OVERDUE_MONTH_MB2/100) AS TOTAL_OVERDUE_MONTH_MD2,
+							SUM(OVERDUE_MONTH_MB3/100) AS TOTAL_OVERDUE_MONTH_MD3,
+							SUM(OVERDUE_MONTH_MB4/100) AS TOTAL_OVERDUE_MONTH_MD4,
+							SUM(OVERDUE_NUM) AS TOTAL_OVERDUE_NUM,
+							SUM(OVERDUE_NUM_MD5) AS TOTAL_OVERDUE_NUM_MD5,
+							SUM(OVERDUE_NUM_MB1) AS TOTAL_OVERDUE_NUM_MD1,
+							SUM(OVERDUE_NUM_MB2) AS TOTAL_OVERDUE_NUM_MD2,
+							SUM(OVERDUE_NUM_MB3) AS TOTAL_OVERDUE_NUM_MD3,
+							SUM(OVERDUE_NUM_MB4) AS TOTAL_OVERDUE_NUM_MD4
+        FROM r_overdue_new
+		<where>
+		  <if test="schedueDate != null and schedueDate !=''">
+		     AND schedue_date = #{schedueDate}
+		  </if>
+		  <if test="merList != null">
+             AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+		</where>
+		  
+	</select>
+	
+	<select id="getNewRoverDueListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM r_overdue_new
+        <where>
+          <if test="schedueDate  != null and schedueDate !=''">
+              AND schedue_date = #{schedueDate}
+          </if>
+          <if test="merList != null">
+              AND merchantno IN
+            <foreach item="item" index="index" collection="merList" open="(" separator="," close=")">  
+                #{item}  
+            </foreach>
+          </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.finance.batch.dao.InstallmentPlanDaoImpl">
+
+	<sql id="table">inst_plan</sql>
+
+	<resultMap type="InstallmentPlan" id="installmentPlan">
+		<result column="ID" property="id" />
+		<result column="REPAYMETHOD" property="repayMethod" />
+		<result column="INSTMETHOD" property="instMethod" />
+		<result column="INTERESTID" property="interestId" />
+		<result column="OVERDUEMETHOD" property="overdueMethod" />
+		<result column="OVEDUEID" property="ovedueId" />
+		<result column="REPAYDATEID" property="repayDateId" />
+		<result column="PREPAYMENT" property="prepayMent" />
+		<result column="PARTPAYMENT" property="partpayMent" />
+		<result column="BREACHCONTRACT" property="breachContract" />
+		<result column="BREACHCONTRACTID" property="breachContractId" />
+		<result column="REFUNDCOST" property="refundCost" />
+		<result column="REFUNDCOSTID" property="refundCostId" />
+		<result column="REFUNDINTEREST" property="refundInterest" />
+		<result column="FREEID" property="freeId" />
+		<result column="LOCKREPAYDATE" property="lockRepayDate" />
+		<result column="LOCKREPAYDATEID" property="lockRepayDateId" />
+		<result column="GRACEDAYS" property="graceDays" />
+		<result column="STATUS" property="status" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<insert id="insert" parameterType="InstallmentPlan" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO inst_plan (REPAYMETHOD, INSTMETHOD,
+		INTERESTID, OVERDUEMETHOD, OVEDUEID, REPAYDATEID, PREPAYMENT,
+		PARTPAYMENT, BREACHCONTRACT, BREACHCONTRACTID, REFUNDCOST,
+		REFUNDCOSTID, REFUNDINTEREST, FREEID, LOCKREPAYDATE, LOCKREPAYDATEID,
+		GRACEDAYS, STATUS, VERSION, CREATETIME, UPDATETIME) VALUES (#{repayMethod},
+		#{instMethod}, #{interestId}, #{overdueMethod}, #{ovedueId}, #{repayDateId}, #{prepayMent}, #{partpayMent}, #{breachContract},#{breachContractId}, #{refundCost}, #{refundCostId}, #{refundInterest},
+		#{freeId}, #{lockRepayDate}, #{lockRepayDateId}, #{graceDays}, #{status}, #{version}, #{createTime}, #{updateTime});
+	</insert>
+
+	<select id="getById" parameterType="long" resultMap="installmentPlan">
+		select * from
+		<include refid="table" />
+		where ID = #{id} AND STATUS = 1;
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		delete from <include refid="table" /> where ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.finance.batch.bean.InstallmentPlan">
+		UPDATE 
+		  <include refid="table" /> 
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="repayMethod != null and repayMethod != '' ">
+				REPAYMETHOD = #{repayMethod},
+			</if>
+			<if test="instMethod != null and instMethod != '' ">
+				INSTMETHOD = #{instMethod},
+			</if>
+			<if test="interestId != null and interestId != '' ">
+				INTERESTID = #{interestId},
+			</if>
+			<if test="overdueMethod != null and overdueMethod != '' ">
+				OVERDUEMETHOD = #{overdueMethod},
+			</if>
+			<if test="ovedueId != null and ovedueId != '' ">
+				OVEDUEID = #{ovedueId},
+			</if>
+			<if test="repayDateId != null and repayDateId != '' ">
+				REPAYDATEID = #{repayDateId},
+			</if>
+			<if test="prepayMent != null and prepayMent != '' ">
+				PREPAYMENT = #{prepayMent},
+			</if>
+			<if test="partpayMent != null and partpayMent != '' ">
+				PARTPAYMENT = #{partpayMent},
+			</if>
+			<if test="breachContract != null and breachContract != '' ">
+				BREACHCONTRACT = #{breachContract},
+			</if>
+			<if test="breachContractId != null and breachContractId != '' ">
+				BREACHCONTRACTID = #{breachContractId},
+			</if>
+			<if test="refundCost != null and refundCost != '' ">
+				REFUNDCOST = #{refundCost},
+			</if>
+			<if test="refundCostId != null and refundCostId != '' ">
+				REFUNDCOSTID = #{refundCostId},
+			</if>
+			<if test="refundInterest != null and refundInterest != '' ">
+				REFUNDINTEREST = #{refundInterest},
+			</if>
+			<if test="freeId != null and freeId != '' ">
+				FREEID = #{freeId},
+			</if>
+			<if test="lockRepayDate != null and lockRepayDate != '' ">
+				LOCKREPAYDATE = #{lockRepayDate},
+			</if>
+			<if test="lockRepayDateId != null and lockRepayDateId != '' ">
+				LOCKREPAYDATEID = #{lockRepayDateId},
+			</if>
+			<if test="graceDays != null and graceDays != '' ">
+				GRACEDAYS = #{graceDays},
+			</if>
+			<if test="status != null and status != '' ">
+				STATUS = #{status},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATETIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+
+</mapper>

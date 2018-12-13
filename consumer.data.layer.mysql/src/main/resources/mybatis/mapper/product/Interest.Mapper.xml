@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.product.InterestDaoImpl">
+
+	<sql id="table">P_INTEREST</sql>
+
+	<resultMap type="Interest" id="interest">
+		<result column="ID" property="id" />
+		<result column="RATIO" property="ratio" />
+		<result column="RATIOTYPE" property="ratioType" />
+		<result column="MINAMT" property="minAmt" />
+		<result column="MAXAMT" property="maxAmt" />
+		<result column="ENABLE" property="enable" />
+		<result column="DAY2YEAR" property="day2year" />
+		<result column="DAY2MONTH" property="day2month" />
+		<result column="REMARK" property="remark" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 表中的字段 -->
+	<sql id="interestCols">
+		ID, RATIO, RATIOTYPE, MINAMT, MAXAMT, ENABLE, DAY2YEAR,
+		DAY2MONTH,
+		REMARK, VERSION, CREATETIME
+	</sql>
+
+	<insert id="insert" parameterType="Interest" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(RATIO, RATIOTYPE, MINAMT, MAXAMT, ENABLE, DAY2YEAR, DAY2MONTH,
+		REMARK, VERSION, CREATETIME) VALUES (#{ratio},
+		#{ratioType},
+		#{minAmt}, #{maxAmt}, #{enable}, #{day2year},
+		#{day2month}, #{remark},
+		0, #{createTime});
+	</insert>
+
+	<!-- 根据利息计算方式表中id查询利息计算方式 -->
+	<select id="getInterestById" parameterType="String" resultMap="interest">
+		select
+		<include refid="interestCols" />
+		from
+		<include refid="table" />
+		where ID=#{id};
+	</select>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM <include refid="table" /> WHERE ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.data.layer.mysql.domain.product.Interest">
+		UPDATE 
+		  <include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="ratio != null and ratio != '' ">
+				RATIO = #{ratio},
+			</if>
+			<if test="ratioType != null and ratioType != '' ">
+				RATIOTYPE = #{ratioType},
+			</if>
+			<if test="minAmt != null and minAmt != '' ">
+				MINAMT = #{minAmt},
+			</if>
+			<if test="maxAmt != null and maxAmt != '' ">
+				MAXAMT = #{maxAmt},
+			</if>
+			<if test="enable != null and enable != '' ">
+				ENABLE = #{enable},
+			</if>
+			<if test="day2year != null and day2year != '' ">
+				DAY2YEAR = #{day2year},
+			</if>
+			<if test="day2month != null and day2month != '' ">
+				DAY2MONTH = #{day2month},
+			</if>
+			<if test="remark != null and remark != '' ">
+				REMARK = #{remark},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATE_TIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+
+</mapper>

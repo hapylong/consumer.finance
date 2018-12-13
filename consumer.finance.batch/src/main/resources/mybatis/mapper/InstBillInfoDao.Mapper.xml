@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.finance.batch.dao.InstBillInfoDaoImpl">
+
+	<sql id="table">inst_billinfo</sql>
+
+	<resultMap
+		type="com.iqb.consumer.finance.batch.bean.InstBillInfoBean"
+		id="instBillInfoBean">
+		<result column="ID" 					property="id" />
+		<result column="ORDERID" 				property="orderId" />
+		<result column="MERCHANTNO" 			property="merchantNo" />
+		<result column="SCHEDUE_DATE" 			property="schedueDate" />
+		<result column="OVERDUE_MONTH_MD5" 		property="overdueMonthMD5" />
+		
+		<result column="OVERDUE_INTEREST_MD5" 	property="overdueInterestMD5" />
+		<result column="FIXED_OVERDUE_AMT_MD5" 	property="fixedOverdueAmtMD5" />
+		<result column="CUR_REPAY_AMT_MD5" 		property="curRepayAmtMD5" />
+		<result column="OVERDUE_RATE_MD5" 		property="overdueRateMD5" />
+		<result column="OVERDUE_MONTH_MB1" 		property="overdueMonthMB1" />
+		
+		<result column="OVERDUE_INTEREST_MB1" 	property="overdueInterestMB1" />
+		<result column="FIXED_OVERDUE_AMT_MB1" 	property="fixedOverdueAmtMB1" />
+		<result column="CUR_REPAY_AMT_MB1" 		property="curRepayAmtMB1" />
+		<result column="OUT_OVERDUE_RATE_MB1" 	property="outOverdueRateMB1" />
+		<result column="OVERDUE_PRINCIPAL_MB1" 	property="overduePincipalMB1" />
+
+		
+		<result column="STOCK_AMT_MB1" 			property="stockAmtMB1" />
+		<result column="OVERDUE_RATE_MB1" 		property="overdueRateMB1" />
+		<result column="OVERDUE_PRINCIPAL_MB2" 	property="overduePincipalMB2" />
+		<result column="STOCK_AMT_MB2" 			property="stockAmtMB2" />
+		<result column="OVERDUE_RATE_MB2" 		property="overdueRateMB2" />
+		
+		<result column="OVERDUE_PRINCIPAL_MB3" 	property="overduePincipalMB3" />
+		<result column="STOCK_AMT_MB3" 			property="stockAmtMB3" />
+		<result column="OVERDUE_RATE_MB3" 		property="overdueRateMB3" />
+		<result column="OVERDUE_PRINCIPAL_MB4" 	property="overduePincipalMB4" />
+		<result column="STOCK_AMT_MB4" 			property="stockAmtMB4" />
+		<result column="OVERDUE_RATE_MB4" 		property="overdueRateMB4" />
+		
+		
+		<result column="VERSION" 				property="version" />
+		<result column="CREATETIME" 			property="createTime" />
+		<result column="UPDATETIME" 			property="updateTime" />
+	</resultMap>
+	<!-- 资产逾期数据批量插入 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO
+		r_overdue
+		(
+		MERCHANTNO,SCHEDUE_DATE,OVERDUE_MONTH_MD5, OVERDUE_INTEREST_MD5, FIXED_OVERDUE_AMT_MD5, 
+		CUR_REPAY_AMT_MD5, OVERDUE_RATE_MD5,OVERDUE_MONTH_MB1,OVERDUE_INTEREST_MB1, FIXED_OVERDUE_AMT_MB1,
+		CUR_REPAY_AMT_MB1, OUT_OVERDUE_RATE_MB1,OVERDUE_PRINCIPAL_MB1,STOCK_AMT_MB1,OVERDUE_RATE_MB1,
+		OVERDUE_PRINCIPAL_MB2, STOCK_AMT_MB2, OVERDUE_RATE_MB2,OVERDUE_PRINCIPAL_MB3,STOCK_AMT_MB3,
+		OVERDUE_RATE_MB3,OVERDUE_PRINCIPAL_MB4,STOCK_AMT_MB4,OVERDUE_RATE_MB4,VERSION,CREATETIME
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.merchantNo},#{item.schedueDate},#{item.overdueMonthMD5}, #{item.overdueInterestMD5},#{item.fixedOverdueAmtMD5},
+			#{item.curRepayAmtMD5},#{item.overdueRateMD5},#{item.overdueMonthMB1}, #{item.overdueInterestMB1},#{item.fixedOverdueAmtMB1},
+			#{item.curRepayAmtMB1},#{item.outOverdueRateMB1},#{item.overduePincipalMB1},#{item.stockAmtMB1},#{item.overdueRateMB1},
+			#{item.overduePincipalMB2},#{item.stockAmtMB2},#{item.overdueRateMB2},#{item.overduePincipalMB3},#{item.stockAmtMB3},
+			#{item.overdueRateMB3},#{item.overduePincipalMB4},#{item.stockAmtMB4},#{item.overdueRateMB4},#{item.version},now()
+			)
+		</foreach>
+	</insert>
+	<!-- 更新逾期报表数据 -->
+	<update id="update" parameterType="com.iqb.consumer.finance.batch.bean.InstBillInfoBean">
+		UPDATE r_overdue  
+		<set>
+			<if test="overdueMonthMD5 != null and overdueMonthMD5 != '' ">
+				OVERDUE_MONTH_MD5 = #{overdueMonthMD5},
+			</if>
+			<if test="overdueInterestMD5 != null and overdueInterestMD5 != '' ">
+				OVERDUE_INTEREST_MD5 = #{overdueInterestMD5},
+			</if>
+			<if test="fixedOverdueAmtMD5 != null and fixedOverdueAmtMD5 != '' ">
+				FIXED_OVERDUE_AMT_MD5 = #{fixedOverdueAmtMD5},
+			</if>
+			
+			<if test="curRepayAmtMD5 != null and curRepayAmtMD5 != '' ">
+				CUR_REPAY_AMT_MD5 = #{curRepayAmtMD5},
+			</if>
+			<if test="overdueRateMD5 != null and overdueRateMD5 != '' ">
+				OVERDUE_RATE_MD5 = #{overdueRateMD5},
+			</if>
+			<if test="overdueMonthMB1 != null and overdueMonthMB1 != '' ">
+				OVERDUE_MONTH_MB1 = #{overdueMonthMB1},
+			</if>
+			<if test="overdueInterestMB1 != null and overdueInterestMB1 != '' ">
+				OVERDUE_INTEREST_MB1 = #{overdueInterestMB1},
+			</if>
+			<if test="fixedOverdueAmtMB1 != null and fixedOverdueAmtMB1 != '' ">
+				FIXED_OVERDUE_AMT_MB1 = #{fixedOverdueAmtMB1},
+			</if>
+			
+			<if test="curRepayAmtMB1 != null and curRepayAmtMB1 != '' ">
+				CUR_REPAY_AMT_MB1 = #{curRepayAmtMB1},
+			</if>
+			<if test="outOverdueRateMB1 != null and outOverdueRateMB1 != '' ">
+				OUT_OVERDUE_RATE_MB1 = #{outOverdueRateMB1},
+			</if>
+			<if test="overduePincipalMB1 != null and overduePincipalMB1 != '' ">
+				OVERDUE_PRINCIPAL_MB1 = #{overduePincipalMB1},
+			</if>
+			<if test="stockAmtMB1 != null and stockAmtMB1 != '' ">
+				STOCK_AMT_MB1 = #{stockAmtMB1},
+			</if>
+			<if test="overdueRateMB1 != null and overdueRateMB1 != '' ">
+				OVERDUE_RATE_MB1 = #{overdueRateMB1},
+			</if>
+			
+			<if test="overduePincipalMB2 != null and overduePincipalMB2 != '' ">
+				OVERDUE_PRINCIPAL_MB2 = #{overduePincipalMB2},
+			</if>
+			<if test="stockAmtMB2 != null and stockAmtMB2 != '' ">
+				STOCK_AMT_MB2 = #{stockAmtMB2},
+			</if>
+			<if test="overdueRateMB2 != null and overdueRateMB2 != '' ">
+				OVERDUE_RATE_MB2 = #{overdueRateMB2},
+			</if>
+			<if test="overduePincipalMB3 != null and overduePincipalMB3 != '' ">
+				OVERDUE_PRINCIPAL_MB3 = #{overduePincipalMB3},
+			</if>
+			<if test="stockAmtMB3 != null and stockAmtMB3 != '' ">
+				STOCK_AMT_MB3 = #{stockAmtMB3},
+			</if>
+
+			<if test="overdueRateMB3 != null and overdueRateMB3 != '' ">
+				OVERDUE_RATE_MB3 = #{overdueRateMB3},
+			</if>
+			<if test="overduePincipalMB4 != null and overduePincipalMB4 != '' ">
+				OVERDUE_PRINCIPAL_MB4 = #{overduePincipalMB4},
+			</if>
+			<if test="stockAmtMB4 != null and stockAmtMB4 != '' ">
+				STOCK_AMT_MB4 = #{stockAmtMB4},
+			</if>
+			<if test="overdueRateMB4 != null and overdueRateMB4 != '' ">
+				OVERDUE_RATE_MB4 = #{overdueRateMB4},
+			</if>
+			updateTime = now()
+				
+		</set>
+			where
+			MERCHANTNO = #{merchantNo}
+			AND SCHEDUE_DATE = #{schedueDate}
+		
+	</update>
+	<!-- 获取资产逾期MD5数据 -->
+	<select id="listOverdueForMD5" parameterType="java.util.Map" resultMap="instBillInfoBean">
+		<![CDATA[
+		SELECT
+			curdate() AS schedueDate,
+			BB.ORDERID,
+			BB.MERCHANTNO,
+			SUM(BB.CUR_REPAY_PRINCIPAL)+SUM(BB.CUR_REPAY_INTEREST) AS overdueMonthMD5,
+			SUM(
+				BB.CUR_REPAY_OVERDUE_INTEREST
+			) AS overdueInterestMD5,
+			SUM(BB.FIXED_OVERDUE_AMT) AS fixedOverdueAmtMD5
+		FROM
+			(
+				SELECT
+					A.ORDERID,
+					A.MERCHANTNO,
+					A.CUR_REPAY_PRINCIPAL,
+					A.CUR_REPAY_INTEREST,
+					A.CUR_REPAY_OVERDUE_INTEREST,
+					A.FIXED_OVERDUE_AMT
+				FROM
+					inst_billinfo A
+				WHERE
+					A. STATUS = 0
+					AND DATE_SUB(#{currentDate}, INTERVAL 1 DAY) >= A.LASTREPAYDATE
+					AND DATE_ADD( A.LASTREPAYDATE, INTERVAL 6 DAY ) > #{currentDate}
+				AND A.OPENID = '10102'
+				GROUP BY
+					A.ORDERID
+			) BB
+		GROUP BY
+			BB.MERCHANTNO
+			]]>
+	</select>
+	<!-- 获取资产逾期MOB1数据 -->
+	<select id="listOverdueForMOB1" parameterType="java.util.Map" resultMap="instBillInfoBean">
+	<![CDATA[
+		SELECT
+			BB.schedueDate,
+			BB.MERCHANTNO,
+			SUM(BB.CUR_REPAY_PRINCIPAL)+SUM(BB.CUR_REPAY_INTEREST) AS overdueMonthMB1,
+			SUM(BB.overdueInterestMB1) AS overdueInterestMB1,
+			SUM(BB.fixedOverdueAmtMB1) AS fixedOverdueAmtMB1,
+			SUM(BB.overduePincipalMB1) AS overduePincipalMB1
+		FROM
+			(
+				SELECT
+						curdate() AS schedueDate,
+						 A.MERCHANTNO,
+						 A.CUR_REPAY_PRINCIPAL,
+						 A.CUR_REPAY_INTEREST,
+						 A.CUR_REPAY_OVERDUE_INTEREST AS overdueInterestMB1,
+						 A.FIXED_OVERDUE_AMT AS fixedOverdueAmtMB1,
+						 A.CUR_REPAY_PRINCIPAL AS overduePincipalMB1
+					FROM
+						inst_billinfo A
+					WHERE
+						A. STATUS = 0
+					AND DATE_SUB(#{currentDate}, INTERVAL 6 DAY) >= A.LASTREPAYDATE
+					AND DATE_ADD(
+						A.LASTREPAYDATE,
+						INTERVAL 31 DAY
+					) > #{currentDate}
+					AND A.OPENID = '10102'
+					GROUP BY A.ORDERID
+			) BB GROUP BY BB.MERCHANTNO
+			]]>
+	</select>
+	
+	<!-- 获取资产逾期MOB2数据 -->
+	<select id="listOverdueForMOB2" parameterType="java.util.Map" resultMap="instBillInfoBean">
+		<![CDATA[
+		SELECT
+			BB.schedueDate,
+			BB.merchantNo,
+			SUM(BB.overduePincipalMB2) AS overduePincipalMB2
+		FROM
+			(
+				SELECT
+						curdate() AS schedueDate,
+						A.ORDERID,
+						A.MERCHANTNO,
+						A.CUR_REPAY_PRINCIPAL AS overduePincipalMB2
+					FROM
+						inst_billinfo A
+					WHERE
+						A. STATUS = 0
+					AND DATE_SUB(#{currentDate}, INTERVAL 31 DAY) >= A.LASTREPAYDATE
+					AND DATE_ADD(
+						A.LASTREPAYDATE,
+						INTERVAL 61 DAY
+					) > #{currentDate}
+					AND A.OPENID = '10102'
+					GROUP BY
+						A.ORDERID
+			) BB
+		GROUP BY
+			BB.merchantNo
+		]]>
+	</select>
+	
+	<!-- 获取资产逾期MOB3数据 -->
+	<select id="listOverdueForMOB3" parameterType="java.util.Map" resultMap="instBillInfoBean">
+		<![CDATA[
+		SELECT
+			BB.MERCHANTNO,
+			curdate() AS schedueDate,
+			SUM(BB.REMAINPRINCIPAL) AS overduePincipalMB3
+		FROM
+			(
+				SELECT
+					AA.ORDERID,
+					AA.MERCHANTNO,
+					AA.INSTALLSUMAMT,
+					AA.CUR_REPAY_PRINCIPAL,
+					CASE
+				WHEN (
+					AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+				) IS NULL THEN
+					AA.INSTALLSUMAMT
+				ELSE
+					AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+				END AS REMAINPRINCIPAL
+				FROM
+					(
+						SELECT
+							A.ORDERID,
+							A.REPAYNO,
+							a.`STATUS`,
+							A.MERCHANTNO,
+							A.INSTALLSUMAMT AS 'INSTALLSUMAMT',
+							(
+								SELECT
+									SUM(B.CUR_REPAY_PRINCIPAL)
+								FROM
+									inst_billinfo B
+								WHERE
+									A.ORDERID = B.ORDERID
+								AND B. STATUS = 3
+							) CUR_REPAY_PRINCIPAL
+						FROM
+							inst_billinfo A
+						WHERE
+							A. STATUS <= 2
+						AND A.OPENID = '10102'
+						AND A.MERCHANTNO <> 'hykc'
+						AND A.ORDERDATE <= #{currentDate}
+						AND (
+							A.CUR_REPAYDATE > #{currentDate}
+							OR A.CUR_REPAYDATE IS NULL
+						)
+						AND A.ORDERID IN (
+							SELECT
+								C.ORDERID
+							FROM
+								inst_billinfo C
+							WHERE
+								C. STATUS = 0
+							AND DATE_SUB(#{currentDate}, INTERVAL 61 DAY) >= C.LASTREPAYDATE
+							AND DATE_SUB(#{currentDate}, INTERVAL 91 DAY) < C.LASTREPAYDATE
+							AND C.OPENID = '10102'
+						)
+						GROUP BY
+							A.ORDERID
+					) AA
+			) BB
+		GROUP BY
+			BB.MERCHANTNO
+
+		]]>
+	</select>
+	
+	<!-- 获取资产逾期MOB4数据 -->
+	<select id="listOverdueForMOB4" parameterType="java.util.Map" resultMap="instBillInfoBean">
+		<![CDATA[
+			SELECT
+				BB.MERCHANTNO,
+				curdate() AS schedueDate,
+				SUM(BB.REMAINPRINCIPAL) AS overduePincipalMB4
+			FROM
+				(
+					SELECT
+						AA.ORDERID,
+						AA.MERCHANTNO,
+						AA.INSTALLSUMAMT,
+						AA.CUR_REPAY_PRINCIPAL,
+						CASE
+					WHEN (
+						AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+					) IS NULL THEN
+						AA.INSTALLSUMAMT
+					ELSE
+						AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+					END AS REMAINPRINCIPAL
+					FROM
+						(
+							SELECT
+								A.ORDERID,
+								A.REPAYNO,
+								a.`STATUS`,
+								A.MERCHANTNO,
+								A.INSTALLSUMAMT AS 'INSTALLSUMAMT',
+								(
+									SELECT
+										SUM(B.CUR_REPAY_PRINCIPAL)
+									FROM
+										inst_billinfo B
+									WHERE
+										A.ORDERID = B.ORDERID
+									AND B. STATUS = 3
+								) CUR_REPAY_PRINCIPAL
+							FROM
+								inst_billinfo A
+							WHERE
+								A. STATUS <= 2
+							AND A.OPENID = '10102'
+							AND A.MERCHANTNO <> 'hykc'
+							AND A.ORDERDATE <= #{currentDate}
+							AND (
+								A.CUR_REPAYDATE > #{currentDate}
+								OR A.CUR_REPAYDATE IS NULL
+							)
+							AND A.ORDERID IN (
+								SELECT
+									C.ORDERID
+								FROM
+									inst_billinfo C
+								WHERE
+									C. STATUS = 0
+								AND DATE_SUB(#{currentDate}, INTERVAL 91 DAY) >= C.LASTREPAYDATE
+								AND C.OPENID = '10102'
+							)
+							GROUP BY
+								A.ORDERID
+						) AA
+				) BB
+			GROUP BY
+				BB.MERCHANTNO
+		]]>
+	</select>
+	<!-- 根据商户号日期查询所有符合条件的商户 -->
+	<select id="listAllMerchantnoByParams" parameterType="java.util.Map" resultMap="instBillInfoBean">
+			SELECT
+				A.MERCHANTNO
+			FROM
+				r_overdue A
+			WHERE
+				A.SCHEDUE_DATE = #{currentDate}
+				<if test="merchantNo !=null and merchantNo !=''">
+					and A.MERCHANTNO = #{merchantNo}
+				</if>
+	</select>
+	<!-- 查询逾期指标 mob1、mob2、mob3、mob资产存量 -->
+	<select id="listStockStatisticsAmt" parameterType="java.util.Map" resultMap="instBillInfoBean">
+			SELECT
+				BB.MERCHANTNO,
+				SUM(BB.REMAINPRINCIPAL) AS stockAmtMB1,
+				SUM(BB.REMAINPRINCIPAL) AS stockAmtMB2,
+				SUM(BB.REMAINPRINCIPAL) AS stockAmtMB3,
+				SUM(BB.REMAINPRINCIPAL) AS stockAmtMB4,
+				SUM(BB.REMAINPRINCIPAL) AS curRepayAmtMD5,
+				SUM(BB.REMAINPRINCIPAL) AS curRepayAmtMB1
+			FROM
+				(
+					SELECT
+						AA.ORDERID,
+						AA.MERCHANTNO,
+						AA.INSTALLSUMAMT,
+						AA.CUR_REPAY_PRINCIPAL,
+						CASE
+					WHEN (
+						AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+					) IS NULL THEN
+						AA.INSTALLSUMAMT
+					ELSE
+						AA.INSTALLSUMAMT - AA.CUR_REPAY_PRINCIPAL
+					END AS REMAINPRINCIPAL
+					FROM
+						(
+							SELECT
+								A.ORDERID,
+								A.MERCHANTNO,
+								A.INSTALLSUMAMT ,
+								(
+									SELECT
+										SUM(B.CUR_REPAY_PRINCIPAL)
+									FROM
+										inst_billinfo B
+									WHERE
+										A.ORDERID = B.ORDERID
+									AND B. STATUS = 3
+								) CUR_REPAY_PRINCIPAL
+							FROM
+								inst_billinfo A
+							WHERE
+								A. STATUS &lt;= 2
+							AND A.OPENID = '10102'
+							AND A.MERCHANTNO NOT IN ('hykc')
+							<if test="currentDate != null and currentDate != ''">
+								<![CDATA[ 
+									AND A.ORDERDATE <= #{currentDate}
+									AND (
+										A.CUR_REPAYDATE > #{currentDate}
+										OR A.CUR_REPAYDATE IS NULL
+									)
+								]]>
+							</if>
+							<if test="merchantNos != null and merchantNos.size() > 0">
+								and A.MERCHANTNO in
+								<foreach item="item" index="index" collection="merchantNos"
+									open="(" separator="," close=")">
+									#{item}
+								</foreach>
+							</if>
+							GROUP BY
+								A.ORDERID
+						) AA
+				) BB
+			GROUP BY
+				BB.MERCHANTNO
+	</select>
+</mapper>

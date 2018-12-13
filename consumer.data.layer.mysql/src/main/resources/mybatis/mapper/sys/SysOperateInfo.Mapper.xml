@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.data.layer.mysql.dao.sys.SysOperateInfoDaoImpl">
+
+	<sql id="table">sys_operate_info</sql>
+
+	<resultMap type="SysOperateInfo" id="sysOperateInfo">
+		<result column="ID" property="id" />
+		<result column="CLASSNAME" property="className" />
+		<result column="METHOD" property="method" />
+		<result column="REASON" property="reason" />
+		<result column="CREATEBY" property="createBy" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 插入日志表信息 -->
+	<insert id="insert" parameterType="SysOperateInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(CLASSNAME, METHOD, REASON, CREATEBY, VERSION, CREATETIME, UPDATETIME)
+		VALUES (#{className}, #{method}, #{reason}, #{createBy}, #{version}, #{createTime}, #{updateTime});
+	</insert>
+
+</mapper>

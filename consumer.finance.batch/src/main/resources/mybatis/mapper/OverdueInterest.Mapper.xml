@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.iqb.consumer.finance.batch.dao.OverdueInterestDaoImpl">
+
+	<sql id="table">P_OVERDUE_INTEREST</sql>
+
+	<resultMap type="OverdueInterest" id="overdueInterest">
+		<result column="ID" property="id" />
+		<result column="FIXEDTYPE" property="fixedType" />
+		<result column="FIXEDBASEAMTTYPE" property="fixedBaseAmtType" />
+		<result column="FIXEDRATIO" property="fixedRatio" />
+		<result column="FIXEDAMOUNT" property="fixedAmount" />
+		<result column="MINAMT" property="minAmt" />
+		<result column="REMARK" property="remark" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+	
+	<resultMap type="OverdueRule" id="overdueRule">
+		<result column="ID" property="id" />
+		<result column="POVERDUEID" property="poverdueId" />
+		<result column="BASEAMTTYPE" property="baseAmtType" />
+		<result column="RATIO" property="ratio" />
+		<result column="FLOATRATIO" property="floatRatio" />
+		<result column="MINAMT" property="minAmt" />
+		<result column="OVERDUEMINDAYS" property="overdueMinDays" />
+		<result column="OVERDUEMAXDAYS" property="overdueMaxDays" />
+		<result column="REMARK" property="remark" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<!-- 违约金规则表中的字段 -->
+	<sql id="overdueInterestCols">
+		ID, FIXEDTYPE,FIXEDBASEAMTTYPE,FIXEDRATIO, FIXEDAMOUNT, MINAMT,REMARK,VERSION, CREATETIME, UPDATETIME
+	</sql>
+	
+	<!-- 逾期规则字段 -->
+	<sql id="overdueRuleCols">
+		ID,POVERDUEID,BASEAMTTYPE,RATIO,FLOATRATIO,MINAMT,OVERDUEMINDAYS,OVERDUEMAXDAYS,REMARK,VERSION, CREATETIME, UPDATETIME
+	</sql>
+
+	<!-- 根据逾期计算方式表中id查询利息计算方式 -->
+	<select id="getOverdueInterestById" parameterType="String"
+		resultMap="overdueInterest">
+		select
+		<include refid="overdueInterestCols" />
+		from
+		<include refid="table" />
+		where ID=#{id};
+	</select>
+	
+	<!-- 根据逾期ID查询逾期规则 -->
+	<select id="getOverdueRuleSById" parameterType="java.util.Map" resultMap="overdueRule">
+		SELECT <include refid="overdueRuleCols"/> FROM p_overdue_rule WHERE POVERDUEID = #{poverdueId};
+	</select>
+	
+	<insert id="insert" parameterType="Interest" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(FIXEDAMOUNT ,MINAMT ,REMARK ,VERSION ,CREATETIME) 
+		VALUES 
+		(#{fixedAmount}, #{minAmt}, #{remark}, 0, #{createTime});
+	</insert>
+	
+	<!-- deleteById -->
+	<delete id="deleteById" parameterType="long">
+		DELETE FROM <include refid="table" /> WHERE ID = #{id}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="com.iqb.consumer.finance.batch.bean.OverdueInterest">
+		UPDATE 
+		  <include refid="table" />
+		<set>
+			VERSION = #{version}+1 ,
+			<if test="baseAmtType != null and baseAmtType != '' ">
+				BASEAMTTYPE = #{baseAmtType},
+			</if>
+			<if test="ratio != null and ratio != '' ">
+				RATIO = #{ratio},
+			</if>
+			<if test="floatRatio != null and floatRatio != '' ">
+				FLOATRATIO = #{floatRatio},
+			</if>
+			<if test="fixedAmount != null and fixedAmount != '' ">
+				FIXEDAMOUNT = #{fixedAmount},
+			</if>
+			<if test="minAmt != null and minAmt != '' ">
+				MINAMT = #{minAmt},
+			</if>
+			<if test="remark != null and remark != '' ">
+				REMARK = #{remark},
+			</if>
+			<if test="updateTime != null and updateTime != '' ">
+				UPDATE_TIME = #{updateTime},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+    
+    <!-- 根据订单获取产品方案是否上收月供 -->
+    <select id="getTakePayment" parameterType="String" resultType="int">
+        SELECT
+		    A.TAKEPAYMENT
+		FROM
+		    consumer_instbiz.inst_plan A,
+		    consumer_instbiz.inst_orderinfo B
+		WHERE
+		    A.ID = B.planId
+		AND B.orderId = #{orderId}
+    </select>
+</mapper>

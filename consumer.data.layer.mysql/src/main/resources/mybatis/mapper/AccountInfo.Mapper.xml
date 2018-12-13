@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iqb.consumer.data.layer.mysql.dao.AccountInfoDaoImpl">
+
+	<sql id="table">ACCOUNTINFO</sql>
+
+	<resultMap type="AccountInfo" id="accountInfo">
+		<result column="ID" property="id" />
+		<result column="CONUUID" property="conUUID" />
+		<result column="REGID" property="regID" />
+		<result column="IDNO" property="IDNO" />
+		<result column="ACCSTATUS" property="accStatus" />
+		<result column="CREDITLIMIT" property="creditLimit" />
+		<result column="AVAILLIMIT" property="availLimit" />
+		<result column="SAVEAMT" property="saveAmt" />
+		<result column="CURRTYPE" property="currType" />
+		<result column="OPENDAY" property="openDay" />
+		<result column="CANCELDAY" property="cancelDay" />
+		<result column="FREEINTERESTCOUNT" property="freeInterestCount" />
+		<result column="POINTSUM" property="pointSum" />
+		<result column="VERSION" property="version" />
+		<result column="CREATETIME" property="createTime" />
+		<result column="UPDATETIME" property="updateTime" />
+	</resultMap>
+
+	<insert id="insert" parameterType="AccountInfo" keyProperty="id"
+		useGeneratedKeys="true">
+		INSERT INTO
+		<include refid="table" />
+		(CONUUID, REGID,IDNO, ACCSTATUS,CREDITLIMIT, AVAILLIMIT,
+		CURRTYPE,OPENDAY,FREEINTERESTCOUNT, POINTSUM,
+		VERSION, CREATETIME)
+		VALUES
+		(#{conUUID},
+		#{regID},#{IDNO},#{accStatus},#{creditLimit},#{availLimit},
+		#{currType},#{openDay}, #{freeInterestCount}, #{pointSum},0,
+		#{createTime});
+	</insert>
+
+	<sql id="condition_sql">
+		<if test="conUUID != null and conUUID !=''"> and CONUUID = #{conUUID} </if>
+		<if test="regID != null and regID != ''"> and REGID = #{regID} </if>
+		<if test="IDNO != null and IDNO != ''"> and IDNO = #{IDNO} </if>
+	</sql>
+
+	<select id="getByConUUID" parameterType="AccountInfo" resultMap="accountInfo">
+		select * from
+		<include refid="table" />
+		where CONUUID = #{conUUID}
+	</select>
+
+	<select id="listBy" parameterType="java.util.Map" resultMap="accountInfo">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+
+	<select id="getByIDCard" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) from ACCOUNTINFO a,ACCOUNTCREDITINFO c
+		WHERE a.ID = c.ACCOUNTID AND c.INDUSTRYTYPE=#{industryType} AND
+		a.IDNO=#{idNo};
+	</select>
+
+	<update id="update" parameterType="AccountInfo">
+		UPDATE
+		<include refid="table" />
+		SET
+		VERSION=#{version}+1,UPDATETIME=#{updateTime},ACCSTATUS=#{accStatus}
+		,AVAILLIMIT=#{availLimit},POINTSUM=#{pointSum},FREEINTERESTCOUNT=#{freeInterestCount}
+		<where>
+			ID = #{id} and VERSION = #{version}
+		</where>
+	</update>
+
+</mapper>

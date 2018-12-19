@@ -40,7 +40,7 @@ public class JQCheck {
 
     public static boolean hswq(Map<String, Object> map, String pkSuffix,
             String host, String port) {
-        String url = "/cupdata-FengKongKaiHu-registerFK";
+        String url = "/K";
         // String host = "cuptest.iqianbang.cn";
         HttpClient httpClient = new HttpClient();
         httpClient.getHostConfiguration().setHost(host, Integer.parseInt(port), "http");
